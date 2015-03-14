@@ -7,15 +7,15 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "Method", uniqueConstraints = { @UniqueConstraint(columnNames = {
-		"methodId", "name" }) })
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = {
+		"methodId", "name", "url" }) })
 public class Method {
 
 	@Id
 	@Column(name = "methodId")
 	private int methodId;
 
-	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
+	@Column(columnDefinition = "VARCHAR(50)", nullable = false)
 	private String name;
 
 	@Column(columnDefinition = "VARCHAR(255)", nullable = false)

@@ -12,7 +12,7 @@ public class UDDI {
 	@Id
 	private int uddiId;
 
-	@Column(columnDefinition = "VARCHAR(255)", nullable = false)
+	@Column(columnDefinition = "TEXT", nullable = false)
 	private String description;
 
 	public int getUddiId() {

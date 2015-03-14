@@ -5,15 +5,18 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Check;
+
 @Entity
-@Table(name = "SLAGuarantee")
+@Check(constraints = "obligated in('provide', 'customer')")
+@Table
 public class GuaranteeTerms {
 
 	@Id
-	@Column(name = "keyPerformanceIndicatorId")
+	@Column(name = "guaranteeId")
 	private int guaranteeId;
 
-	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
+	@Column(columnDefinition = "VARCHAR(10)", nullable = false)
 	private String obligated;
 
 	@Column(columnDefinition = "VARCHAR(100)", nullable = false)

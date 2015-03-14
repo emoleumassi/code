@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="SLAService")
+@Table
 public class ServiceTerms {
 
 	@Id
@@ -19,10 +19,10 @@ public class ServiceTerms {
 	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
 	private String designation;
 	
-	@Column(columnDefinition = "VARCHAR(255)", nullable = false)
+	@Column(columnDefinition = "TEXT", nullable = false)
 	private String description;
 	
-	@Column(columnDefinition = "VARCHAR(10)", nullable = false)
+	@Column(columnDefinition = "DECIMAL(10, 2)", nullable = false)
 	private String costPerUnitOfAccount;
 	
 	@Column(columnDefinition = "INTEGER", nullable = false)

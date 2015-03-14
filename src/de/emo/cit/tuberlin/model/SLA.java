@@ -10,13 +10,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "SLA")
+@Table
 public class SLA {
 
 	@Id
 	private int slaId;
 
-	@Column(columnDefinition = "VARCHAR(255)", nullable = false)
+	@Column(columnDefinition = "TEXT", nullable = false)
 	private String description;
 
 	@Column(nullable = false)

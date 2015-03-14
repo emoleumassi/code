@@ -18,7 +18,7 @@ public class UDDISLA {
 	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
 	private String name;
 
-	@Column(columnDefinition = "VARCHAR(255)", nullable = false)
+	@Column(columnDefinition = "TEXT", nullable = false)
 	private String description;
 
 	@Column(columnDefinition = "VARCHAR(10)", nullable = false)

@@ -12,11 +12,11 @@ public class OverviewDoc {
 	@Id
 	private int overviewDocId;
 
-	@Column(columnDefinition = "VARCHAR(255)", nullable = false)
+	@Column(columnDefinition = "TEXT", nullable = false)
 	private String description;
 	
 	@Column(columnDefinition = "VARCHAR(255)", nullable = false)
-	private String overviewurl;
+	private String overviewUrl;
 
 	public int getOverviewDocId() {
 		return overviewDocId;
@@ -34,11 +34,11 @@ public class OverviewDoc {
 		this.description = description;
 	}
 
-	public String getOverviewurl() {
-		return overviewurl;
+	public String getOverviewUrl() {
+		return overviewUrl;
 	}
 
 	public void setOverviewurl(String overviewurl) {
-		this.overviewurl = overviewurl;
+		this.overviewUrl = overviewurl;
 	}
 }

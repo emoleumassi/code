@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table()
+@Table
 public class KeyPerformanceIndicator {
 
 	@Id
@@ -16,10 +16,10 @@ public class KeyPerformanceIndicator {
 	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
 	private String designation;
 
-	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
+	@Column(columnDefinition = "VARCHAR(5)", nullable = false)
 	private String targetValue;
 
-	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
+	@Column(columnDefinition = "VARCHAR(5)", nullable = false)
 	private String qualifyingCondiction;
 
 	public int getKeyPerformanceIndicatorId() {
