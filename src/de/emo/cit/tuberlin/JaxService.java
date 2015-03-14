@@ -31,7 +31,7 @@ public class JaxService {
 				.getAutowireCapableBeanFactory();
 		acbFactory.autowireBean(this);
 
-		emo.setNom("Mon nom est Emo Leumassi Ferdinand");
+		emo.setNom("Mon nom est Emo Leumassi Ferdinand Frederic");
 		track.setSinger("je suis le singer new singer");
 		track.setTitle("voici le titel with bean and autowired");
 		track.setEmo(emo);
