@@ -4,7 +4,10 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -26,6 +29,10 @@ public class SLA {
 	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
 	private short endTime;
+
+	@OneToOne(optional = false, targetEntity = UDDISLA.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "uddislaId", referencedColumnName = "uddislaId", insertable = true, updatable = true, nullable = false)
+	private UDDISLA uddisla;
 
 	public int getSlaId() {
 		return slaId;

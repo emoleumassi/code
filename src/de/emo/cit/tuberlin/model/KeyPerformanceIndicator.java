@@ -2,7 +2,10 @@ package de.emo.cit.tuberlin.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -21,6 +24,10 @@ public class KeyPerformanceIndicator {
 
 	@Column(columnDefinition = "VARCHAR(5)", nullable = false)
 	private String qualifyingCondiction;
+	
+	@OneToOne(optional = false, targetEntity = Method.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "methodId", referencedColumnName = "methodId", insertable = true, updatable = true, nullable = false)
+	private Method method;
 
 	public int getKeyPerformanceIndicatorId() {
 		return keyPerformanceIndicatorId;

@@ -2,7 +2,10 @@ package de.emo.cit.tuberlin.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -17,6 +20,10 @@ public class OverviewDoc {
 	
 	@Column(columnDefinition = "VARCHAR(255)", nullable = false)
 	private String overviewUrl;
+	
+	@OneToOne(optional = false, targetEntity = UDDI.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "uddiId", referencedColumnName = "uddiId", insertable = true, updatable = true, nullable = false)
+	private UDDI uddi;
 
 	public int getOverviewDocId() {
 		return overviewDocId;

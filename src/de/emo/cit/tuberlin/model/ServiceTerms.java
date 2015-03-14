@@ -2,7 +2,10 @@ package de.emo.cit.tuberlin.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -27,6 +30,10 @@ public class ServiceTerms {
 	
 	@Column(columnDefinition = "INTEGER", nullable = false)
 	private int unitOfAccount;
+	
+	@ManyToOne(optional = false, targetEntity = SLA.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "slaId", referencedColumnName = "slaId", insertable = true, updatable = true, nullable = false)
+	private SLA sla;
 
 	public int getServiceId() {
 		return serviceId;
