@@ -18,6 +18,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import de.emo.cit.tuberlin.Emo;
 import de.emo.cit.tuberlin.Track;
+import de.emo.cit.tuberlin.dao.UDDIDao;
+import de.emo.cit.tuberlin.dao.impl.UDDIDaoImpl;
 
 @Configuration
 @ComponentScan("de.emo.cit.tuberlin")
@@ -75,11 +77,11 @@ public class ThesisConfiguration {
 		return new HibernateTransactionManager(sessionFactory);
 	}
 
-	// @Autowired
-	// @Bean(name = "userDao")
-	// public UserDAO getUserDao(SessionFactory sessionFactory) {
-	// return new UserDAOImpl(sessionFactory);
-	// }
+	 @Autowired
+	 @Bean(name = "uddiDao")
+	 public UDDIDao getUDDIDao(SessionFactory sessionFactory) {
+	 return new UDDIDaoImpl(sessionFactory);
+	 }
 
 	private Properties getHibernateProperties() {
 		Properties properties = new Properties();
