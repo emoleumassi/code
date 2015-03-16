@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.emo.cit.tu-berlin</groupId>
-	<artifactId>masterthesis</artifactId>
+	<artifactId>master</artifactId>
 	<version>0.0.1</version>
 	<packaging>war</packaging>
 	<name>MasterThesis</name>
@@ -37,6 +37,12 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
 	</build>
 	<dependencies>
 		<dependency>
