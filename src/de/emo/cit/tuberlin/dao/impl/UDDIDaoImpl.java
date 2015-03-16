@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import de.emo.cit.tuberlin.dao.UDDIDao;
 import de.emo.cit.tuberlin.model.UDDI;
 
+//@Repository
 public class UDDIDaoImpl implements UDDIDao {
 
 	private static final Logger LOGGER = LoggerFactory
@@ -40,6 +41,7 @@ public class UDDIDaoImpl implements UDDIDao {
 	}
 
 	@Override
+	@Transactional
 	public UDDI getUDDIById(int id) {
 		UDDI uddi = (UDDI) session.load(UDDI.class, new Integer(id));
 		LOGGER.info("UDDI loaded successfully, Person details= " + uddi);

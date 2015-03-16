@@ -16,12 +16,29 @@ import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
 @Path("/webservice")
 @Produces(MediaType.APPLICATION_JSON)
 public class JaxService {
+	// implements WebApplicationInitializer {
 
 	@Autowired
 	Emo emo;
 	@Autowired
 	Track track;
 
+	// @Autowired
+	// UDDIDao uddiDao;
+
+	// @SuppressWarnings("resource")
+	// @Override
+	// public void onStartup(ServletContext arg0) throws ServletException {
+	// ApplicationContext applicationContext = new
+	// AnnotationConfigApplicationContext(
+	// ThesisConfiguration.class);
+	// AutowireCapableBeanFactory acbFactory = applicationContext
+	// .getAutowireCapableBeanFactory();
+	// acbFactory.autowireBean(this);
+	//
+	// }
+
+	@SuppressWarnings("resource")
 	@GET
 	public Track test() {
 
@@ -33,9 +50,14 @@ public class JaxService {
 
 		emo.setNom("Mon nom est Emo Leumassi Ferdinand Frederic");
 		track.setSinger("je suis le singer new singer");
-		track.setTitle("voici le titel with bean and autowired");
+		track.setTitle("voici le titel");
 		track.setEmo(emo);
 		return track;
 	}
 
+	// @GET
+	// @Path("/all")
+	// public void uddiTest() {
+	// uddiDao.listUDDI();
+	// }
 }

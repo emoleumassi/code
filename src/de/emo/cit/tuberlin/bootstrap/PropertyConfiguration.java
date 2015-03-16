@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@PropertySource(value = { "classpath:application.databases" })
+@PropertySource(value = { "file:/media/ferdinand/Emo/Kurses/Master/Arbeit/code/resources/properties/database.properties" })
 public class PropertyConfiguration implements InitializingBean {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PropertyConfiguration.class);
