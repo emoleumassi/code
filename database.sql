@@ -2,16 +2,13 @@ SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
-DROP SCHEMA IF EXISTS `mydb` ;
-CREATE SCHEMA IF NOT EXISTS `mydb` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
-USE `mydb` ;
 
 -- -----------------------------------------------------
--- Table `mydb`.`UDDISLA`
+-- Table `masterthesis`.`UDDISLA`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`UDDISLA` ;
+DROP TABLE IF EXISTS `masterthesis`.`UDDISLA` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`UDDISLA` (
+CREATE TABLE IF NOT EXISTS `masterthesis`.`UDDISLA` (
   `uddislaId` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
   `description` TEXT NOT NULL,
@@ -25,11 +22,11 @@ PACK_KEYS = DEFAULT;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`SLA`
+-- Table `masterthesis`.`SLA`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`SLA` ;
+DROP TABLE IF EXISTS `masterthesis`.`SLA` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`SLA` (
+CREATE TABLE IF NOT EXISTS `masterthesis`.`SLA` (
   `slaId` INT NOT NULL AUTO_INCREMENT,
   `uddislaId` INT NOT NULL,
   `name` VARCHAR(100) NOT NULL,
@@ -39,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`SLA` (
   INDEX `fk_SLA_UDDISLA1_idx` (`uddislaId` ASC),
   CONSTRAINT `fk_SLA_UDDISLA1`
     FOREIGN KEY (`uddislaId`)
-    REFERENCES `mydb`.`UDDISLA` (`uddislaId`)
+    REFERENCES `masterthesis`.`UDDISLA` (`uddislaId`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -47,11 +44,11 @@ PACK_KEYS = DEFAULT;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`ServiceTerms`
+-- Table `masterthesis`.`ServiceTerms`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`ServiceTerms` ;
+DROP TABLE IF EXISTS `masterthesis`.`ServiceTerms` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`ServiceTerms` (
+CREATE TABLE IF NOT EXISTS `masterthesis`.`ServiceTerms` (
   `serviceTermsId` INT NOT NULL AUTO_INCREMENT,
   `slaId` INT NOT NULL,
   `name` VARCHAR(100) NOT NULL,
@@ -63,18 +60,18 @@ CREATE TABLE IF NOT EXISTS `mydb`.`ServiceTerms` (
   INDEX `fk_ServiceTerms_SLA1_idx` (`slaId` ASC),
   CONSTRAINT `fk_ServiceTerms_SLA1`
     FOREIGN KEY (`slaId`)
-    REFERENCES `mydb`.`SLA` (`slaId`)
+    REFERENCES `masterthesis`.`SLA` (`slaId`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`Method`
+-- Table `masterthesis`.`Method`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`Method` ;
+DROP TABLE IF EXISTS `masterthesis`.`Method` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`Method` (
+CREATE TABLE IF NOT EXISTS `masterthesis`.`Method` (
   `methodId` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(50) NOT NULL,
   `url` VARCHAR(255) NOT NULL,
@@ -83,11 +80,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`KeyPerformanceIndicator`
+-- Table `masterthesis`.`KeyPerformanceIndicator`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`KeyPerformanceIndicator` ;
+DROP TABLE IF EXISTS `masterthesis`.`KeyPerformanceIndicator` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`KeyPerformanceIndicator` (
+CREATE TABLE IF NOT EXISTS `masterthesis`.`KeyPerformanceIndicator` (
   `keyPerformanceIndicatorId` INT NOT NULL AUTO_INCREMENT,
   `methodId` INT NOT NULL,
   `designation` VARCHAR(100) NOT NULL,
@@ -97,18 +94,18 @@ CREATE TABLE IF NOT EXISTS `mydb`.`KeyPerformanceIndicator` (
   INDEX `fk_KeyPerformanceIndicator_Method1_idx` (`methodId` ASC),
   CONSTRAINT `fk_KeyPerformanceIndicator_Method1`
     FOREIGN KEY (`methodId`)
-    REFERENCES `mydb`.`Method` (`methodId`)
+    REFERENCES `masterthesis`.`Method` (`methodId`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`UDDI`
+-- Table `masterthesis`.`UDDI`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`UDDI` ;
+DROP TABLE IF EXISTS `masterthesis`.`UDDI` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`UDDI` (
+CREATE TABLE IF NOT EXISTS `masterthesis`.`UDDI` (
   `uddiId` INT NOT NULL AUTO_INCREMENT,
   `uddislaId` INT NOT NULL,
   `description` TEXT NOT NULL,
@@ -116,18 +113,18 @@ CREATE TABLE IF NOT EXISTS `mydb`.`UDDI` (
   INDEX `fk_UDDI_UDDISLA1_idx` (`uddislaId` ASC),
   CONSTRAINT `fk_UDDI_UDDISLA1`
     FOREIGN KEY (`uddislaId`)
-    REFERENCES `mydb`.`UDDISLA` (`uddislaId`)
+    REFERENCES `masterthesis`.`UDDISLA` (`uddislaId`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`OverviewDoc`
+-- Table `masterthesis`.`OverviewDoc`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`OverviewDoc` ;
+DROP TABLE IF EXISTS `masterthesis`.`OverviewDoc` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`OverviewDoc` (
+CREATE TABLE IF NOT EXISTS `masterthesis`.`OverviewDoc` (
   `overviewDocId` INT NOT NULL AUTO_INCREMENT,
   `uddiId` INT NOT NULL,
   `description` TEXT NOT NULL,
@@ -136,18 +133,18 @@ CREATE TABLE IF NOT EXISTS `mydb`.`OverviewDoc` (
   INDEX `fk_OverviewDoc_UDDI_idx` (`uddiId` ASC),
   CONSTRAINT `fk_OverviewDoc_UDDI`
     FOREIGN KEY (`uddiId`)
-    REFERENCES `mydb`.`UDDI` (`uddiId`)
+    REFERENCES `masterthesis`.`UDDI` (`uddiId`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `mydb`.`GuaranteeTerms`
+-- Table `masterthesis`.`GuaranteeTerms`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `mydb`.`GuaranteeTerms` ;
+DROP TABLE IF EXISTS `masterthesis`.`GuaranteeTerms` ;
 
-CREATE TABLE IF NOT EXISTS `mydb`.`GuaranteeTerms` (
+CREATE TABLE IF NOT EXISTS `masterthesis`.`GuaranteeTerms` (
   `guaranteeTermsId` INT NOT NULL AUTO_INCREMENT,
   `slaId` INT NOT NULL,
   `keyPerformanceIndicatorId` INT NOT NULL,
@@ -158,12 +155,12 @@ CREATE TABLE IF NOT EXISTS `mydb`.`GuaranteeTerms` (
   INDEX `fk_GuaranteeTerms_KeyPerformanceIndicator1_idx` (`keyPerformanceIndicatorId` ASC),
   CONSTRAINT `fk_GuaranteeTerms_SLA1`
     FOREIGN KEY (`slaId`)
-    REFERENCES `mydb`.`SLA` (`slaId`)
+    REFERENCES `masterthesis`.`SLA` (`slaId`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_GuaranteeTerms_KeyPerformanceIndicator1`
     FOREIGN KEY (`keyPerformanceIndicatorId`)
-    REFERENCES `mydb`.`KeyPerformanceIndicator` (`keyPerformanceIndicatorId`)
+    REFERENCES `masterthesis`.`KeyPerformanceIndicator` (`keyPerformanceIndicatorId`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
