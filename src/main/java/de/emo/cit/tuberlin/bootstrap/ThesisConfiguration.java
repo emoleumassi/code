@@ -5,6 +5,7 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,18 +13,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.orm.hibernate4.HibernateTransactionManager;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
 import de.emo.cit.tuberlin.Emo;
 import de.emo.cit.tuberlin.Track;
 
 @Configuration
 @ComponentScan("de.emo.cit.tuberlin")
-//@EnableTransactionManagement
+@EnableTransactionManagement
 @Import(value = { PropertyConfiguration.class })
-public class ThesisConfiguration implements TransactionManagementConfigurer {
+public class ThesisConfiguration /*implements TransactionManagementConfigurer */{
 
 	@Autowired
 	PropertyConfiguration propertyConfiguration;
@@ -57,24 +59,24 @@ public class ThesisConfiguration implements TransactionManagementConfigurer {
 		return dataSource;
 	}
 
-//	@Autowired
-//	@Bean(name = "sessionFactory")
-//	public SessionFactory getSessionFactory(DataSource dataSource) {
-//
-//		LocalSessionFactoryBuilder sessionBuilder = new LocalSessionFactoryBuilder(
-//				dataSource);
-//		sessionBuilder.scanPackages("de.emo.cit.tuberlin.model");
-//		sessionBuilder.addProperties(getHibernateProperties());
-//		return sessionBuilder.buildSessionFactory();
-//	}
-//
-//	@Autowired
-//	@Bean(name = "transactionManager")
-//	public HibernateTransactionManager getTransactionManager(
-//			SessionFactory sessionFactory) {
-//		return new HibernateTransactionManager(sessionFactory);
-//	}
-//
+	@Autowired
+	@Bean(name = "sessionFactory")
+	public SessionFactory getSessionFactory(DataSource dataSource) {
+
+		LocalSessionFactoryBuilder sessionBuilder = new LocalSessionFactoryBuilder(
+				dataSource);
+		sessionBuilder.scanPackages("de.emo.cit.tuberlin.model");
+		sessionBuilder.addProperties(getHibernateProperties());
+		return sessionBuilder.buildSessionFactory();
+	}
+
+	@Autowired
+	@Bean(name = "transactionManager")
+	public HibernateTransactionManager getTransactionManager(
+			SessionFactory sessionFactory) {
+		return new HibernateTransactionManager(sessionFactory);
+	}
+
 //	@Autowired
 //	@Bean(name = "uddiDao")
 //	public UDDIDao getUDDIDao(SessionFactory sessionFactory) {
@@ -96,7 +98,7 @@ public class ThesisConfiguration implements TransactionManagementConfigurer {
     }
 
     //@Override
-    public PlatformTransactionManager annotationDrivenTransactionManager() {
-        return txManager();
-    }
+//    public PlatformTransactionManager annotationDrivenTransactionManager() {
+//        return txManager();
+//    }
 }
