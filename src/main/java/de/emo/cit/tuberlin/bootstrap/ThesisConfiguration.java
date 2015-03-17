@@ -21,7 +21,7 @@ import de.emo.cit.tuberlin.Track;
 
 @Configuration
 @ComponentScan("de.emo.cit.tuberlin")
-@EnableTransactionManagement
+//@EnableTransactionManagement
 @Import(value = { PropertyConfiguration.class })
 public class ThesisConfiguration implements TransactionManagementConfigurer {
 
