@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -20,6 +21,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import de.emo.cit.tuberlin.Emo;
 import de.emo.cit.tuberlin.Track;
+import de.emo.cit.tuberlin.service.UDDIService;
+import de.emo.cit.tuberlin.service.impl.UDDIServiceImpl;
 
 @Configuration
 @ComponentScan("de.emo.cit.tuberlin")
@@ -28,7 +31,7 @@ import de.emo.cit.tuberlin.Track;
 public class ThesisConfiguration /* implements TransactionManagementConfigurer */{
 
 	private static final String DEFAULT_PACKAGE = "de.emo.cit.tuberlin.model";
-	
+
 	@Autowired
 	PropertyConfiguration propertyConfiguration;
 
@@ -91,11 +94,11 @@ public class ThesisConfiguration /* implements TransactionManagementConfigurer *
 	// return new HibernateTransactionManager(entityManagerFactory);
 	// }
 
-	// @Autowired
-	// @Bean(name = "uddiDao")
-	// public UDDIDao getUDDIDao(EntityManagerFactory entityManagerFactory) {
-	// return new UDDIDaoImpl(entityManagerFactory);
-	// }
+	@Autowired
+	@Bean(name = "uddiService")
+	public UDDIService getUDDIDao(EntityManagerFactory entityManagerFactory) {
+		return new UDDIServiceImpl(entityManagerFactory);
+	}
 
 	private Properties getHibernateProperties() {
 		Properties properties = new Properties();
@@ -113,8 +116,8 @@ public class ThesisConfiguration /* implements TransactionManagementConfigurer *
 		// return new DataSourceTransactionManager(getDataSource());
 	}
 
-	// @Override
-	// public PlatformTransactionManager annotationDrivenTransactionManager() {
-	// return txManager();
-	// }
+	@Bean
+	public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
+		return new PersistenceExceptionTranslationPostProcessor();
+	}
 }

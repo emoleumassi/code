@@ -2,50 +2,55 @@ package de.emo.cit.tuberlin.service.impl;
 
 import java.util.List;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import de.emo.cit.tuberlin.model.UDDI;
 import de.emo.cit.tuberlin.service.UDDIService;
 
-//@Repository
+@Service("uddiService")
 public class UDDIServiceImpl implements UDDIService {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UDDIServiceImpl.class);
 
 	@Autowired
-	private SessionFactory sessionFactory;
-	private Session session = sessionFactory.getCurrentSession();
+	private EntityManagerFactory entityManagerFactory;
+	private EntityManager entityManager = entityManagerFactory
+			.createEntityManager();
 
 	public UDDIServiceImpl() {
 	}
 
-	public UDDIServiceImpl(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
+	public UDDIServiceImpl(EntityManagerFactory entityManagerFactory) {
+		this.entityManagerFactory = entityManagerFactory;
 	}
 
-	//@Override
+	@Override
 	@Transactional
 	public List<UDDI> listUDDI() {
 
 		@SuppressWarnings("unchecked")
-		List<UDDI> listUDDI = session.createQuery("from Person").list();
+		List<UDDI> listUDDI = entityManager.createQuery("from Person")
+				.getResultList();
 		for (UDDI uddi : listUDDI)
 			LOGGER.info("UDDI List:: " + uddi);
 		return listUDDI;
 	}
 
-	//@Override
+	@Override
 	@Transactional
 	public UDDI getUDDIById(int id) {
-		UDDI uddi = (UDDI) session.load(UDDI.class, new Integer(id));
-		LOGGER.info("UDDI loaded successfully, Person details= " + uddi);
-		return uddi;
+		// UDDI uddi = (UDDI) entityManager.load(UDDI.class, new Integer(id));
+		// LOGGER.info("UDDI loaded successfully, Person details= " + uddi);
+		// return uddi;
+		return null;
 	}
 
 }
