@@ -2,10 +2,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.emo.cit.tu-berlin</groupId>
-	<artifactId>master</artifactId>
-	<version>0.0.1</version>
+	<artifactId>thesis</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>MasterThesis</name>
+	<name>Master-Thesis</name>
 
 	<properties>
 		<java-version>1.8</java-version>
@@ -16,9 +16,8 @@
 		<jersey-version>1.19</jersey-version>
 	</properties>
 
-
 	<build>
-		<sourceDirectory>src</sourceDirectory>
+		<sourceDirectory>src/main/java</sourceDirectory>
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -255,3 +254,4 @@
 		</dependency>
 	</dependencies>
 </project>
+
