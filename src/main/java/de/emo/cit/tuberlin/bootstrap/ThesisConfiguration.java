@@ -2,19 +2,19 @@ package de.emo.cit.tuberlin.bootstrap;
 
 import java.util.Properties;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.BasicDataSource;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.orm.hibernate4.HibernateTransactionManager;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -25,8 +25,10 @@ import de.emo.cit.tuberlin.Track;
 @ComponentScan("de.emo.cit.tuberlin")
 @EnableTransactionManagement
 @Import(value = { PropertyConfiguration.class })
-public class ThesisConfiguration /*implements TransactionManagementConfigurer */{
+public class ThesisConfiguration /* implements TransactionManagementConfigurer */{
 
+	private static final String DEFAULT_PACKAGE = "de.emo.cit.tuberlin.model";
+	
 	@Autowired
 	PropertyConfiguration propertyConfiguration;
 
@@ -48,6 +50,17 @@ public class ThesisConfiguration /*implements TransactionManagementConfigurer */
 		return propertySourcesPlaceholderConfigurer;
 	}
 
+	@Bean
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+		em.setDataSource(getDataSource());
+		em.setPackagesToScan(DEFAULT_PACKAGE);
+
+		em.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+		em.setJpaProperties(getHibernateProperties());
+		return em;
+	}
+
 	@Bean(name = "dataSource")
 	public DataSource getDataSource() {
 		BasicDataSource dataSource = new BasicDataSource();
@@ -59,29 +72,30 @@ public class ThesisConfiguration /*implements TransactionManagementConfigurer */
 		return dataSource;
 	}
 
-	@Autowired
-	@Bean(name = "sessionFactory")
-	public SessionFactory getSessionFactory(DataSource dataSource) {
+	// @Autowired
+	// @Bean(name = "sessionFactory")
+	// public SessionFactory getSessionFactory(DataSource dataSource) {
+	//
+	// LocalSessionFactoryBuilder sessionBuilder = new
+	// LocalSessionFactoryBuilder(
+	// dataSource);
+	// sessionBuilder.scanPackages("de.emo.cit.tuberlin.model");
+	// sessionBuilder.addProperties(getHibernateProperties());
+	// return sessionBuilder.buildSessionFactory();
+	// }
 
-		LocalSessionFactoryBuilder sessionBuilder = new LocalSessionFactoryBuilder(
-				dataSource);
-		sessionBuilder.scanPackages("de.emo.cit.tuberlin.model");
-		sessionBuilder.addProperties(getHibernateProperties());
-		return sessionBuilder.buildSessionFactory();
-	}
+	// @Autowired
+	// @Bean(name = "transactionManager")
+	// public HibernateTransactionManager getTransactionManager(
+	// EntityManagerFactory entityManagerFactory) {
+	// return new HibernateTransactionManager(entityManagerFactory);
+	// }
 
-	@Autowired
-	@Bean(name = "transactionManager")
-	public HibernateTransactionManager getTransactionManager(
-			SessionFactory sessionFactory) {
-		return new HibernateTransactionManager(sessionFactory);
-	}
-
-//	@Autowired
-//	@Bean(name = "uddiDao")
-//	public UDDIDao getUDDIDao(SessionFactory sessionFactory) {
-//		return new UDDIDaoImpl(sessionFactory);
-//	}
+	// @Autowired
+	// @Bean(name = "uddiDao")
+	// public UDDIDao getUDDIDao(EntityManagerFactory entityManagerFactory) {
+	// return new UDDIDaoImpl(entityManagerFactory);
+	// }
 
 	private Properties getHibernateProperties() {
 		Properties properties = new Properties();
@@ -91,14 +105,16 @@ public class ThesisConfiguration /*implements TransactionManagementConfigurer */
 				propertyConfiguration.getJdbcDialect());
 		return properties;
 	}
-	
-	@Bean
-    public PlatformTransactionManager txManager() {
-        return new DataSourceTransactionManager(getDataSource());
-    }
 
-    //@Override
-//    public PlatformTransactionManager annotationDrivenTransactionManager() {
-//        return txManager();
-//    }
+	@Bean(name = "transactionManager")
+	public PlatformTransactionManager txManager(
+			EntityManagerFactory entityManagerFactory) {
+		return new JpaTransactionManager(entityManagerFactory);
+		// return new DataSourceTransactionManager(getDataSource());
+	}
+
+	// @Override
+	// public PlatformTransactionManager annotationDrivenTransactionManager() {
+	// return txManager();
+	// }
 }
