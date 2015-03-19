@@ -14,7 +14,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
 import de.emo.cit.tuberlin.model.UDDI;
 import de.emo.cit.tuberlin.service.ThesisService;
-import de.emo.cit.tuberlin.service.UDDIService;
 
 //@Component
 @Path("/webservice")
@@ -26,9 +25,6 @@ public class JaxService {
 	Emo emo;
 	@Autowired
 	Track track;
-
-	@Autowired
-	UDDIService uddiService;
 	
 	@SuppressWarnings("rawtypes")
 	@Autowired
@@ -78,6 +74,6 @@ public class JaxService {
 				.getAutowireCapableBeanFactory();
 		acbFactory.autowireBean(this);
 
-		return uddiService.listUDDI();
+		return thesisServive.listEntity();
 	}
 }
