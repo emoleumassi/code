@@ -22,12 +22,15 @@ public class PropertyConfiguration implements InitializingBean {
 	@Value("${jdbc.url}")
 	private String jdbcUrl;
 
-	@Value("${jdbc.dialect}")
+	@Value("${hibernate.dialect}")
 	private String jdbcDialect;
 
-	@Value("${jdbc.showsql}")
+	@Value("${hibernate.showsql}")
 	private String jdbcShowSql;
 
+	@Value("${hibernate.hbm2ddl.auto}")
+	private String jdbcHbm2ddlAuto;
+	
 	@Value("${jdbc.driverClassName}")
 	private String jdbcDriverClassName;
 
@@ -50,6 +53,10 @@ public class PropertyConfiguration implements InitializingBean {
 	public String getJdbcShowSql() {
 		return jdbcShowSql;
 	}
+	
+	public String getJdbcHbm2ddlAuto() {
+		return jdbcHbm2ddlAuto;
+	}
 
 	public String getJdbcDriverClassName() {
 		return jdbcDriverClassName;
@@ -58,10 +65,11 @@ public class PropertyConfiguration implements InitializingBean {
 	//@Override
 	public void afterPropertiesSet() throws Exception {
 		LOGGER.info("jdbcDriverClassName.....................: " + jdbcDriverClassName);
-		//LOGGER.info("jdbcUsername............................: " + jdbcUsername);
-		//LOGGER.info("jdbcPassword............................: " + jdbcPassword);
-		//LOGGER.info("jdbcUrl.................................: " + jdbcUrl);
+		LOGGER.info("jdbcUsername............................: " + jdbcUsername);
+		LOGGER.info("jdbcPassword............................: " + jdbcPassword);
+		LOGGER.info("jdbcUrl.................................: " + jdbcUrl);
 		LOGGER.info("jdbcShowSql.............................: " + jdbcShowSql);
 		LOGGER.info("jdbcDialect.............................: " + jdbcDialect);
+		LOGGER.info("jdbcHbm2ddlAuto.........................: " + jdbcHbm2ddlAuto);
 	}
 }

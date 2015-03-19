@@ -5,7 +5,6 @@ import java.util.Properties;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -21,14 +21,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import de.emo.cit.tuberlin.Emo;
 import de.emo.cit.tuberlin.Track;
-import de.emo.cit.tuberlin.service.UDDIService;
-import de.emo.cit.tuberlin.service.impl.UDDIServiceImpl;
 
 @Configuration
 @ComponentScan("de.emo.cit.tuberlin")
 @EnableTransactionManagement
 @Import(value = { PropertyConfiguration.class })
-public class ThesisConfiguration /* implements TransactionManagementConfigurer */{
+public class ThesisConfiguration {
 
 	private static final String DEFAULT_PACKAGE = "de.emo.cit.tuberlin.model";
 
@@ -66,7 +64,7 @@ public class ThesisConfiguration /* implements TransactionManagementConfigurer *
 
 	@Bean(name = "dataSource")
 	public DataSource getDataSource() {
-		BasicDataSource dataSource = new BasicDataSource();
+		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName(propertyConfiguration
 				.getJdbcDriverClassName());
 		dataSource.setUrl(propertyConfiguration.getJdbcUrl());
@@ -75,18 +73,14 @@ public class ThesisConfiguration /* implements TransactionManagementConfigurer *
 		return dataSource;
 	}
 
-	// @Autowired
-//	@Bean(name = "uddiService")
-//	public UDDIService getUDDIService(EntityManagerFactory entityManagerFactory) {
-//		return new UDDIServiceImpl(entityManagerFactory);
-//	}
-
 	private Properties getHibernateProperties() {
 		Properties properties = new Properties();
 		properties.put("hibernate.show_sql",
 				propertyConfiguration.getJdbcShowSql());
 		properties.put("hibernate.dialect",
 				propertyConfiguration.getJdbcDialect());
+		properties.put("hibernate.hbm2ddl.auto",
+				propertyConfiguration.getJdbcHbm2ddlAuto());
 		return properties;
 	}
 

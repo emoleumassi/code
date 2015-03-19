@@ -9,4 +9,6 @@ public interface UDDIService {
 	public List<UDDI> listUDDI();
 	
 	public UDDI getUDDIById(int id);
+	
+	public void createEntity(UDDI uddi);
 }

@@ -1,5 +1,7 @@
 package de.emo.cit.tuberlin;
 
+import java.util.List;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -10,7 +12,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
+import de.emo.cit.tuberlin.model.UDDI;
+import de.emo.cit.tuberlin.service.ThesisService;
 import de.emo.cit.tuberlin.service.UDDIService;
+
 //@Component
 @Path("/webservice")
 @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
@@ -22,20 +27,14 @@ public class JaxService {
 	@Autowired
 	Track track;
 
-	 @Autowired
-	 UDDIService uddiService;
+	@Autowired
+	UDDIService uddiService;
+	
+	@SuppressWarnings("rawtypes")
+	@Autowired
+	ThesisService thesisServive;
 
-	// @SuppressWarnings("resource")
-	// @Override
-	// public void onStartup(ServletContext arg0) throws ServletException {
-	// ApplicationContext applicationContext = new
-	// AnnotationConfigApplicationContext(
-	// ThesisConfiguration.class);
-	// AutowireCapableBeanFactory acbFactory = applicationContext
-	// .getAutowireCapableBeanFactory();
-	// acbFactory.autowireBean(this);
-	//
-	// }
+	UDDI uddi = new UDDI();
 
 	@SuppressWarnings("resource")
 	@GET
@@ -54,9 +53,31 @@ public class JaxService {
 		return track;
 	}
 
-	// @GET
-	// @Path("/all")
-	// public void uddiTest() {
-	// uddiDao.listUDDI();
-	// }
+	@SuppressWarnings({ "unchecked", "resource" })
+	@GET
+	@Path("/all")
+	public void getAll() {
+		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
+				ThesisConfiguration.class);
+		AutowireCapableBeanFactory acbFactory = applicationContext
+				.getAutowireCapableBeanFactory();
+		acbFactory.autowireBean(this);
+
+		uddi.setDescription("This a just a test description");
+		thesisServive.setClazz(UDDI.class);
+		thesisServive.createEntity(uddi);
+		// uddiService.listUDDI();
+	}
+
+	@GET
+	@Path("/alltt")
+	public List<UDDI> uddiTest1() {
+		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
+				ThesisConfiguration.class);
+		AutowireCapableBeanFactory acbFactory = applicationContext
+				.getAutowireCapableBeanFactory();
+		acbFactory.autowireBean(this);
+
+		return uddiService.listUDDI();
+	}
 }
