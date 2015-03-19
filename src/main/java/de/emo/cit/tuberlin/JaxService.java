@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
+import de.emo.cit.tuberlin.service.UDDIService;
 //@Component
 @Path("/webservice")
 @Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
@@ -21,8 +22,8 @@ public class JaxService {
 	@Autowired
 	Track track;
 
-	// @Autowired
-	// UDDIDao uddiDao;
+	 @Autowired
+	 UDDIService uddiService;
 
 	// @SuppressWarnings("resource")
 	// @Override

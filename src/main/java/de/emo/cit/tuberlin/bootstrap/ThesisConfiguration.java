@@ -76,29 +76,10 @@ public class ThesisConfiguration /* implements TransactionManagementConfigurer *
 	}
 
 	// @Autowired
-	// @Bean(name = "sessionFactory")
-	// public SessionFactory getSessionFactory(DataSource dataSource) {
-	//
-	// LocalSessionFactoryBuilder sessionBuilder = new
-	// LocalSessionFactoryBuilder(
-	// dataSource);
-	// sessionBuilder.scanPackages("de.emo.cit.tuberlin.model");
-	// sessionBuilder.addProperties(getHibernateProperties());
-	// return sessionBuilder.buildSessionFactory();
-	// }
-
-	// @Autowired
-	// @Bean(name = "transactionManager")
-	// public HibernateTransactionManager getTransactionManager(
-	// EntityManagerFactory entityManagerFactory) {
-	// return new HibernateTransactionManager(entityManagerFactory);
-	// }
-
-	@Autowired
-	@Bean(name = "uddiService")
-	public UDDIService getUDDIDao(EntityManagerFactory entityManagerFactory) {
-		return new UDDIServiceImpl(entityManagerFactory);
-	}
+//	@Bean(name = "uddiService")
+//	public UDDIService getUDDIService(EntityManagerFactory entityManagerFactory) {
+//		return new UDDIServiceImpl(entityManagerFactory);
+//	}
 
 	private Properties getHibernateProperties() {
 		Properties properties = new Properties();
@@ -110,10 +91,8 @@ public class ThesisConfiguration /* implements TransactionManagementConfigurer *
 	}
 
 	@Bean(name = "transactionManager")
-	public PlatformTransactionManager txManager(
-			EntityManagerFactory entityManagerFactory) {
-		return new JpaTransactionManager(entityManagerFactory);
-		// return new DataSourceTransactionManager(getDataSource());
+	public PlatformTransactionManager txManager(EntityManagerFactory emf) {
+		return new JpaTransactionManager(emf);
 	}
 
 	@Bean

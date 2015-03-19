@@ -6,9 +6,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-@Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = {
-		"methodId", "name", "url" }) })
+//@Entity
+//@Table(uniqueConstraints = { @UniqueConstraint(columnNames = {
+//		"methodId", "name", "url" }) })
 public class Method {
 
 	@Id

@@ -7,9 +7,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Check;
 
-@Entity
-@Check(constraints = "obligated in('provide', 'customer')")
-@Table
+//@Entity
+//@Check(constraints = "obligated in('provide', 'customer')")
+//@Table
 public class GuaranteeTerms {
 
 	@Id

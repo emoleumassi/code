@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,30 +15,32 @@ import org.springframework.transaction.annotation.Transactional;
 import de.emo.cit.tuberlin.model.UDDI;
 import de.emo.cit.tuberlin.service.UDDIService;
 
+@Transactional
 @Service("uddiService")
 public class UDDIServiceImpl implements UDDIService {
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(UDDIServiceImpl.class);
 
-	@Autowired
-	private EntityManagerFactory entityManagerFactory;
-	private EntityManager entityManager = entityManagerFactory
-			.createEntityManager();
+//	@Autowired
+//	private EntityManagerFactory entityManagerFactory;
+	@PersistenceContext
+	private EntityManager entityManager;
+//	= entityManagerFactory
+//			.createEntityManager();
 
-	public UDDIServiceImpl() {
-	}
-
-	public UDDIServiceImpl(EntityManagerFactory entityManagerFactory) {
-		this.entityManagerFactory = entityManagerFactory;
-	}
+//	public UDDIServiceImpl() {
+//	}
+//
+//	public UDDIServiceImpl(EntityManagerFactory entityManagerFactory) {
+//		this.entityManagerFactory = entityManagerFactory;
+//	}
 
 	@Override
-	@Transactional
 	public List<UDDI> listUDDI() {
 
 		@SuppressWarnings("unchecked")
-		List<UDDI> listUDDI = entityManager.createQuery("from Person")
+		List<UDDI> listUDDI = entityManager.createQuery("from UDDI")
 				.getResultList();
 		for (UDDI uddi : listUDDI)
 			LOGGER.info("UDDI List:: " + uddi);
@@ -45,7 +48,6 @@ public class UDDIServiceImpl implements UDDIService {
 	}
 
 	@Override
-	@Transactional
 	public UDDI getUDDIById(int id) {
 		// UDDI uddi = (UDDI) entityManager.load(UDDI.class, new Integer(id));
 		// LOGGER.info("UDDI loaded successfully, Person details= " + uddi);

@@ -7,9 +7,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Check;
 
-@Entity
-@Check(constraints = "state in('pending', 'observed', 'rejected', 'completed')")
-@Table
+//@Entity
+//@Check(constraints = "state in('pending', 'observed', 'rejected', 'completed')")
+//@Table
 public class UDDISLA {
 
 	@Id

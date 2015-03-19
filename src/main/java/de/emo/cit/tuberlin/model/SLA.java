@@ -9,8 +9,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-@Entity
-@Table
+//@Entity
+//@Table
 public class SLA {
 
 	@Id
