@@ -5,28 +5,25 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-//@Entity
-//@Table
+@Entity
+@Table
 public class OverviewDoc {
 
 	@Id
-	private int overviewDocId;
+	@Column(columnDefinition = "VARCHAR(50)", nullable = false)
+	private String overviewDocId;
 
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String description;
 	
 	@Column(columnDefinition = "VARCHAR(255)", nullable = false)
 	private String overviewUrl;
-	
-//	@OneToOne(optional = false, targetEntity = UDDI.class, fetch = FetchType.LAZY)
-//	@JoinColumn(name = "uddiId", referencedColumnName = "uddiId", insertable = true, updatable = true, nullable = false)
-//	private UDDI uddi;
 
-	public int getOverviewDocId() {
+	public String getOverviewDocId() {
 		return overviewDocId;
 	}
 
-	public void setOverviewDocId(int overviewDocId) {
+	public void setOverviewDocId(String overviewDocId) {
 		this.overviewDocId = overviewDocId;
 	}
 
@@ -44,5 +41,11 @@ public class OverviewDoc {
 
 	public void setOverviewurl(String overviewurl) {
 		this.overviewUrl = overviewurl;
+	}
+
+	@Override
+	public String toString() {
+		return "OverviewDoc [overviewDocId=" + overviewDocId + ", description="
+				+ description + ", overviewUrl=" + overviewUrl + "]";
 	}
 }

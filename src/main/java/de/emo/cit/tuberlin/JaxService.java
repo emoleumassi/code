@@ -2,9 +2,9 @@ package de.emo.cit.tuberlin;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -14,12 +14,13 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import de.emo.cit.tuberlin.bootstrap.ModelConfiguration;
 import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
 import de.emo.cit.tuberlin.config.GenerateUUID;
+import de.emo.cit.tuberlin.model.OverviewDoc;
 import de.emo.cit.tuberlin.model.UDDI;
 import de.emo.cit.tuberlin.model.UDDISLA;
 import de.emo.cit.tuberlin.service.ThesisService;
 
 @Path("/webservice")
-@Produces(javax.ws.rs.core.MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class JaxService {
 
 	@Autowired
@@ -35,6 +36,8 @@ public class JaxService {
 	private UDDI uddi;
 	@Autowired
 	private UDDISLA uddisla;
+	@Autowired
+	private OverviewDoc overviewDoc;
 
 	@SuppressWarnings("resource")
 	@GET
@@ -55,33 +58,25 @@ public class JaxService {
 
 	@SuppressWarnings({ "unchecked", "resource" })
 	@GET
-	@Path("/all/{description}")
-	// @POST
-	// @PATH("/ALL/{DESCRIPTION}")
-	public Response getAll(@PathParam("description") String description) {
-		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
-				ThesisConfiguration.class, ModelConfiguration.class);
-		AutowireCapableBeanFactory acbFactory = applicationContext
-				.getAutowireCapableBeanFactory();
-		acbFactory.autowireBean(this);
-
-		uddi.setDescription(description);
-		thesisServive.setClazz(UDDI.class);
-		thesisServive.createEntity(uddi);
-		return Response.status(200).entity(uddi).build();
-	}
-
-	@GET
 	@Path("/uddisla")
-	public Response uddiTest1() {
+	// @Path("/all/{description}")
+	// public Response getAll(@PathParam("description") String description)
+	public Response getUDDISLA() {
 		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
 				ThesisConfiguration.class, ModelConfiguration.class);
 		AutowireCapableBeanFactory acbFactory = applicationContext
 				.getAutowireCapableBeanFactory();
 		acbFactory.autowireBean(this);
+
+		overviewDoc.setOverviewDocId(GenerateUUID.newUUID());
+		overviewDoc.setDescription("overviewDoc description");
+		overviewDoc.setOverviewurl("http://emo.xxx.emo.wsdl");
+		thesisServive.setClazz(OverviewDoc.class);
+		thesisServive.createEntity(overviewDoc);
 
 		uddi.setUddiId(GenerateUUID.newUUID());
 		uddi.setDescription("uddi description test");
+		uddi.setOverviewDoc(overviewDoc);
 		thesisServive.setClazz(UDDI.class);
 		thesisServive.createEntity(uddi);
 
