@@ -1,9 +1,8 @@
 package de.emo.cit.tuberlin;
 
-import java.util.List;
-
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
@@ -12,8 +11,11 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import de.emo.cit.tuberlin.bootstrap.ModelConfiguration;
 import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
+import de.emo.cit.tuberlin.config.GenerateUUID;
 import de.emo.cit.tuberlin.model.UDDI;
+import de.emo.cit.tuberlin.model.UDDISLA;
 import de.emo.cit.tuberlin.service.ThesisService;
 
 @Path("/webservice")
@@ -29,7 +31,10 @@ public class JaxService {
 	@Autowired
 	ThesisService thesisServive;
 
-	UDDI uddi = new UDDI();
+	@Autowired
+	private UDDI uddi;
+	@Autowired
+	private UDDISLA uddisla;
 
 	@SuppressWarnings("resource")
 	@GET
@@ -50,31 +55,39 @@ public class JaxService {
 
 	@SuppressWarnings({ "unchecked", "resource" })
 	@GET
-	@Path("/all")
+	@Path("/all/{description}")
 	// @POST
 	// @PATH("/ALL/{DESCRIPTION}")
-	public Response getAll() {
+	public Response getAll(@PathParam("description") String description) {
 		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
-				ThesisConfiguration.class);
+				ThesisConfiguration.class, ModelConfiguration.class);
 		AutowireCapableBeanFactory acbFactory = applicationContext
 				.getAutowireCapableBeanFactory();
 		acbFactory.autowireBean(this);
 
-		uddi.setDescription("This a just a test description with response");
+		uddi.setDescription(description);
 		thesisServive.setClazz(UDDI.class);
 		thesisServive.createEntity(uddi);
 		return Response.status(200).entity(uddi).build();
 	}
 
 	@GET
-	@Path("/alltt")
-	public List<UDDI> uddiTest1() {
+	@Path("/uddisla")
+	public Response uddiTest1() {
 		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
-				ThesisConfiguration.class);
+				ThesisConfiguration.class, ModelConfiguration.class);
 		AutowireCapableBeanFactory acbFactory = applicationContext
 				.getAutowireCapableBeanFactory();
 		acbFactory.autowireBean(this);
 
-		return thesisServive.listEntity();
-	}
+		uddisla.setUddislaId(GenerateUUID.newUUID());
+		uddisla.setDescription("uddi sla test with UUID");
+		uddisla.setEmail("emo@cit.com");
+		uddisla.setName("my name");
+		uddisla.setPhone("015478");
+		uddisla.setState("pending");
+		uddisla.setVersion("1.0");
+		thesisServive.setClazz(UDDISLA.class);
+		thesisServive.createEntity(uddisla);
+		return Response.status(200).entity(uddisla).build();	}
 }

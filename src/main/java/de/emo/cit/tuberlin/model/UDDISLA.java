@@ -7,13 +7,14 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Check;
 
-//@Entity
-//@Check(constraints = "state in('pending', 'observed', 'rejected', 'completed')")
-//@Table
+@Entity
+@Check(constraints = "state in('pending', 'observed', 'rejected', 'completed')")
+@Table
 public class UDDISLA {
 
 	@Id
-	private int uddislaId;
+	@Column(columnDefinition = "VARCHAR(50)", nullable = false)
+	private String uddislaId;
 
 	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
 	private String name;
@@ -33,11 +34,11 @@ public class UDDISLA {
 	@Column(columnDefinition = "CHAR(5)", nullable = false)
 	private String version;
 
-	public int getUddislaId() {
+	public String getUddislaId() {
 		return uddislaId;
 	}
 
-	public void setUddislaId(int uddislaId) {
+	public void setUddislaId(String uddislaId) {
 		this.uddislaId = uddislaId;
 	}
 
@@ -87,5 +88,13 @@ public class UDDISLA {
 
 	public void setVersion(String version) {
 		this.version = version;
+	}
+
+	@Override
+	public String toString() {
+		return "UDDISLA [uddislaId=" + uddislaId + ", name=" + name
+				+ ", description=" + description + ", state=" + state
+				+ ", email=" + email + ", phone=" + phone + ", version="
+				+ version + "]";
 	}
 }

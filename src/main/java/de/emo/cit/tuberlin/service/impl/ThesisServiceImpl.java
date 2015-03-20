@@ -45,6 +45,7 @@ public class ThesisServiceImpl<T> implements ThesisService<T> {
 
 		try {
 			entityManager.persist(t);
+			LOGGER.info(t.toString());
 		} catch (Exception e) {
 			LOGGER.info(e.getMessage());
 		}
