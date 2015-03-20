@@ -10,17 +10,12 @@ import javax.persistence.Table;
 public class UDDI {
 
 	@Id
-	//@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(columnDefinition = "VARCHAR(30)", nullable = false)
+	@Column(columnDefinition = "VARCHAR(50)", nullable = false)
 	private String uddiId;
 
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String description;
 
-//	@OneToOne(optional = false, targetEntity = UDDISLA.class, fetch = FetchType.LAZY)
-//	@JoinColumn(name = "uddislaId", referencedColumnName = "uddislaId", insertable = true, updatable = true, nullable = false)
-//	private UDDISLA uddisla;
-	
 	public String getUddiId() {
 		return uddiId;
 	}

@@ -80,6 +80,11 @@ public class JaxService {
 				.getAutowireCapableBeanFactory();
 		acbFactory.autowireBean(this);
 
+		uddi.setUddiId(GenerateUUID.newUUID());
+		uddi.setDescription("uddi description test");
+		thesisServive.setClazz(UDDI.class);
+		thesisServive.createEntity(uddi);
+
 		uddisla.setUddislaId(GenerateUUID.newUUID());
 		uddisla.setDescription("uddi sla test with UUID");
 		uddisla.setEmail("emo@cit.com");
@@ -87,7 +92,9 @@ public class JaxService {
 		uddisla.setPhone("015478");
 		uddisla.setState("pending");
 		uddisla.setVersion("1.0");
+		uddisla.setUddi(uddi);
 		thesisServive.setClazz(UDDISLA.class);
 		thesisServive.createEntity(uddisla);
-		return Response.status(200).entity(uddisla).build();	}
+		return Response.status(200).entity(uddisla).build();
+	}
 }

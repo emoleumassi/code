@@ -2,7 +2,10 @@ package de.emo.cit.tuberlin.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Check;
@@ -33,6 +36,10 @@ public class UDDISLA {
 
 	@Column(columnDefinition = "CHAR(5)", nullable = false)
 	private String version;
+
+	@OneToOne(optional = false, targetEntity = UDDI.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "uddiId", referencedColumnName = "uddiId", insertable = true, updatable = true, nullable = false)
+	private UDDI uddi;
 
 	public String getUddislaId() {
 		return uddislaId;
@@ -90,11 +97,19 @@ public class UDDISLA {
 		this.version = version;
 	}
 
+	public UDDI getUddi() {
+		return uddi;
+	}
+
+	public void setUddi(UDDI uddi) {
+		this.uddi = uddi;
+	}
+
 	@Override
 	public String toString() {
 		return "UDDISLA [uddislaId=" + uddislaId + ", name=" + name
 				+ ", description=" + description + ", state=" + state
 				+ ", email=" + email + ", phone=" + phone + ", version="
-				+ version + "]";
+				+ version + ", uddi=" + uddi + "]";
 	}
 }
