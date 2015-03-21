@@ -12,8 +12,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-//@Entity
-//@Table
+@Entity
+@Table
 public class SLA {
 
 	@Id
@@ -31,8 +31,8 @@ public class SLA {
 	@Temporal(TemporalType.DATE)
 	private Date endTime;
 
-	@OneToOne(optional = false, targetEntity = UDDISLA.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "uddislaId", referencedColumnName = "uddislaId", insertable = true, updatable = true, nullable = false)
+	@OneToOne(targetEntity = UDDISLA.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "uddislaId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "uddislaId", insertable = true, updatable = true, nullable = true)
 	private UDDISLA uddisla;
 
 	public String getSlaId() {

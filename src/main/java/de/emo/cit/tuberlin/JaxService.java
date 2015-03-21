@@ -61,7 +61,7 @@ public class JaxService {
 		return track;
 	}
 
-	@SuppressWarnings({ "unchecked", "resource", "deprecation" })
+	@SuppressWarnings({ "resource", "deprecation" })
 	@GET
 	@Path("/uddisla")
 	// @Path("/all/{description}")
@@ -73,11 +73,11 @@ public class JaxService {
 				.getAutowireCapableBeanFactory();
 		acbFactory.autowireBean(this);
 
-//		sla.setSlaId(GenerateUUID.newUUID());
-//		sla.setDescription("SLA description");
-//		sla.setEndTime(new Date(2017, 03, 22));
-//		sla.setStartTime(new Date(2015, 03, 22));
-//		setEntity(sla);
+		sla.setSlaId(GenerateUUID.newUUID());
+		sla.setDescription("SLA description");
+		sla.setEndTime(new Date(2017, 03, 22));
+		sla.setStartTime(new Date(2015, 03, 22));
+		setEntity(sla);
 		
 		overviewDoc.setOverviewDocId(GenerateUUID.newUUID());
 		overviewDoc.setDescription("overviewDoc description");
@@ -98,11 +98,12 @@ public class JaxService {
 		uddisla.setVersion("1.0");
 		uddisla.setUddi(uddi);
 //		sla.setUddisla(uddisla);
-//		uddisla.setSla(sla);
+		uddisla.setSla(sla);
 		setEntity(uddisla);
 		return Response.status(200).entity(uddisla).build();
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void setEntity(Object object){
 		thesisServive.setClazz(Object.class);
 		thesisServive.createEntity(object);
