@@ -17,7 +17,7 @@ public class OverviewDoc {
 	private String description;
 	
 	@Column(columnDefinition = "VARCHAR(255)", nullable = false)
-	private String overviewUrl;
+	private String overviewURL;
 
 	public String getOverviewDocId() {
 		return overviewDocId;
@@ -35,17 +35,17 @@ public class OverviewDoc {
 		this.description = description;
 	}
 
-	public String getOverviewUrl() {
-		return overviewUrl;
+	public String getOverviewURL() {
+		return overviewURL;
 	}
 
-	public void setOverviewurl(String overviewurl) {
-		this.overviewUrl = overviewurl;
+	public void setOverviewuRL(String overviewURL) {
+		this.overviewURL = overviewURL;
 	}
 
 	@Override
 	public String toString() {
 		return "OverviewDoc [overviewDocId=" + overviewDocId + ", description="
-				+ description + ", overviewUrl=" + overviewUrl + "]";
+				+ description + ", overviewURL=" + overviewURL + "]";
 	}
 }

@@ -1,8 +1,6 @@
 package de.emo.cit.tuberlin;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -22,6 +20,7 @@ import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
 import de.emo.cit.tuberlin.config.GenerateUUID;
 import de.emo.cit.tuberlin.model.OverviewDoc;
 import de.emo.cit.tuberlin.model.SLA;
+import de.emo.cit.tuberlin.model.ThesisRoot;
 import de.emo.cit.tuberlin.model.UDDI;
 import de.emo.cit.tuberlin.model.UDDISLA;
 import de.emo.cit.tuberlin.service.ThesisService;
@@ -34,9 +33,6 @@ public class JaxService {
 	Emo emo;
 	@Autowired
 	Track track;
-
-	// @Autowired
-	// UDDISLAJson uddiSlaJson;
 
 	@SuppressWarnings("rawtypes")
 	@Autowired
@@ -73,18 +69,15 @@ public class JaxService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/send")
-	public Response postUDDISLA(Emo emo) {
+	public Response postUDDISLA(ThesisRoot thesisRoot) {
 		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
 				ThesisConfiguration.class, ModelConfiguration.class);
 		AutowireCapableBeanFactory acbFactory = applicationContext
 				.getAutowireCapableBeanFactory();
 		acbFactory.autowireBean(this);
 
-		Map<String, Emo> map = new HashMap<String, Emo>();
-
-		map.put(emo.getNom(), emo);
-
-		return Response.status(200).entity(emo).build();
+		setUUID(thesisRoot);
+		return Response.status(200).entity(thesisRoot).build();
 	}
 
 	@SuppressWarnings({ "resource", "deprecation" })
@@ -99,9 +92,6 @@ public class JaxService {
 				.getAutowireCapableBeanFactory();
 		acbFactory.autowireBean(this);
 
-		// System.out.println("Halloooooo++++++++++++++++++++++++++:" +
-		// uddiSlaJson.toString());
-
 		sla.setSlaId(GenerateUUID.newUUID());
 		sla.setDescription("SLA description");
 		sla.setEndTime(new Date(2017, 03, 22));
@@ -110,7 +100,7 @@ public class JaxService {
 
 		overviewDoc.setOverviewDocId(GenerateUUID.newUUID());
 		overviewDoc.setDescription("overviewDoc description");
-		overviewDoc.setOverviewurl("http://emo.xxx.emo.wsdl");
+		overviewDoc.setOverviewuRL("http://emo.xxx.emo.wsdl");
 		setEntity(overviewDoc);
 
 		uddi.setUddiId(GenerateUUID.newUUID());
@@ -136,5 +126,20 @@ public class JaxService {
 	private void setEntity(Object object) {
 		thesisServive.setClazz(Object.class);
 		thesisServive.createEntity(object);
+	}
+	
+	private void setUUID(ThesisRoot thesisRoot){
+		
+		UDDISLA uddisla = thesisRoot.getUddisla();
+		uddisla.setUddislaId(GenerateUUID.newUUID());
+		
+		UDDI uddi = uddisla.getUddi();
+		uddi.setUddiId(GenerateUUID.newUUID());
+		
+		SLA sla = uddisla.getSla();
+		sla.setSlaId(GenerateUUID.newUUID());	
+		
+		OverviewDoc overviewDoc = uddi.getOverviewDoc();
+		overviewDoc.setOverviewDocId(GenerateUUID.newUUID());
 	}
 }
