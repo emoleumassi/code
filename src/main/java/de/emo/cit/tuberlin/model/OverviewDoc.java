@@ -2,7 +2,10 @@ package de.emo.cit.tuberlin.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -19,6 +22,10 @@ public class OverviewDoc {
 	@Column(columnDefinition = "VARCHAR(255)", nullable = false)
 	private String overviewURL;
 
+	@OneToOne(targetEntity = UDDI.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "uddiId", columnDefinition = "VARCHAR(50)", referencedColumnName = "uddiId", insertable = true, updatable = true, nullable = false)
+	private UDDI uddi;
+	
 	public String getOverviewDocId() {
 		return overviewDocId;
 	}
@@ -39,13 +46,7 @@ public class OverviewDoc {
 		return overviewURL;
 	}
 
-	public void setOverviewuRL(String overviewURL) {
+	public void setOverviewURL(String overviewURL) {
 		this.overviewURL = overviewURL;
-	}
-
-	@Override
-	public String toString() {
-		return "OverviewDoc [overviewDocId=" + overviewDocId + ", description="
-				+ description + ", overviewURL=" + overviewURL + "]";
 	}
 }

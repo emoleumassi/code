@@ -19,8 +19,11 @@ public class UDDI {
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String description;
 
-	@OneToOne(optional = false, targetEntity = OverviewDoc.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "overviewDocId", referencedColumnName = "overviewDocId", insertable = true, updatable = true, nullable = false)
+	@OneToOne(targetEntity = UDDISLA.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "uddislaId", columnDefinition = "VARCHAR(50)", referencedColumnName = "uddislaId", insertable = true, updatable = true, nullable = false)
+	private UDDISLA uddisla;
+	
+	@OneToOne(mappedBy = "uddi", targetEntity = OverviewDoc.class, fetch = FetchType.LAZY)
 	private OverviewDoc overviewDoc;
 
 	public String getUddiId() {
@@ -45,11 +48,5 @@ public class UDDI {
 
 	public void setOverviewDoc(OverviewDoc overviewDoc) {
 		this.overviewDoc = overviewDoc;
-	}
-
-	@Override
-	public String toString() {
-		return "UDDI [uddiId=" + uddiId + ", description=" + description
-				+ ", overviewDoc=" + overviewDoc + "]";
 	}
 }

@@ -7,12 +7,16 @@
         "phone": "004944782734",
         "version": "01.2",
         "uddi": {
-            "description": "this is a uddi part...."
+            "description": "this is a uddi part....",
+            "overviewDoc": {
+                "description": "this a part for the wsdl'reference....",
+                "overviewURL": "http://www.strato.de/thesis/master/strato.wsdl"
+            }
         },
         "sla": {
             "description": "This is a sla part....",
-            "startTime": "03-02-2015",
-            "endTime": "03-02-2017"
+            "startTime": "2015-02-03",
+            "endTime": "2017-02-03"
         }
     }
 }

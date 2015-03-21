@@ -32,7 +32,7 @@ public class SLA {
 	private Date endTime;
 
 	@OneToOne(targetEntity = UDDISLA.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "uddislaId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "uddislaId", insertable = true, updatable = true, nullable = true)
+	@JoinColumn(name = "uddislaId", columnDefinition = "VARCHAR(50)", referencedColumnName = "uddislaId", insertable = true, updatable = true, nullable = false)
 	private UDDISLA uddisla;
 
 	public String getSlaId() {
@@ -65,13 +65,5 @@ public class SLA {
 
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
-	}
-
-	public UDDISLA getUddisla() {
-		return uddisla;
-	}
-
-	public void setUddisla(UDDISLA uddisla) {
-		this.uddisla = uddisla;
 	}
 }

@@ -4,7 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -37,8 +36,7 @@ public class UDDISLA {
 	@Column(columnDefinition = "CHAR(5)", nullable = false)
 	private String version;
 
-	@OneToOne(optional = false, targetEntity = UDDI.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "uddiId", referencedColumnName = "uddiId", insertable = true, updatable = true, nullable = false)
+	@OneToOne(mappedBy = "uddisla", targetEntity = UDDI.class, fetch = FetchType.LAZY)
 	private UDDI uddi;
 
 	@OneToOne(mappedBy = "uddisla", targetEntity = SLA.class, fetch = FetchType.LAZY)

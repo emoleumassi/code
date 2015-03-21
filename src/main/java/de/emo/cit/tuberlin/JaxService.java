@@ -100,7 +100,7 @@ public class JaxService {
 
 		overviewDoc.setOverviewDocId(GenerateUUID.newUUID());
 		overviewDoc.setDescription("overviewDoc description");
-		overviewDoc.setOverviewuRL("http://emo.xxx.emo.wsdl");
+		overviewDoc.setOverviewURL("http://emo.xxx.emo.wsdl");
 		setEntity(overviewDoc);
 
 		uddi.setUddiId(GenerateUUID.newUUID());
