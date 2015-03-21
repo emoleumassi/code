@@ -113,12 +113,4 @@ public class UDDISLA {
 	public void setSla(SLA sla) {
 		this.sla = sla;
 	}
-
-	@Override
-	public String toString() {
-		return "UDDISLA [uddislaId=" + uddislaId + ", name=" + name
-				+ ", description=" + description + ", state=" + state
-				+ ", email=" + email + ", phone=" + phone + ", version="
-				+ version + ", uddi=" + uddi + "]";
-	}
 }

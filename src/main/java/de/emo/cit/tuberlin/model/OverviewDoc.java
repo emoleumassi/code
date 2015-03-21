@@ -1,8 +1,8 @@
 package de.emo.cit.tuberlin.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -22,8 +22,8 @@ public class OverviewDoc {
 	@Column(columnDefinition = "VARCHAR(255)", nullable = false)
 	private String overviewURL;
 
-	@OneToOne(targetEntity = UDDI.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "uddiId", columnDefinition = "VARCHAR(50)", referencedColumnName = "uddiId", insertable = true, updatable = true, nullable = false)
+	@OneToOne(targetEntity = UDDI.class, cascade = CascadeType.ALL)
+	@JoinColumn(name = "uddiId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "uddiId", insertable = true, updatable = true, nullable = true)
 	private UDDI uddi;
 	
 	public String getOverviewDocId() {

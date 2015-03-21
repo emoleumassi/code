@@ -61,14 +61,17 @@ public class POSTService {
 
 		sla = uddisla.getSla();
 		sla.setSlaId(GenerateUUID.newUUID());
-
+		
 		overviewDoc = uddi.getOverviewDoc();
 		overviewDoc.setOverviewDocId(GenerateUUID.newUUID());
-
-		setEntity(uddisla);
+		
 		setEntity(sla);
-		setEntity(uddi);
 		setEntity(overviewDoc);
+//		uddi.setOverviewDoc(overviewDoc);
+		setEntity(uddi);
+//		uddisla.setSla(sla);
+//		uddisla.setUddi(uddi);
+		setEntity(uddisla);
 	}
 
 	@SuppressWarnings("unchecked")

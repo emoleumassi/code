@@ -1,5 +1,6 @@
 package de.emo.cit.tuberlin.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,10 +20,10 @@ public class UDDI {
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String description;
 
-	@OneToOne(targetEntity = UDDISLA.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "uddislaId", columnDefinition = "VARCHAR(50)", referencedColumnName = "uddislaId", insertable = true, updatable = true, nullable = false)
+	@OneToOne(targetEntity = UDDISLA.class, cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "uddislaId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "uddislaId", insertable = true, updatable = true, nullable = true)
 	private UDDISLA uddisla;
-	
+
 	@OneToOne(mappedBy = "uddi", targetEntity = OverviewDoc.class, fetch = FetchType.LAZY)
 	private OverviewDoc overviewDoc;
 

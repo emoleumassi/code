@@ -19,9 +19,6 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import de.emo.cit.tuberlin.Emo;
-import de.emo.cit.tuberlin.Track;
-
 @Configuration
 @ComponentScan("de.emo.cit.tuberlin")
 @EnableTransactionManagement
@@ -32,16 +29,6 @@ public class ThesisConfiguration {
 
 	@Autowired
 	PropertyConfiguration propertyConfiguration;
-
-	@Bean
-	public Emo emo() {
-		return new Emo();
-	}
-
-	@Bean
-	public Track track() {
-		return new Track();
-	}
 
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer properties() {
