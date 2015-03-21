@@ -41,6 +41,9 @@ public class UDDISLA {
 	@JoinColumn(name = "uddiId", referencedColumnName = "uddiId", insertable = true, updatable = true, nullable = false)
 	private UDDI uddi;
 
+//	@OneToOne(mappedBy = "sla", targetEntity = SLA.class)
+//	private SLA sla;
+
 	public String getUddislaId() {
 		return uddislaId;
 	}
@@ -104,6 +107,14 @@ public class UDDISLA {
 	public void setUddi(UDDI uddi) {
 		this.uddi = uddi;
 	}
+
+//	public SLA getSla() {
+//		return sla;
+//	}
+//
+//	public void setSla(SLA sla) {
+//		this.sla = sla;
+//	}
 
 	@Override
 	public String toString() {

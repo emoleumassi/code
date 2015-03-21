@@ -4,7 +4,10 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -14,7 +17,8 @@ import javax.persistence.TemporalType;
 public class SLA {
 
 	@Id
-	private int slaId;
+	@Column(columnDefinition = "VARCHAR(50)", nullable = false)
+	private String slaId;
 
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String description;
@@ -25,17 +29,17 @@ public class SLA {
 
 	@Column(nullable = false)
 	@Temporal(TemporalType.DATE)
-	private short endTime;
+	private Date endTime;
 
-//	@OneToOne(optional = false, targetEntity = UDDISLA.class, fetch = FetchType.LAZY)
-//	@JoinColumn(name = "uddislaId", referencedColumnName = "uddislaId", insertable = true, updatable = true, nullable = false)
-//	private UDDISLA uddisla;
+	@OneToOne(optional = false, targetEntity = UDDISLA.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "uddislaId", referencedColumnName = "uddislaId", insertable = true, updatable = true, nullable = false)
+	private UDDISLA uddisla;
 
-	public int getSlaId() {
+	public String getSlaId() {
 		return slaId;
 	}
 
-	public void setSlaId(int slaId) {
+	public void setSlaId(String slaId) {
 		this.slaId = slaId;
 	}
 
@@ -55,11 +59,19 @@ public class SLA {
 		this.startTime = startTime;
 	}
 
-	public short getEndTime() {
+	public Date getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(short endTime) {
+	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
+	}
+
+	public UDDISLA getUddisla() {
+		return uddisla;
+	}
+
+	public void setUddisla(UDDISLA uddisla) {
+		this.uddisla = uddisla;
 	}
 }
