@@ -17,16 +17,16 @@ import de.emo.cit.tuberlin.service.ThesisService;
 public class ThesisServiceImpl<T> implements ThesisService<T> {
 
 	private Class<T> clazz;
-	
+
 	@PersistenceContext
 	private EntityManager entityManager;
-	
+
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ThesisServiceImpl.class);
 
 	public void setClazz(final Class<T> clazzToSet) {
-        this.clazz = clazzToSet;
-    }
+		this.clazz = clazzToSet;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -36,7 +36,7 @@ public class ThesisServiceImpl<T> implements ThesisService<T> {
 	}
 
 	@Override
-	public T getEntityById(int id) {
+	public T getEntityById(String id) {
 		return entityManager.find(clazz, id);
 	}
 
@@ -50,4 +50,17 @@ public class ThesisServiceImpl<T> implements ThesisService<T> {
 			LOGGER.info(e.getMessage());
 		}
 	}
+
+	@Override
+	public void updateColumnById(String field, String tableId, String targetId, String id) {
+		String query = "update SLA " /* + clazz.getName() */+ " set " + field
+				+ "=\"" + targetId + "\" where " + tableId + "=\"" + id + "\"";
+		LOGGER.info(query);
+		try {
+			entityManager.createQuery(query).executeUpdate();
+		} catch (Exception e) {
+			LOGGER.info(e.getMessage());
+		}
+	}
+
 }

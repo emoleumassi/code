@@ -26,6 +26,8 @@ import de.emo.cit.tuberlin.service.ThesisService;
 @Produces(MediaType.APPLICATION_JSON)
 public class POSTService {
 
+	// curl -H "Content-Type: application/json" -d
+	// '@/media/ferdinand/Emo/test.json' localhost:8080/thesis/webservice/send
 	@SuppressWarnings("rawtypes")
 	@Autowired
 	ThesisService thesisServive;
@@ -61,17 +63,23 @@ public class POSTService {
 
 		sla = uddisla.getSla();
 		sla.setSlaId(GenerateUUID.newUUID());
-		
+
 		overviewDoc = uddi.getOverviewDoc();
 		overviewDoc.setOverviewDocId(GenerateUUID.newUUID());
-		
+
 		setEntity(sla);
 		setEntity(overviewDoc);
-//		uddi.setOverviewDoc(overviewDoc);
 		setEntity(uddi);
-//		uddisla.setSla(sla);
-//		uddisla.setUddi(uddi);
 		setEntity(uddisla);
+
+		// thesisServive.setClazz(SLA.class);
+		// thesisServive.updateColumnById("uddislaId", "slaId",
+		// uddisla.getUddislaId(), sla.getSlaId());
+
+		// thesisServive.setClazz(UDDISLA.class);
+		// UDDISLA uddisla = (UDDISLA)
+		// thesisServive.getEntityById(this.uddisla.getUddislaId());
+		// uddisla.setSla(sla);
 	}
 
 	@SuppressWarnings("unchecked")

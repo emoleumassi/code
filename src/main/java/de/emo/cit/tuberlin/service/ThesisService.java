@@ -8,7 +8,9 @@ public interface ThesisService<T> {
 	
 	public List<T> listEntity();
 
-	public T getEntityById(int id);
+	public T getEntityById(String id);
 
 	public void createEntity(T t);
+	
+	public void updateColumnById(String field, String tableId, String targetId, String id);
 }
