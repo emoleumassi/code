@@ -1,8 +1,12 @@
 package de.emo.cit.tuberlin;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -30,6 +34,9 @@ public class JaxService {
 	Emo emo;
 	@Autowired
 	Track track;
+
+	// @Autowired
+	// UDDISLAJson uddiSlaJson;
 
 	@SuppressWarnings("rawtypes")
 	@Autowired
@@ -61,6 +68,25 @@ public class JaxService {
 		return track;
 	}
 
+	@SuppressWarnings({ "resource" })
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/send")
+	public Response postUDDISLA(Emo emo) {
+		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
+				ThesisConfiguration.class, ModelConfiguration.class);
+		AutowireCapableBeanFactory acbFactory = applicationContext
+				.getAutowireCapableBeanFactory();
+		acbFactory.autowireBean(this);
+
+		Map<String, Emo> map = new HashMap<String, Emo>();
+
+		map.put(emo.getNom(), emo);
+
+		return Response.status(200).entity(emo).build();
+	}
+
 	@SuppressWarnings({ "resource", "deprecation" })
 	@GET
 	@Path("/uddisla")
@@ -73,12 +99,15 @@ public class JaxService {
 				.getAutowireCapableBeanFactory();
 		acbFactory.autowireBean(this);
 
+		// System.out.println("Halloooooo++++++++++++++++++++++++++:" +
+		// uddiSlaJson.toString());
+
 		sla.setSlaId(GenerateUUID.newUUID());
 		sla.setDescription("SLA description");
 		sla.setEndTime(new Date(2017, 03, 22));
 		sla.setStartTime(new Date(2015, 03, 22));
 		setEntity(sla);
-		
+
 		overviewDoc.setOverviewDocId(GenerateUUID.newUUID());
 		overviewDoc.setDescription("overviewDoc description");
 		overviewDoc.setOverviewurl("http://emo.xxx.emo.wsdl");
@@ -97,14 +126,14 @@ public class JaxService {
 		uddisla.setState("pending");
 		uddisla.setVersion("1.0");
 		uddisla.setUddi(uddi);
-//		sla.setUddisla(uddisla);
+		// sla.setUddisla(uddisla);
 		uddisla.setSla(sla);
 		setEntity(uddisla);
 		return Response.status(200).entity(uddisla).build();
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	private void setEntity(Object object){
+	private void setEntity(Object object) {
 		thesisServive.setClazz(Object.class);
 		thesisServive.createEntity(object);
 	}
