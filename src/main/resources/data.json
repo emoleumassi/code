@@ -1,0 +1,18 @@
+{
+    "uddisla": {
+        "name": "Strato",
+        "description": "this describes a document for uddi, sla and ....",
+        "state": "pending",
+        "email": "uddisla@strato.de",
+        "phone": "004944782734",
+        "version": "01.2",
+        "uddi": {
+            "description": "this is a uddi part...."
+        },
+        "sla": {
+            "description": "This is a sla part....",
+            "startTime": "03-02-2015",
+            "endTime": "03-02-2017"
+        }
+    }
+}

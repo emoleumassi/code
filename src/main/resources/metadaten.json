@@ -1,0 +1,85 @@
+{
+    "uddisla": {
+        "name": "Strato",
+        "description": "this describes a document for uddi, sla and ....",
+        "state": "pending",
+        "email": "uddisla@strato.de",
+        "phone": "004944782734",
+        "version": "01.2",
+        "uddi": {
+            "description": "this is a uddi part....",
+            "overviewDoc": {
+                "description": "this a part for the wsdl'reference....",
+                "overviewURL": "http://www.strato.de/thesis/master/strato.wsdl"
+            }
+        },
+        "sla": {
+            "description": "This is a sla part....",
+            "startTime": "03-02-2015",
+            "endTime": "03-02-2017",
+            "Terms": [
+                {
+                    "service": [
+                        {
+                            "name": "ServerStrato",
+                            "designation": "server",
+                            "description": "This is a server for...",
+                            "costPerUnitOfAccount": "50",
+                            "unitOfAccount": 4
+                        },
+                        {
+                            "name": "DatabaseStrato",
+                            "designation": "databasesystem",
+                            "description": "a database'system for....",
+                            "costPerUnitOfAccount": "100",
+                            "unitOfAccount": 2
+                        }
+                    ],
+                    "Guarantee": [
+                        {
+                            "obligated": "ServiceProvider",
+                            "serviceName": "ServerStrato",
+                            "keyPerformanceIndicator": [
+                                {
+                                    "designation": "availability",
+                                    "method": "amazon",
+                                    "qualifyingCondiction": "98%",
+                                    "targetValue": "99%"
+                                },
+                                {
+                                    "designation": "response time",
+                                    "method": "rackspace",
+                                    "qualifyingCondiction": "5ms",
+                                    "targetValue": "3ms"
+                                }
+                            ]
+                        },
+                        {
+                            "obligated": "ServiceProvider",
+                            "serviceName": "DatabaseStrato",
+                            "keyPerformanceIndicator": [
+                                {
+                                    "designation": "MTBF",
+                                    "method": "msazure",
+                                    "qualifyingCondiction": "2h",
+                                    "targetValue": "10h"
+                                },
+                                {
+                                    "designation": "MTTR",
+                                    "method": "rackspace",
+                                    "qualifyingCondiction": "1h",
+                                    "targetValue": "0.5h"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "method": {
+                "amazon": "http://aws.amazon.com/de/ec2/sla",
+                "msazure": "http://azure.microsoft.com/eu-us/support/legal/sla",
+                "rackspace": "http://www.rackspace.com/managed_hosting/support/servicelevels/managedsla"
+            }
+        }
+    }
+}
