@@ -34,11 +34,11 @@
              }],
             "guaranteeTerms": [
             {
-            	"obligated": "ServiceProvider",
+            	"obligated": "provider",
                 "serviceName": "ServerStrato",
                 "keyPerformanceIndicator": [
                 {
-                	"designation": "availability",
+                    "designation": "availability",
                     "qualifyingCondiction": "98%",
                     "targetValue": "99%"
                 },
@@ -49,11 +49,11 @@
                 }]
              },
              {
-                "obligated": "ServiceProvider",
+                "obligated": "provider",
                 "serviceName": "DatabaseStrato",
                 "keyPerformanceIndicator": [
                 {
-                	"designation": "MTBF",
+                    "designation": "MTBF",
                     "qualifyingCondiction": "2h",
                     "targetValue": "10h"
                 },

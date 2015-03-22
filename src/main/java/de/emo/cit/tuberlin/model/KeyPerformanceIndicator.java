@@ -26,14 +26,14 @@ public class KeyPerformanceIndicator {
 	@Column(columnDefinition = "VARCHAR(5)", nullable = false)
 	private String qualifyingCondiction;
 
-	// @OneToOne(optional = false, targetEntity = Method.class, fetch =
+	// @OneToOne(targetEntity = Method.class, fetch =
 	// FetchType.LAZY)
 	// @JoinColumn(name = "methodId", columnDefinition =
 	// "VARCHAR(50) default 'xxxxx'", referencedColumnName = "methodId",
 	// insertable = true, updatable = true, nullable = true)
 	// private Method method;
 
-	@ManyToOne(optional = false, targetEntity = GuaranteeTerms.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = GuaranteeTerms.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "guaranteeTermId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "guaranteeTermId", insertable = true, updatable = true, nullable = true)
 	private GuaranteeTerms guaranteeTerms;
 

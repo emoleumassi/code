@@ -28,7 +28,7 @@ public class GuaranteeTerms {
 	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
 	private String serviceName;
 
-	@ManyToOne(optional = false, targetEntity = SLA.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = SLA.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "slaId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "slaId", insertable = true, updatable = true, nullable = true)
 	private SLA sla;
 

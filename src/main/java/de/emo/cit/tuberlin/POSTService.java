@@ -78,8 +78,10 @@ public class POSTService {
 
 		serviceTermsList = sla.getServiceTerms();
 		guaranteeTermsList = sla.getGuaranteeTerms();
-		for (ServiceTerms serviceTerms : serviceTermsList)
+		for (ServiceTerms serviceTerms : serviceTermsList){			
 			serviceTerms.setServiceTermId(GenerateUUID.newUUID());
+			setEntity(serviceTerms);
+		}
 		for (GuaranteeTerms guaranteeTerms : guaranteeTermsList) {
 			guaranteeTerms.setGuaranteeTermId(GenerateUUID.newUUID());
 			keyPerformanceIndicatorList = guaranteeTerms
@@ -87,7 +89,9 @@ public class POSTService {
 			for (KeyPerformanceIndicator keyPerformanceIndicator : keyPerformanceIndicatorList) {
 				keyPerformanceIndicator
 						.setKeyPerformanceIndicatorId(GenerateUUID.newUUID());
+				setEntity(keyPerformanceIndicator);
 			}
+			setEntity(guaranteeTerms);
 		}
 
 		setEntity(sla);

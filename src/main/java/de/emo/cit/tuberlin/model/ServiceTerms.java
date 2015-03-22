@@ -31,7 +31,7 @@ public class ServiceTerms {
 	@Column(columnDefinition = "INTEGER", nullable = false)
 	private int unitOfAccount;
 
-	@ManyToOne(optional = false, targetEntity = SLA.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = SLA.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "slaId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "slaId", insertable = true, updatable = true, nullable = true)
 	private SLA sla;
 
