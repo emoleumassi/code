@@ -1,14 +1,16 @@
 package de.emo.cit.tuberlin.model;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
-//@Entity
-//@Table
+@Entity
+@Table
 public class KeyPerformanceIndicator {
 
 	@Id
@@ -23,11 +25,14 @@ public class KeyPerformanceIndicator {
 
 	@Column(columnDefinition = "VARCHAR(5)", nullable = false)
 	private String qualifyingCondiction;
-	
-	@OneToOne(optional = false, targetEntity = Method.class, fetch = FetchType.LAZY)
-	@JoinColumn(name = "methodId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "methodId", insertable = true, updatable = true, nullable = true)
-	private Method method;
-	
+
+	// @OneToOne(optional = false, targetEntity = Method.class, fetch =
+	// FetchType.LAZY)
+	// @JoinColumn(name = "methodId", columnDefinition =
+	// "VARCHAR(50) default 'xxxxx'", referencedColumnName = "methodId",
+	// insertable = true, updatable = true, nullable = true)
+	// private Method method;
+
 	@ManyToOne(optional = false, targetEntity = GuaranteeTerms.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "guaranteeTermId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "guaranteeTermId", insertable = true, updatable = true, nullable = true)
 	private GuaranteeTerms guaranteeTerms;
@@ -64,19 +69,19 @@ public class KeyPerformanceIndicator {
 		this.qualifyingCondiction = qualifyingCondiction;
 	}
 
-	public Method getMethod() {
-		return method;
-	}
+	// public Method getMethod() {
+	// return method;
+	// }
+	//
+	// public void setMethod(Method method) {
+	// this.method = method;
+	// }
 
-	public void setMethod(Method method) {
-		this.method = method;
-	}
-
-	public GuaranteeTerms getGuaranteeTerms() {
-		return guaranteeTerms;
-	}
-
-	public void setGuaranteeTerms(GuaranteeTerms guaranteeTerms) {
-		this.guaranteeTerms = guaranteeTerms;
-	}
+	// public GuaranteeTerms getGuaranteeTerms() {
+	// return guaranteeTerms;
+	// }
+	//
+	// public void setGuaranteeTerms(GuaranteeTerms guaranteeTerms) {
+	// this.guaranteeTerms = guaranteeTerms;
+	// }
 }

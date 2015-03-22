@@ -36,10 +36,32 @@
             {
             	"obligated": "ServiceProvider",
                 "serviceName": "ServerStrato",
+                "keyPerformanceIndicator": [
+                {
+                	"designation": "availability",
+                    "qualifyingCondiction": "98%",
+                    "targetValue": "99%"
+                },
+                {
+                    "designation": "response time",
+                    "qualifyingCondiction": "5ms",
+                    "targetValue": "3ms"
+                }]
              },
              {
                 "obligated": "ServiceProvider",
                 "serviceName": "DatabaseStrato",
+                "keyPerformanceIndicator": [
+                {
+                	"designation": "MTBF",
+                    "qualifyingCondiction": "2h",
+                    "targetValue": "10h"
+                },
+                {
+                    "designation": "MTTR",
+                    "qualifyingCondiction": "1h",
+                    "targetValue": "0.5h"
+                }]
              }]
         }
     }

@@ -38,8 +38,8 @@ public class SLA {
 	@JoinColumn(name = "uddislaId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "uddislaId", insertable = true, updatable = true, nullable = true)
 	private UDDISLA uddisla;
 
-//	@OneToMany(mappedBy = "sla", targetEntity = GuaranteeTerms.class, fetch = FetchType.LAZY)
-//	private List<GuaranteeTerms> guaranteeTerms;
+	@OneToMany(mappedBy = "sla", targetEntity = GuaranteeTerms.class, fetch = FetchType.LAZY)
+	private List<GuaranteeTerms> guaranteeTerms;
 
 	@OneToMany(mappedBy = "sla", targetEntity = ServiceTerms.class, fetch = FetchType.LAZY)
 	private List<ServiceTerms> serviceTerms;
@@ -74,6 +74,14 @@ public class SLA {
 
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
+	}
+
+	public List<GuaranteeTerms> getGuaranteeTerms() {
+		return guaranteeTerms;
+	}
+
+	public void setGuaranteeTerms(List<GuaranteeTerms> guaranteeTerms) {
+		this.guaranteeTerms = guaranteeTerms;
 	}
 
 	public List<ServiceTerms> getServiceTerms() {

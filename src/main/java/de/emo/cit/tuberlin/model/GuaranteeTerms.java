@@ -1,15 +1,21 @@
 package de.emo.cit.tuberlin.model;
 
+import java.util.List;
+
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
-//@Entity
-//@Check(constraints = "obligated in('provide', 'customer')")
-//@Table
+import org.hibernate.annotations.Check;
+
+@Entity
+@Check(constraints = "obligated in('provide', 'customer')")
+@Table
 public class GuaranteeTerms {
 
 	@Id
@@ -27,7 +33,7 @@ public class GuaranteeTerms {
 	private SLA sla;
 
 	@OneToMany(mappedBy = "guaranteeTerms", targetEntity = KeyPerformanceIndicator.class, fetch = FetchType.LAZY)
-	private KeyPerformanceIndicator keyPerformanceIndicator;
+	private List<KeyPerformanceIndicator> keyPerformanceIndicator;
 
 	public String getGuaranteeTermId() {
 		return guaranteeTermId;
@@ -53,11 +59,12 @@ public class GuaranteeTerms {
 		this.serviceName = serviceName;
 	}
 
-	public SLA getSla() {
-		return sla;
+	public List<KeyPerformanceIndicator> getKeyPerformanceIndicator() {
+		return keyPerformanceIndicator;
 	}
 
-	public void setSla(SLA sla) {
-		this.sla = sla;
+	public void setKeyPerformanceIndicator(
+			List<KeyPerformanceIndicator> keyPerformanceIndicator) {
+		this.keyPerformanceIndicator = keyPerformanceIndicator;
 	}
 }

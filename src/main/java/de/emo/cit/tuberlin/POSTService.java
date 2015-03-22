@@ -17,6 +17,8 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import de.emo.cit.tuberlin.bootstrap.ModelConfiguration;
 import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
 import de.emo.cit.tuberlin.config.GenerateUUID;
+import de.emo.cit.tuberlin.model.GuaranteeTerms;
+import de.emo.cit.tuberlin.model.KeyPerformanceIndicator;
 import de.emo.cit.tuberlin.model.OverviewDoc;
 import de.emo.cit.tuberlin.model.SLA;
 import de.emo.cit.tuberlin.model.ServiceTerms;
@@ -41,6 +43,8 @@ public class POSTService {
 	private OverviewDoc overviewDoc;
 	// private ServiceTerms serviceTerms;
 	private List<ServiceTerms> serviceTermsList;
+	private List<GuaranteeTerms> guaranteeTermsList;
+	private List<KeyPerformanceIndicator> keyPerformanceIndicatorList;
 
 	@SuppressWarnings({ "resource" })
 	@POST
@@ -73,8 +77,17 @@ public class POSTService {
 		overviewDoc.setOverviewDocId(GenerateUUID.newUUID());
 
 		serviceTermsList = sla.getServiceTerms();
-		for (ServiceTerms serviceTerms : serviceTermsList) {
+		guaranteeTermsList = sla.getGuaranteeTerms();
+		for (ServiceTerms serviceTerms : serviceTermsList)
 			serviceTerms.setServiceTermId(GenerateUUID.newUUID());
+		for (GuaranteeTerms guaranteeTerms : guaranteeTermsList) {
+			guaranteeTerms.setGuaranteeTermId(GenerateUUID.newUUID());
+			keyPerformanceIndicatorList = guaranteeTerms
+					.getKeyPerformanceIndicator();
+			for (KeyPerformanceIndicator keyPerformanceIndicator : keyPerformanceIndicatorList) {
+				keyPerformanceIndicator
+						.setKeyPerformanceIndicatorId(GenerateUUID.newUUID());
+			}
 		}
 
 		setEntity(sla);
