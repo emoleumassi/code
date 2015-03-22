@@ -15,8 +15,8 @@
         },
         "sla": {
             "description": "This is a sla part....",
-            "startTime": "03-02-2015",
-            "endTime": "03-02-2017",
+            "startTime": "2015-02-03",
+            "endTime": "2017-02-03"
             "Terms": [
                 {
                     "serviceTerms": [

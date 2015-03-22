@@ -1,5 +1,7 @@
 package de.emo.cit.tuberlin;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -17,6 +19,7 @@ import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
 import de.emo.cit.tuberlin.config.GenerateUUID;
 import de.emo.cit.tuberlin.model.OverviewDoc;
 import de.emo.cit.tuberlin.model.SLA;
+import de.emo.cit.tuberlin.model.ServiceTerms;
 import de.emo.cit.tuberlin.model.ThesisRoot;
 import de.emo.cit.tuberlin.model.UDDI;
 import de.emo.cit.tuberlin.model.UDDISLA;
@@ -36,6 +39,8 @@ public class POSTService {
 	private UDDI uddi;
 	private UDDISLA uddisla;
 	private OverviewDoc overviewDoc;
+	// private ServiceTerms serviceTerms;
+	private List<ServiceTerms> serviceTermsList;
 
 	@SuppressWarnings({ "resource" })
 	@POST
@@ -66,6 +71,11 @@ public class POSTService {
 
 		overviewDoc = uddi.getOverviewDoc();
 		overviewDoc.setOverviewDocId(GenerateUUID.newUUID());
+
+		serviceTermsList = sla.getServiceTerms();
+		for (ServiceTerms serviceTerms : serviceTermsList) {
+			serviceTerms.setServiceTermId(GenerateUUID.newUUID());
+		}
 
 		setEntity(sla);
 		setEntity(overviewDoc);

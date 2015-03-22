@@ -1,12 +1,15 @@
 package de.emo.cit.tuberlin.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -36,11 +39,11 @@ public class SLA {
 	private UDDISLA uddisla;
 
 //	@OneToMany(mappedBy = "sla", targetEntity = GuaranteeTerms.class, fetch = FetchType.LAZY)
-//	private GuaranteeTerms guaranteeTerms;
-//
-//	@OneToMany(mappedBy = "sla", targetEntity = ServiceTerms.class, fetch = FetchType.LAZY)
-//	private ServiceTerms serviceTerms;
+//	private List<GuaranteeTerms> guaranteeTerms;
 
+	@OneToMany(mappedBy = "sla", targetEntity = ServiceTerms.class, fetch = FetchType.LAZY)
+	private List<ServiceTerms> serviceTerms;
+	
 	public String getSlaId() {
 		return slaId;
 	}
@@ -71,5 +74,13 @@ public class SLA {
 
 	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
+	}
+
+	public List<ServiceTerms> getServiceTerms() {
+		return serviceTerms;
+	}
+
+	public void setServiceTerms(List<ServiceTerms> serviceTerms) {
+		this.serviceTerms = serviceTerms;
 	}
 }

@@ -16,7 +16,31 @@
         "sla": {
             "description": "This is a sla part....",
             "startTime": "2015-02-03",
-            "endTime": "2017-02-03"
+            "endTime": "2017-02-03",
+            "serviceTerms": [
+            {
+            	"name": "ServerStrato",
+                "designation": "server",
+                "description": "This is a server for...",
+                "costPerUnitOfAccount": "50",
+                "unitOfAccount": 4
+             },
+             {
+                "name": "DatabaseStrato",
+                "designation": "databasesystem",
+                "description": "a database'system for....",
+                "costPerUnitOfAccount": "100",
+                "unitOfAccount": 2
+             }],
+            "guaranteeTerms": [
+            {
+            	"obligated": "ServiceProvider",
+                "serviceName": "ServerStrato",
+             },
+             {
+                "obligated": "ServiceProvider",
+                "serviceName": "DatabaseStrato",
+             }]
         }
     }
 }

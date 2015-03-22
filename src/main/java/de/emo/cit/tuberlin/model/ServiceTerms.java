@@ -1,18 +1,20 @@
 package de.emo.cit.tuberlin.model;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-//@Entity
-//@Table
+@Entity
+@Table
 public class ServiceTerms {
 
 	@Id
 	@Column(columnDefinition = "VARCHAR(50)", nullable = false)
-	private String serviceId;
+	private String serviceTermId;
 
 	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
 	private String name;
@@ -33,12 +35,12 @@ public class ServiceTerms {
 	@JoinColumn(name = "slaId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "slaId", insertable = true, updatable = true, nullable = true)
 	private SLA sla;
 
-	public String getServiceId() {
-		return serviceId;
+	public String getServiceTermId() {
+		return serviceTermId;
 	}
 
-	public void setServiceId(String serviceId) {
-		this.serviceId = serviceId;
+	public void setServiceTermId(String serviceTermId) {
+		this.serviceTermId = serviceTermId;
 	}
 
 	public String getName() {
