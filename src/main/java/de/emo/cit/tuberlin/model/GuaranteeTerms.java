@@ -1,11 +1,11 @@
 package de.emo.cit.tuberlin.model;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.Check;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 //@Entity
 //@Check(constraints = "obligated in('provide', 'customer')")
@@ -13,8 +13,8 @@ import org.hibernate.annotations.Check;
 public class GuaranteeTerms {
 
 	@Id
-	@Column(name = "guaranteeId")
-	private int guaranteeId;
+	@Column(columnDefinition = "VARCHAR(50)", nullable = false)
+	private String guaranteeTermId;
 
 	@Column(columnDefinition = "VARCHAR(10)", nullable = false)
 	private String obligated;
@@ -22,20 +22,19 @@ public class GuaranteeTerms {
 	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
 	private String serviceName;
 
-//	@ManyToOne(optional = false, targetEntity = SLA.class, fetch = FetchType.LAZY)
-//	@JoinColumn(name = "slaId", referencedColumnName = "slaId", insertable = true, updatable = true, nullable = false)
-//	private SLA sla;
-//
-//	@ManyToOne(optional = false, targetEntity = KeyPerformanceIndicator.class, fetch = FetchType.LAZY)
-//	@JoinColumn(name = "keyPerformanceIndicatorId", referencedColumnName = "keyPerformanceIndicatorId", insertable = true, updatable = true, nullable = false)
-//	private KeyPerformanceIndicator keyPerformanceIndicator;
+	@ManyToOne(optional = false, targetEntity = SLA.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "slaId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "slaId", insertable = true, updatable = true, nullable = true)
+	private SLA sla;
 
-	public int getGuaranteeId() {
-		return guaranteeId;
+	@OneToMany(mappedBy = "guaranteeTerms", targetEntity = KeyPerformanceIndicator.class, fetch = FetchType.LAZY)
+	private KeyPerformanceIndicator keyPerformanceIndicator;
+
+	public String getGuaranteeTermId() {
+		return guaranteeTermId;
 	}
 
-	public void setGuaranteeId(int guaranteeId) {
-		this.guaranteeId = guaranteeId;
+	public void setGuaranteeTermId(String guaranteeTermId) {
+		this.guaranteeTermId = guaranteeTermId;
 	}
 
 	public String getObligated() {
@@ -52,5 +51,13 @@ public class GuaranteeTerms {
 
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
+	}
+
+	public SLA getSla() {
+		return sla;
+	}
+
+	public void setSla(SLA sla) {
+		this.sla = sla;
 	}
 }

@@ -1,10 +1,9 @@
 package de.emo.cit.tuberlin.model;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.OneToOne;
 
 //@Entity
 //@Table(uniqueConstraints = { @UniqueConstraint(columnNames = {
@@ -12,8 +11,8 @@ import javax.persistence.UniqueConstraint;
 public class Method {
 
 	@Id
-	@Column(name = "methodId")
-	private int methodId;
+	@Column(columnDefinition = "VARCHAR(50)", nullable = false)
+	private String methodId;
 
 	@Column(columnDefinition = "VARCHAR(50)", nullable = false)
 	private String name;
@@ -21,11 +20,14 @@ public class Method {
 	@Column(columnDefinition = "VARCHAR(255)", nullable = false)
 	private String url;
 
-	public int getMethodId() {
+	@OneToOne(mappedBy = "method", targetEntity = KeyPerformanceIndicator.class, fetch = FetchType.LAZY)
+	private KeyPerformanceIndicator keyPerformanceIndicator;
+
+	public String getMethodId() {
 		return methodId;
 	}
 
-	public void setMethodId(int methodId) {
+	public void setMethodId(String methodId) {
 		this.methodId = methodId;
 	}
 

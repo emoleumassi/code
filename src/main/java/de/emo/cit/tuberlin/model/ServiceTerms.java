@@ -1,42 +1,43 @@
 package de.emo.cit.tuberlin.model;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 //@Entity
 //@Table
 public class ServiceTerms {
 
 	@Id
-	@Column(name = "serviceId")
-	private int serviceId;
-	
+	@Column(columnDefinition = "VARCHAR(50)", nullable = false)
+	private String serviceId;
+
 	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
 	private String name;
-	
+
 	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
 	private String designation;
-	
+
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String description;
-	
+
 	@Column(columnDefinition = "DECIMAL(10, 2)", nullable = false)
 	private String costPerUnitOfAccount;
-	
+
 	@Column(columnDefinition = "INTEGER", nullable = false)
 	private int unitOfAccount;
-	
-//	@ManyToOne(optional = false, targetEntity = SLA.class, fetch = FetchType.LAZY)
-//	@JoinColumn(name = "slaId", referencedColumnName = "slaId", insertable = true, updatable = true, nullable = false)
-//	private SLA sla;
 
-	public int getServiceId() {
+	@ManyToOne(optional = false, targetEntity = SLA.class, fetch = FetchType.LAZY)
+	@JoinColumn(name = "slaId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "slaId", insertable = true, updatable = true, nullable = true)
+	private SLA sla;
+
+	public String getServiceId() {
 		return serviceId;
 	}
 
-	public void setServiceId(int serviceId) {
+	public void setServiceId(String serviceId) {
 		this.serviceId = serviceId;
 	}
 

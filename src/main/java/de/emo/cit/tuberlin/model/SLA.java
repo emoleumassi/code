@@ -35,6 +35,12 @@ public class SLA {
 	@JoinColumn(name = "uddislaId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "uddislaId", insertable = true, updatable = true, nullable = true)
 	private UDDISLA uddisla;
 
+//	@OneToMany(mappedBy = "sla", targetEntity = GuaranteeTerms.class, fetch = FetchType.LAZY)
+//	private GuaranteeTerms guaranteeTerms;
+//
+//	@OneToMany(mappedBy = "sla", targetEntity = ServiceTerms.class, fetch = FetchType.LAZY)
+//	private ServiceTerms serviceTerms;
+
 	public String getSlaId() {
 		return slaId;
 	}
