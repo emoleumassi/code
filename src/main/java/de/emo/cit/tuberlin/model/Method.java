@@ -1,12 +1,9 @@
 package de.emo.cit.tuberlin.model;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 //@Entity
 //@Table(uniqueConstraints = { @UniqueConstraint(columnNames = {
@@ -50,4 +47,12 @@ public class Method {
 		this.url = url;
 	}
 
+	public KeyPerformanceIndicator getKeyPerformanceIndicator() {
+		return keyPerformanceIndicator;
+	}
+
+	public void setKeyPerformanceIndicator(
+			KeyPerformanceIndicator keyPerformanceIndicator) {
+		this.keyPerformanceIndicator = keyPerformanceIndicator;
+	}
 }

@@ -40,12 +40,14 @@
                 {
                     "designation": "availability",
                     "qualifyingCondiction": "98%",
-                    "targetValue": "99%"
+                    "targetValue": "99%",
+                    "description": "this is a availability of ...."
                 },
                 {
                     "designation": "response time",
                     "qualifyingCondiction": "5ms",
-                    "targetValue": "3ms"
+                    "targetValue": "3ms",
+                    "description": "this is a response time of ...."
                 }]
              },
              {
@@ -55,14 +57,27 @@
                 {
                     "designation": "MTBF",
                     "qualifyingCondiction": "2h",
-                    "targetValue": "10h"
+                    "targetValue": "10h",
+                    "description": "this is a mean time to between failure ...."
                 },
                 {
                     "designation": "MTTR",
                     "qualifyingCondiction": "1h",
-                    "targetValue": "0.5h"
+                    "targetValue": "0.5h",
+                    "description": "this is a mean time to repair a ...."
                 }]
              }]
         }
-    }
+    },
+    "method": [
+    {
+		"name": "amazon",
+        "url": "http://aws.amazon.com/de/ec2/sla",
+    },{
+    	"name": "msazure",
+    	"url": "http://azure.microsoft.com/eu-us/support/legal/sla"
+    },{
+    	"name": "rackspace",
+    	"url": "http://www.rackspace.com/managed_hosting/support/servicelevels/managedsla"
+    }]
 }

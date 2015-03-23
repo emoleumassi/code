@@ -6,7 +6,6 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -26,8 +25,9 @@ public class KeyPerformanceIndicator {
 	@Column(columnDefinition = "VARCHAR(5)", nullable = false)
 	private String qualifyingCondiction;
 
-	// @OneToOne(targetEntity = Method.class, fetch =
-	// FetchType.LAZY)
+	@Column(columnDefinition = "TEXT", nullable = false)
+	private String description;
+	// @OneToOne(targetEntity = Method.class, fetch = FetchType.LAZY)
 	// @JoinColumn(name = "methodId", columnDefinition =
 	// "VARCHAR(50) default 'xxxxx'", referencedColumnName = "methodId",
 	// insertable = true, updatable = true, nullable = true)
@@ -69,19 +69,11 @@ public class KeyPerformanceIndicator {
 		this.qualifyingCondiction = qualifyingCondiction;
 	}
 
-	// public Method getMethod() {
-	// return method;
-	// }
-	//
-	// public void setMethod(Method method) {
-	// this.method = method;
-	// }
+	public String getDescription() {
+		return description;
+	}
 
-	// public GuaranteeTerms getGuaranteeTerms() {
-	// return guaranteeTerms;
-	// }
-	//
-	// public void setGuaranteeTerms(GuaranteeTerms guaranteeTerms) {
-	// this.guaranteeTerms = guaranteeTerms;
-	// }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }
