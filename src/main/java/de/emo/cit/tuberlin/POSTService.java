@@ -9,12 +9,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import de.emo.cit.tuberlin.bootstrap.ModelConfiguration;
 import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
 import de.emo.cit.tuberlin.config.GenerateUUID;
 import de.emo.cit.tuberlin.model.GuaranteeTerms;
@@ -31,8 +32,9 @@ import de.emo.cit.tuberlin.service.ThesisService;
 @Produces(MediaType.APPLICATION_JSON)
 public class POSTService {
 
-	// curl -H "Content-Type: application/json" -d
-	// '@/media/ferdinand/Emo/test.json' localhost:8080/thesis/webservice/send
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(POSTService.class);
+
 	@SuppressWarnings("rawtypes")
 	@Autowired
 	ThesisService thesisServive;
@@ -41,7 +43,6 @@ public class POSTService {
 	private UDDI uddi;
 	private UDDISLA uddisla;
 	private OverviewDoc overviewDoc;
-	// private ServiceTerms serviceTerms;
 	private List<ServiceTerms> serviceTermsList;
 	private List<GuaranteeTerms> guaranteeTermsList;
 	private List<KeyPerformanceIndicator> keyPerformanceIndicatorList;
@@ -53,7 +54,7 @@ public class POSTService {
 	@Path("/send")
 	public Response postUDDISLA(ThesisRoot thesisRoot) {
 		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
-				ThesisConfiguration.class, ModelConfiguration.class);
+				ThesisConfiguration.class);
 		AutowireCapableBeanFactory acbFactory = applicationContext
 				.getAutowireCapableBeanFactory();
 		acbFactory.autowireBean(this);
@@ -78,7 +79,7 @@ public class POSTService {
 
 		serviceTermsList = sla.getServiceTerms();
 		guaranteeTermsList = sla.getGuaranteeTerms();
-		for (ServiceTerms serviceTerms : serviceTermsList){			
+		for (ServiceTerms serviceTerms : serviceTermsList) {
 			serviceTerms.setServiceTermId(GenerateUUID.newUUID());
 			setEntity(serviceTerms);
 		}
@@ -102,11 +103,6 @@ public class POSTService {
 		// thesisServive.setClazz(SLA.class);
 		// thesisServive.updateColumnById("uddislaId", "slaId",
 		// uddisla.getUddislaId(), sla.getSlaId());
-
-		// thesisServive.setClazz(UDDISLA.class);
-		// UDDISLA uddisla = (UDDISLA)
-		// thesisServive.getEntityById(this.uddisla.getUddislaId());
-		// uddisla.setSla(sla);
 	}
 
 	@SuppressWarnings("unchecked")
