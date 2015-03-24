@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import de.emo.cit.tuberlin.exception.ElementNotFoundException;
 import de.emo.cit.tuberlin.model.GuaranteeTerms;
@@ -94,11 +95,11 @@ public class CheckJsonData {
 
 	private void throwException(String value, String element) {
 
+		Status code = Response.Status.BAD_REQUEST;
 		if (value.isEmpty() || value == null) {
-			String message = "HTTP/1.1 "
-					+ Response.Status.BAD_REQUEST.getStatusCode()
+			String message = "HTTP/1.1 " + code.getStatusCode()
 					+ " Bad Request. '" + element + "' is mandatory.\n";
-			throw new ElementNotFoundException(message);
+			throw new ElementNotFoundException(code, message);
 		}
 	}
 
