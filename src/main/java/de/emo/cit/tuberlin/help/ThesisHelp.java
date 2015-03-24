@@ -25,12 +25,8 @@ public class ThesisHelp {
 		return dateFormat.format(date);
 	}
 
-	public static final Response currentResponse(Status code, String element){
-		return Response
-				.status(code)
-				.entity("HTTP/1.1 " + code.getStatusCode()
-						+ " Bad Request. This element '" + element
-						+ "' is mandatory!\n")
+	public static final Response currentResponse(Status code, String message) {
+		return Response.status(code).entity(message)
 				.header("Date", ThesisHelp.currentDate())
 				.header("Server", "Apache Tomcat/8.0.20")
 				.header("Content-Type", MediaType.APPLICATION_JSON)

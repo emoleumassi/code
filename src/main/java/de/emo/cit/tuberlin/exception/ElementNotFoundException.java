@@ -17,8 +17,8 @@ public class ElementNotFoundException extends WebApplicationException {
 
 	static Status code = Response.Status.BAD_REQUEST;
 
-	public ElementNotFoundException(String element) {
+	public ElementNotFoundException(String message) {
 
-		super(ThesisHelp.currentResponse(code, element));
+		super(ThesisHelp.currentResponse(code, message));
 	}
 }
