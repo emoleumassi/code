@@ -15,7 +15,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import de.emo.cit.tuberlin.bootstrap.ModelConfiguration;
 import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
-import de.emo.cit.tuberlin.config.GenerateUUID;
+import de.emo.cit.tuberlin.help.ThesisHelp;
 import de.emo.cit.tuberlin.model.OverviewDoc;
 import de.emo.cit.tuberlin.model.SLA;
 import de.emo.cit.tuberlin.model.UDDI;
@@ -51,23 +51,23 @@ public class GETServices {
 				.getAutowireCapableBeanFactory();
 		acbFactory.autowireBean(this);
 
-		sla.setSlaId(GenerateUUID.newUUID());
+		sla.setSlaId(ThesisHelp.newUUID());
 		sla.setDescription("SLA description");
 		sla.setEndTime(new Date(2017, 03, 22));
 		sla.setStartTime(new Date(2015, 03, 22));
 		setEntity(sla);
 
-		overviewDoc.setOverviewDocId(GenerateUUID.newUUID());
+		overviewDoc.setOverviewDocId(ThesisHelp.newUUID());
 		overviewDoc.setDescription("overviewDoc description");
 		overviewDoc.setOverviewURL("http://emo.xxx.emo.wsdl");
 		setEntity(overviewDoc);
 
-		uddi.setUddiId(GenerateUUID.newUUID());
+		uddi.setUddiId(ThesisHelp.newUUID());
 		uddi.setDescription("uddi description test");
 		uddi.setOverviewDoc(overviewDoc);
 		setEntity(uddi);
 
-		uddisla.setUddislaId(GenerateUUID.newUUID());
+		uddisla.setUddislaId(ThesisHelp.newUUID());
 		uddisla.setDescription("uddi sla test with UUID");
 		uddisla.setEmail("emo@cit.com");
 		uddisla.setName("my name");

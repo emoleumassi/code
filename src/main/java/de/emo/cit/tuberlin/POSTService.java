@@ -17,7 +17,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
-import de.emo.cit.tuberlin.config.GenerateUUID;
+import de.emo.cit.tuberlin.help.CheckJsonData;
+import de.emo.cit.tuberlin.help.ThesisHelp;
 import de.emo.cit.tuberlin.model.GuaranteeTerms;
 import de.emo.cit.tuberlin.model.KeyPerformanceIndicator;
 import de.emo.cit.tuberlin.model.OverviewDoc;
@@ -53,6 +54,9 @@ public class POSTService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/send")
 	public Response postUDDISLA(ThesisRoot thesisRoot) {
+
+		new CheckJsonData(thesisRoot);
+
 		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
 				ThesisConfiguration.class);
 		AutowireCapableBeanFactory acbFactory = applicationContext
@@ -60,36 +64,39 @@ public class POSTService {
 		acbFactory.autowireBean(this);
 
 		setUUID(thesisRoot);
-		return Response.status(200).entity(thesisRoot).build();
+
+		return Response.status(Response.Status.OK).entity(thesisRoot)
+				.entity("Add json to the server!!!").build();
 	}
 
 	private void setUUID(ThesisRoot thesisRoot) {
 
 		uddisla = thesisRoot.getUddisla();
-		uddisla.setUddislaId(GenerateUUID.newUUID());
+
+		uddisla.setUddislaId(ThesisHelp.newUUID());
 
 		uddi = uddisla.getUddi();
-		uddi.setUddiId(GenerateUUID.newUUID());
+		uddi.setUddiId(ThesisHelp.newUUID());
 
 		sla = uddisla.getSla();
-		sla.setSlaId(GenerateUUID.newUUID());
+		sla.setSlaId(ThesisHelp.newUUID());
 
 		overviewDoc = uddi.getOverviewDoc();
-		overviewDoc.setOverviewDocId(GenerateUUID.newUUID());
+		overviewDoc.setOverviewDocId(ThesisHelp.newUUID());
 
 		serviceTermsList = sla.getServiceTerms();
 		guaranteeTermsList = sla.getGuaranteeTerms();
 		for (ServiceTerms serviceTerms : serviceTermsList) {
-			serviceTerms.setServiceTermId(GenerateUUID.newUUID());
+			serviceTerms.setServiceTermId(ThesisHelp.newUUID());
 			setEntity(serviceTerms);
 		}
 		for (GuaranteeTerms guaranteeTerms : guaranteeTermsList) {
-			guaranteeTerms.setGuaranteeTermId(GenerateUUID.newUUID());
+			guaranteeTerms.setGuaranteeTermId(ThesisHelp.newUUID());
 			keyPerformanceIndicatorList = guaranteeTerms
 					.getKeyPerformanceIndicator();
 			for (KeyPerformanceIndicator keyPerformanceIndicator : keyPerformanceIndicatorList) {
-				keyPerformanceIndicator
-						.setKeyPerformanceIndicatorId(GenerateUUID.newUUID());
+				keyPerformanceIndicator.setKeyPerformanceIndicatorId(ThesisHelp
+						.newUUID());
 				setEntity(keyPerformanceIndicator);
 			}
 			setEntity(guaranteeTerms);
