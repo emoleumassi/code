@@ -6,10 +6,8 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,9 +64,8 @@ public class POSTService {
 		acbFactory.autowireBean(this);
 
 		setUUID(thesisRoot);
-		
-		return Response.status(Response.Status.OK).entity(thesisRoot)
-				.build();
+
+		return Response.status(Response.Status.OK).entity(thesisRoot).build();
 	}
 
 	private void setUUID(ThesisRoot thesisRoot) {
@@ -85,33 +82,22 @@ public class POSTService {
 		overviewDoc = uddi.getOverviewDoc();
 		overviewDoc.setOverviewDocId(ThesisHelp.newUUID());
 
-//		setEntity(sla);
-//		setEntity(uddi);
-//		setEntity(overviewDoc);
-
 		serviceTermsList = sla.getServiceTerms();
 		guaranteeTermsList = sla.getGuaranteeTerms();
-		for (ServiceTerms serviceTerms : serviceTermsList) {
+		for (ServiceTerms serviceTerms : serviceTermsList)
 			serviceTerms.setServiceTermId(ThesisHelp.newUUID());
-			//setEntity(serviceTerms);
-		}
+
 		for (GuaranteeTerms guaranteeTerms : guaranteeTermsList) {
 			guaranteeTerms.setGuaranteeTermId(ThesisHelp.newUUID());
 			keyPerformanceIndicatorList = guaranteeTerms
 					.getKeyPerformanceIndicator();
-			//setEntity(guaranteeTerms);
-			for (KeyPerformanceIndicator keyPerformanceIndicator : keyPerformanceIndicatorList) {
+			for (KeyPerformanceIndicator keyPerformanceIndicator : keyPerformanceIndicatorList)
 				keyPerformanceIndicator.setKeyPerformanceIndicatorId(ThesisHelp
 						.newUUID());
-				//setEntity(keyPerformanceIndicator);
-			}
 		}
 
 		setEntity(uddisla);
-
-		// thesisServive.setClazz(SLA.class);
-		// thesisServive.updateColumnById("uddislaId", "slaId",
-		// uddisla.getUddislaId(), sla.getSlaId());
+		LOGGER.info("succefull insert all the data!!!");
 	}
 
 	@SuppressWarnings("unchecked")
