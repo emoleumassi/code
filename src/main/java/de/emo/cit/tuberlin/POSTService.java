@@ -74,7 +74,6 @@ public class POSTService {
 	private void setUUID(ThesisRoot thesisRoot) {
 
 		uddisla = thesisRoot.getUddisla();
-
 		uddisla.setUddislaId(ThesisHelp.newUUID());
 
 		uddi = uddisla.getUddi();
@@ -86,27 +85,28 @@ public class POSTService {
 		overviewDoc = uddi.getOverviewDoc();
 		overviewDoc.setOverviewDocId(ThesisHelp.newUUID());
 
+//		setEntity(sla);
+//		setEntity(uddi);
+//		setEntity(overviewDoc);
+
 		serviceTermsList = sla.getServiceTerms();
 		guaranteeTermsList = sla.getGuaranteeTerms();
 		for (ServiceTerms serviceTerms : serviceTermsList) {
 			serviceTerms.setServiceTermId(ThesisHelp.newUUID());
-			setEntity(serviceTerms);
+			//setEntity(serviceTerms);
 		}
 		for (GuaranteeTerms guaranteeTerms : guaranteeTermsList) {
 			guaranteeTerms.setGuaranteeTermId(ThesisHelp.newUUID());
 			keyPerformanceIndicatorList = guaranteeTerms
 					.getKeyPerformanceIndicator();
+			//setEntity(guaranteeTerms);
 			for (KeyPerformanceIndicator keyPerformanceIndicator : keyPerformanceIndicatorList) {
 				keyPerformanceIndicator.setKeyPerformanceIndicatorId(ThesisHelp
 						.newUUID());
-				setEntity(keyPerformanceIndicator);
+				//setEntity(keyPerformanceIndicator);
 			}
-			setEntity(guaranteeTerms);
 		}
 
-		setEntity(sla);
-		setEntity(overviewDoc);
-		setEntity(uddi);
 		setEntity(uddisla);
 
 		// thesisServive.setClazz(SLA.class);

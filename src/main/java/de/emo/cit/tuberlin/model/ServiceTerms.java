@@ -1,5 +1,6 @@
 package de.emo.cit.tuberlin.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -31,7 +32,7 @@ public class ServiceTerms {
 	@Column(columnDefinition = "INTEGER", nullable = false)
 	private int unitOfAccount;
 
-	@ManyToOne(targetEntity = SLA.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = SLA.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "slaId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "slaId", insertable = true, updatable = true, nullable = true)
 	private SLA sla;
 

@@ -2,6 +2,7 @@ package de.emo.cit.tuberlin.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -28,11 +29,11 @@ public class GuaranteeTerms {
 	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
 	private String serviceName;
 
-	@ManyToOne(targetEntity = SLA.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = SLA.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "slaId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "slaId", insertable = true, updatable = true, nullable = true)
 	private SLA sla;
 
-	@OneToMany(mappedBy = "guaranteeTerms", targetEntity = KeyPerformanceIndicator.class, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "guaranteeTerms", targetEntity = KeyPerformanceIndicator.class, cascade = CascadeType.ALL)
 	private List<KeyPerformanceIndicator> keyPerformanceIndicator;
 
 	public String getGuaranteeTermId() {

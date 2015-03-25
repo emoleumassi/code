@@ -1,5 +1,6 @@
 package de.emo.cit.tuberlin.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -33,7 +34,7 @@ public class KeyPerformanceIndicator {
 	// insertable = true, updatable = true, nullable = true)
 	// private Method method;
 
-	@ManyToOne(targetEntity = GuaranteeTerms.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = GuaranteeTerms.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "guaranteeTermId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "guaranteeTermId", insertable = true, updatable = true, nullable = true)
 	private GuaranteeTerms guaranteeTerms;
 

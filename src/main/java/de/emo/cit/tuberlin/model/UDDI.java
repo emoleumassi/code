@@ -20,11 +20,11 @@ public class UDDI {
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String description;
 
-	@OneToOne(targetEntity = UDDISLA.class, cascade = CascadeType.PERSIST)
+	@OneToOne(targetEntity = UDDISLA.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "uddislaId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "uddislaId", insertable = true, updatable = true, nullable = true)
 	private UDDISLA uddisla;
 
-	@OneToOne(mappedBy = "uddi", targetEntity = OverviewDoc.class, fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "uddi", targetEntity = OverviewDoc.class, cascade = CascadeType.ALL)
 	private OverviewDoc overviewDoc;
 
 	public String getUddiId() {

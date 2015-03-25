@@ -38,10 +38,10 @@ public class SLA {
 	@JoinColumn(name = "uddislaId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "uddislaId", insertable = true, updatable = true, nullable = true)
 	private UDDISLA uddisla;
 
-	@OneToMany(mappedBy = "sla", targetEntity = GuaranteeTerms.class, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "sla", targetEntity = GuaranteeTerms.class, cascade = CascadeType.ALL)
 	private List<GuaranteeTerms> guaranteeTerms;
 
-	@OneToMany(mappedBy = "sla", targetEntity = ServiceTerms.class, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "sla", targetEntity = ServiceTerms.class, cascade = CascadeType.ALL)
 	private List<ServiceTerms> serviceTerms;
 	
 	public String getSlaId() {
