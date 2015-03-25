@@ -9,6 +9,11 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Check;
 
+/**
+ * 
+ * @author emoleumassi
+ *
+ */
 @Entity
 @Check(constraints = "state in('pending', 'observed', 'rejected', 'completed')")
 @Table

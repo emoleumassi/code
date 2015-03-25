@@ -29,6 +29,11 @@ import de.emo.cit.tuberlin.model.UDDI;
 import de.emo.cit.tuberlin.model.UDDISLA;
 import de.emo.cit.tuberlin.service.ThesisService;
 
+/**
+ * 
+ * @author emoleumassi
+ * 
+ */
 @Path("/webservice")
 @Produces(MediaType.APPLICATION_JSON)
 public class POSTService {
@@ -98,11 +103,20 @@ public class POSTService {
 
 		setEntity(uddisla);
 		LOGGER.info("succefull insert all the data!!!");
+
+		//updateEntities(SLA.class);
 	}
 
 	@SuppressWarnings("unchecked")
 	private void setEntity(Object object) {
 		thesisServive.setClazz(Object.class);
 		thesisServive.createEntity(object);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void updateEntities(Object object) {
+		thesisServive.setClazz(Object.class);
+		thesisServive.updateColumnById("uddislaId", "slaId",
+				uddisla.getUddislaId(), sla.getSlaId());
 	}
 }
