@@ -51,7 +51,7 @@ public class POSTService {
 	private OverviewDoc overviewDoc;
 	private List<ServiceTerms> serviceTermsList;
 	private List<GuaranteeTerms> guaranteeTermsList;
-	private List<KeyPerformanceIndicator> keyPerformanceIndicatorList;
+	private List<KeyPerformanceIndicator> kpiList;
 
 	@SuppressWarnings({ "resource" })
 	@POST
@@ -94,17 +94,15 @@ public class POSTService {
 
 		for (GuaranteeTerms guaranteeTerms : guaranteeTermsList) {
 			guaranteeTerms.setGuaranteeTermId(ThesisHelp.newUUID());
-			keyPerformanceIndicatorList = guaranteeTerms
-					.getKeyPerformanceIndicator();
-			for (KeyPerformanceIndicator keyPerformanceIndicator : keyPerformanceIndicatorList)
-				keyPerformanceIndicator.setKeyPerformanceIndicatorId(ThesisHelp
-						.newUUID());
+			kpiList = guaranteeTerms.getKeyPerformanceIndicator();
+			for (KeyPerformanceIndicator kpi : kpiList)
+				kpi.setKeyPerformanceIndicatorId(ThesisHelp.newUUID());
 		}
 
 		setEntity(uddisla);
 		LOGGER.info("succefull insert all the data!!!");
 
-		//updateEntities(SLA.class);
+		updateEntities();
 	}
 
 	@SuppressWarnings("unchecked")
@@ -113,10 +111,32 @@ public class POSTService {
 		thesisServive.createEntity(object);
 	}
 
-	@SuppressWarnings("unchecked")
-	private void updateEntities(Object object) {
-		thesisServive.setClazz(Object.class);
-		thesisServive.updateColumnById("uddislaId", "slaId",
+	private void updateEntities() {
+		thesisServive.updateColumnById("SLA", "uddislaId", "slaId",
 				uddisla.getUddislaId(), sla.getSlaId());
+
+		thesisServive.updateColumnById("UDDI", "uddislaId", "uddiId",
+				uddisla.getUddislaId(), uddi.getUddiId());
+
+		thesisServive.updateColumnById("OverviewDoc", "uddiId",
+				"overviewDocId", uddi.getUddiId(),
+				overviewDoc.getOverviewDocId());
+
+		for (ServiceTerms serviceTerms : serviceTermsList)
+			thesisServive.updateColumnById("ServiceTerms", "slaId",
+					"serviceTermId", sla.getSlaId(),
+					serviceTerms.getServiceTermId());
+
+		for (GuaranteeTerms guaranteeTerms : guaranteeTermsList) {
+			thesisServive.updateColumnById("GuaranteeTerms", "slaId",
+					"guaranteeTermId", sla.getSlaId(),
+					guaranteeTerms.getGuaranteeTermId());
+			kpiList = guaranteeTerms.getKeyPerformanceIndicator();
+			for (KeyPerformanceIndicator kpi : kpiList)
+				thesisServive.updateColumnById("KeyPerformanceIndicator",
+						"guaranteeTermId", "keyPerformanceIndicatorId",
+						guaranteeTerms.getGuaranteeTermId(),
+						kpi.getKeyPerformanceIndicatorId());
+		}
 	}
 }

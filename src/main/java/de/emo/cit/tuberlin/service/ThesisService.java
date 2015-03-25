@@ -12,5 +12,5 @@ public interface ThesisService<T> {
 
 	public void createEntity(T t);
 	
-	public void updateColumnById(String field, String tableId, String targetId, String id);
+	public void updateColumnById(String table, String field, String tableId, String targetId, String id);
 }

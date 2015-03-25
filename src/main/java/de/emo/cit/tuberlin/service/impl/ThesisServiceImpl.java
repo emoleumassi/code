@@ -52,9 +52,10 @@ public class ThesisServiceImpl<T> implements ThesisService<T> {
 	}
 
 	@Override
-	public void updateColumnById(String field, String tableId, String targetId, String id) {
-		String query = "update SLA " /* + clazz.getName() */+ " set " + field
-				+ "=\"" + targetId + "\" where " + tableId + "=\"" + id + "\"";
+	public void updateColumnById(String table, String field, String tableId,
+			String targetId, String id) {
+		String query = "UPDATE " + table + " SET " + field + "='" + targetId
+				+ "' WHERE " + tableId + "='" + id + "'";
 		LOGGER.info(query);
 		try {
 			entityManager.createQuery(query).executeUpdate();
