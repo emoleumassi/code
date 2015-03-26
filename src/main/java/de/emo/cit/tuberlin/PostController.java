@@ -12,7 +12,6 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import de.emo.cit.tuberlin.bootstrap.ModelConfiguration;
 import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
 import de.emo.cit.tuberlin.help.CheckJsonData;
 import de.emo.cit.tuberlin.model.ThesisRoot;
@@ -40,7 +39,7 @@ public class PostController {
 		new CheckJsonData(thesisRoot);
 
 		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
-				ThesisConfiguration.class, ModelConfiguration.class);
+				ThesisConfiguration.class);
 		AutowireCapableBeanFactory acbFactory = applicationContext
 				.getAutowireCapableBeanFactory();
 		acbFactory.autowireBean(this);
