@@ -1,5 +1,7 @@
 package de.emo.cit.tuberlin;
 
+import java.util.List;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -17,7 +19,7 @@ import de.emo.cit.tuberlin.model.OverviewDoc;
 import de.emo.cit.tuberlin.model.SLA;
 import de.emo.cit.tuberlin.model.UDDI;
 import de.emo.cit.tuberlin.model.UDDISLA;
-import de.emo.cit.tuberlin.service.ThesisService;
+import de.emo.cit.tuberlin.service.GetService;
 
 @Path("/uddisla")
 @Produces(MediaType.APPLICATION_JSON)
@@ -32,11 +34,10 @@ public class GetController {
 	@Autowired
 	private OverviewDoc overviewDoc;
 	
-	@SuppressWarnings("rawtypes")
 	@Autowired
-	ThesisService thesisServive;
+	GetService getService;
 	
-	@SuppressWarnings({ "resource" })
+	@SuppressWarnings({ "resource", "rawtypes" })
 	@GET
 	@Path("/all")
 	public Response getUDDISLA() {
@@ -45,7 +46,9 @@ public class GetController {
 		AutowireCapableBeanFactory acbFactory = applicationContext
 				.getAutowireCapableBeanFactory();
 		acbFactory.autowireBean(this);
-		return Response.status(200).entity(uddisla).build();
+		
+		List entities = getService.getAllEntities();
+		return Response.status(200).entity(entities).build();
 	}
 
 }
