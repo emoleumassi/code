@@ -3,7 +3,6 @@ package de.emo.cit.tuberlin.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -42,10 +41,10 @@ public class UDDISLA {
 	@Column(columnDefinition = "CHAR(5)", nullable = false)
 	private String version;
 
-	@OneToOne(mappedBy = "uddisla", targetEntity = UDDI.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "uddisla", targetEntity = UDDI.class, cascade = CascadeType.ALL)
 	private UDDI uddi;
 
-	@OneToOne(mappedBy = "uddisla", targetEntity = SLA.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "uddisla", targetEntity = SLA.class, cascade = CascadeType.ALL)
 	private SLA sla;
 
 	public String getUddislaId() {

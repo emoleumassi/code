@@ -3,7 +3,6 @@ package de.emo.cit.tuberlin.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -24,7 +23,7 @@ public class UDDI {
 	@JoinColumn(name = "uddislaId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "uddislaId", insertable = true, updatable = true, nullable = true)
 	private UDDISLA uddisla;
 
-	@OneToOne(mappedBy = "uddi", targetEntity = OverviewDoc.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "uddi", targetEntity = OverviewDoc.class, cascade = CascadeType.ALL)
 	private OverviewDoc overviewDoc;
 
 	public String getUddiId() {
