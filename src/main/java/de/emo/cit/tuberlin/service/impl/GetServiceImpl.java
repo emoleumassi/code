@@ -30,7 +30,7 @@ public class GetServiceImpl implements GetService{
 	@Override
 	@SuppressWarnings("rawtypes")
 	public List getAllEntities() {
-		String query = "SELECT * FROM UDDISLA, UDDI, OverviewDoc, SLA, ServiceTerms, GuaranteeTerms, KeyPerformanceIndicator";
+		String query = "FROM UDDISLA, UDDI, OverviewDoc";
 		LOGGER.info(query);
 		try {
 			return entityManager.createQuery(query).getResultList();
