@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import de.emo.cit.tuberlin.model.UDDI;
 import de.emo.cit.tuberlin.model.UDDISLA;
 import de.emo.cit.tuberlin.service.GetService;
 
@@ -52,6 +53,20 @@ public class GetServiceImpl implements GetService {
 			return (List<UDDISLA>) entityManager.createQuery(query)
 					.setParameter("id", idName).setParameter("name", idName)
 					.getResultList();
+		} catch (Exception e) {
+			LOGGER.info(e.getMessage());
+		}
+		return null;
+	}
+
+	@Override
+	public UDDI getUDDI(String uddislaId) {
+
+		String query = "FROM UDDI WHERE uddislaId = (SELECT uddislaId FROM UDDISLA WHERE uddislaId = :id)";
+		LOGGER.info(query);
+		try {
+			return (UDDI) entityManager.createQuery(query)
+					.setParameter("id", uddislaId).getSingleResult();
 		} catch (Exception e) {
 			LOGGER.info(e.getMessage());
 		}
