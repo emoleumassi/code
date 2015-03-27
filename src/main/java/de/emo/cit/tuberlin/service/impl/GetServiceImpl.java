@@ -18,7 +18,7 @@ import de.emo.cit.tuberlin.service.GetService;
  * @author emoleumassi
  * 
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({ "rawtypes", "unchecked" })
 @Service
 @Transactional
 public class GetServiceImpl<T> implements GetService {
@@ -31,7 +31,6 @@ public class GetServiceImpl<T> implements GetService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(GetServiceImpl.class);
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void setClazz(Class clazzToSet) {
 		this.clazz = clazzToSet;
@@ -49,7 +48,6 @@ public class GetServiceImpl<T> implements GetService {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<UDDISLA> getUDDISLAByIdName(String idName) {
 
@@ -66,7 +64,6 @@ public class GetServiceImpl<T> implements GetService {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public T getUddiOrSla(String uddislaId) {
 
@@ -76,6 +73,26 @@ public class GetServiceImpl<T> implements GetService {
 		LOGGER.info(query);
 		try {
 			return (T) entityManager.createQuery(query)
+					.setParameter("id", uddislaId).getSingleResult();
+		} catch (Exception e) {
+			LOGGER.info(e.getMessage());
+		}
+		return null;
+	}
+
+	@Override
+	public T getTerms(String uddislaId, String termId, String col) {
+
+		String query = "FROM "
+				+ clazz.getName()
+				+ " WHERE "
+				+ col
+				+ " = :termId AND slaId = (SELECT slaId FROM SLA WHERE uddislaId = "
+				+ "(SELECT uddislaId FROM UDDISLA WHERE uddislaId = :id))";
+		LOGGER.info(query);
+		try {
+			return (T) entityManager.createQuery(query)
+					.setParameter("termId", termId)
 					.setParameter("id", uddislaId).getSingleResult();
 		} catch (Exception e) {
 			LOGGER.info(e.getMessage());
