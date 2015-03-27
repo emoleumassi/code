@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -37,18 +38,37 @@ public class GetController {
 	@Autowired
 	GetService getService;
 	
-	@SuppressWarnings({ "resource", "rawtypes" })
-	@GET
-	@Path("/all")
-	public Response getUDDISLA() {
+	@SuppressWarnings("resource")
+	public GetController() {
 		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
 				ThesisConfiguration.class, ModelConfiguration.class);
 		AutowireCapableBeanFactory acbFactory = applicationContext
 				.getAutowireCapableBeanFactory();
 		acbFactory.autowireBean(this);
+	}
+	
+	@SuppressWarnings({ "rawtypes" })
+	@GET
+	@Path("/all")
+	public Response getAll() {
 		
 		List entities = getService.getAllEntities();
 		return Response.status(200).entity(entities).build();
 	}
+	
+	@GET
+	@Path("/{uddislaIdName}")
+	public Response getUDDISLAById(@PathParam("uddislaIdName") String uddislaIdName) {
+		
+		List<UDDISLA> uddisla = getService.getUDDISLAByIdName(uddislaIdName);
+		return Response.status(200).entity(uddisla).build();
+	}
 
+//	@GET
+//	@Path("/{name}")
+//	public Response getUDDISLAByName(@PathParam("name") String name) {
+//		
+//		UDDISLA uddisla = getService.getUDDISLAById(name);
+//		return Response.status(200).entity(uddisla).build();
+//	}
 }
