@@ -21,13 +21,20 @@ import de.emo.cit.tuberlin.service.GetService;
  */
 @Service
 @Transactional
-public class GetServiceImpl implements GetService {
+public class GetServiceImpl<T> implements GetService {
+
+	private Class<T> clazz;
+
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(GetServiceImpl.class);
 
-	@PersistenceContext
-	private EntityManager entityManager;
+	@Override
+	public void setClazz(Class clazzToSet) {
+		this.clazz = clazzToSet;
+	}
 
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -59,13 +66,16 @@ public class GetServiceImpl implements GetService {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public UDDI getUDDI(String uddislaId) {
+	public T getUDDI(String uddislaId) {
 
-		String query = "FROM UDDI WHERE uddislaId = (SELECT uddislaId FROM UDDISLA WHERE uddislaId = :id)";
+		String query = "FROM "
+				+ clazz.getName()
+				+ " WHERE uddislaId = (SELECT uddislaId FROM UDDISLA WHERE uddislaId = :id)";
 		LOGGER.info(query);
 		try {
-			return (UDDI) entityManager.createQuery(query)
+			return (T) entityManager.createQuery(query)
 					.setParameter("id", uddislaId).getSingleResult();
 		} catch (Exception e) {
 			LOGGER.info(e.getMessage());

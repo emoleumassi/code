@@ -66,15 +66,16 @@ public class GetController {
 	@Path("/{uddislaId}/uddi")
 	public Response getUDDI(@PathParam("uddislaId") String uddislaId) {
 		
-		UDDI uddi = getService.getUDDI(uddislaId);
+		getService.setClazz(UDDI.class);
+		UDDI uddi = (UDDI) getService.getUDDI(uddislaId);
 		return Response.status(200).entity(uddi).build();
 	}
 	
-	@GET
-	@Path("/{uddislaId}/sla")
-	public Response getSLA(@PathParam("uddislaId") String uddislaId) {
-		
-		UDDI uddi = getService.getUDDI(uddislaId);
-		return Response.status(200).entity(uddi).build();
-	}
+//	@GET
+//	@Path("/{uddislaId}/sla")
+//	public Response getSLA(@PathParam("uddislaId") String uddislaId) {
+//		
+//		UDDI uddi = getService.getUDDI(uddislaId);
+//		return Response.status(200).entity(uddi).build();
+//	}
 }
