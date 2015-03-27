@@ -16,7 +16,7 @@ public interface GetService<T> {
 	
 	public List<UDDISLA> getUDDISLAByIdName(String idname);
 	
-	public T getUDDI(String uddislaId);
+	public T getUddiOrSla(String uddislaId);
 
 	public void setClazz(Class<T> clazzToSet);
 }

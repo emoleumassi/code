@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import de.emo.cit.tuberlin.model.UDDI;
 import de.emo.cit.tuberlin.model.UDDISLA;
 import de.emo.cit.tuberlin.service.GetService;
 
@@ -19,6 +18,7 @@ import de.emo.cit.tuberlin.service.GetService;
  * @author emoleumassi
  * 
  */
+@SuppressWarnings("rawtypes")
 @Service
 @Transactional
 public class GetServiceImpl<T> implements GetService {
@@ -31,13 +31,13 @@ public class GetServiceImpl<T> implements GetService {
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(GetServiceImpl.class);
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void setClazz(Class clazzToSet) {
 		this.clazz = clazzToSet;
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
 	public List getAllEntities() {
 		String query = "FROM UDDISLA";
 		LOGGER.info(query);
@@ -68,7 +68,7 @@ public class GetServiceImpl<T> implements GetService {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public T getUDDI(String uddislaId) {
+	public T getUddiOrSla(String uddislaId) {
 
 		String query = "FROM "
 				+ clazz.getName()

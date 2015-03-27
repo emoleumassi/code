@@ -16,10 +16,12 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import de.emo.cit.tuberlin.bootstrap.ModelConfiguration;
 import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
+import de.emo.cit.tuberlin.model.SLA;
 import de.emo.cit.tuberlin.model.UDDI;
 import de.emo.cit.tuberlin.model.UDDISLA;
 import de.emo.cit.tuberlin.service.GetService;
 
+@SuppressWarnings("unchecked")
 @Path("/uddisla")
 @Produces(MediaType.APPLICATION_JSON)
 public class GetController {
@@ -33,6 +35,7 @@ public class GetController {
 //	@Autowired
 //	private OverviewDoc overviewDoc;
 	
+	@SuppressWarnings("rawtypes")
 	@Autowired
 	GetService getService;
 	
@@ -67,15 +70,16 @@ public class GetController {
 	public Response getUDDI(@PathParam("uddislaId") String uddislaId) {
 		
 		getService.setClazz(UDDI.class);
-		UDDI uddi = (UDDI) getService.getUDDI(uddislaId);
+		UDDI uddi = (UDDI) getService.getUddiOrSla(uddislaId);
 		return Response.status(200).entity(uddi).build();
 	}
 	
-//	@GET
-//	@Path("/{uddislaId}/sla")
-//	public Response getSLA(@PathParam("uddislaId") String uddislaId) {
-//		
-//		UDDI uddi = getService.getUDDI(uddislaId);
-//		return Response.status(200).entity(uddi).build();
-//	}
+	@GET
+	@Path("/{uddislaId}/sla")
+	public Response getSLA(@PathParam("uddislaId") String uddislaId) {
+		
+		getService.setClazz(SLA.class);
+		SLA sla = (SLA) getService.getUddiOrSla(uddislaId);
+		return Response.status(200).entity(sla).build();
+	}
 }
