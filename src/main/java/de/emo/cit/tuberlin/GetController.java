@@ -49,7 +49,7 @@ public class GetController {
 	
 	@SuppressWarnings({ "rawtypes" })
 	@GET
-	@Path("/all")
+	@Path("/")
 	public Response getAll() {
 		
 		List entities = getService.getAllEntities();
