@@ -7,7 +7,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import de.emo.cit.tuberlin.exception.ElementNotFoundException;
+import de.emo.cit.tuberlin.exception.ClientRequestException;
 import de.emo.cit.tuberlin.model.GuaranteeTerms;
 import de.emo.cit.tuberlin.model.KeyPerformanceIndicator;
 import de.emo.cit.tuberlin.model.OverviewDoc;
@@ -31,13 +31,25 @@ public class CheckJsonData {
 		List<ServiceTerms> serviceTermsList = sla.getServiceTerms();
 		List<GuaranteeTerms> guaranteeTermsList = sla.getGuaranteeTerms();
 
+		if (serviceTermsList.size() != guaranteeTermsList.size()) {
+			Status code = Response.Status.BAD_REQUEST;
+			String message = "HTTP/1.1 "
+					+ code.getStatusCode()
+					+ " Bad Request. You have more serviceTerms as guaranteeTerms "
+					+ "or more guaranteeTerms as serviceTerms.\n";
+			throw new ClientRequestException(code, message);
+		}
+
 		for (ServiceTerms serviceTerms : serviceTermsList)
-			checkServiceParam(serviceTerms.getDesignation(),
+			checkServiceParam(serviceTerms.getName(),
+					serviceTerms.getDesignation(),
 					serviceTerms.getCostPerUnitOfAccount(),
 					String.valueOf(serviceTerms.getUnitOfAccount()));
 
 		for (GuaranteeTerms guaranteeTerms : guaranteeTermsList) {
 
+			if (guaranteeTerms.getObligated().isEmpty())
+				guaranteeTerms.setObligated("provider");
 			checkGuaranteeParam(guaranteeTerms.getServiceName());
 
 			List<KeyPerformanceIndicator> kpiList = guaranteeTerms
@@ -66,11 +78,12 @@ public class CheckJsonData {
 		throwException(endTime.toString(), "endTime");
 	}
 
-	private void checkServiceParam(
+	private void checkServiceParam(@QueryParam("name") String name,
 			@QueryParam("designation") String designation,
 			@QueryParam("costPerUnitOfAccount") String costPerUnitOfAccount,
 			@QueryParam("unitOfAccount") String unitOfAccount) {
 
+		throwException(name, "name");
 		throwException(designation, "designation");
 		throwException(costPerUnitOfAccount, "costPerUnitOfAccount");
 		throwException(unitOfAccount, "unitOfAccount");
@@ -95,35 +108,11 @@ public class CheckJsonData {
 
 	private void throwException(String value, String element) {
 
-		Status code = Response.Status.BAD_REQUEST;
 		if (value.isEmpty() || value == null) {
+			Status code = Response.Status.BAD_REQUEST;
 			String message = "HTTP/1.1 " + code.getStatusCode()
 					+ " Bad Request. '" + element + "' is mandatory.\n";
-			throw new ElementNotFoundException(code, message);
+			throw new ClientRequestException(code, message);
 		}
 	}
-
-	// public CheckJsonData(UriInfo uriInfo) {
-	// checkQueryParam(uriInfo, "name");
-	// checkQueryParam(uriInfo, "overviewURL");
-	// checkQueryParam(uriInfo, "startTime");
-	// checkQueryParam(uriInfo, "endTime");
-	// checkQueryParam(uriInfo, "costPerUnitOfAccount");
-	// checkQueryParam(uriInfo, "unitOfAccount");
-	// checkQueryParam(uriInfo, "serviceName");
-	// checkQueryParam(uriInfo, "designation");
-	// checkQueryParam(uriInfo, "qualifyingCondiction");
-	// checkQueryParam(uriInfo, "targetValue");
-	// }
-	//
-	// private void checkQueryParam(UriInfo uriInfo, String element) {
-	//
-	// String value = uriInfo.getQueryParameters().getFirst(element);
-	// if (value == null || value.isEmpty()) {
-	// String message = "HTTP/1.1 "
-	// + Response.Status.BAD_REQUEST.getStatusCode()
-	// + " Bad Request. '" + element + "' is mandatory.\n";
-	// throw new ElementNotFoundException(message);
-	// }
-	// }
 }

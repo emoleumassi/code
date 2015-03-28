@@ -10,11 +10,11 @@ import de.emo.cit.tuberlin.help.ThesisHelp;
  * @author emoleumassi
  * 
  */
-public class ElementNotFoundException extends WebApplicationException {
+public class ClientRequestException extends WebApplicationException {
 
 	private static final long serialVersionUID = -7239312990764229787L;
 
-	public ElementNotFoundException(Status code, String message) {
+	public ClientRequestException(Status code, String message) {
 
 		super(ThesisHelp.currentResponse(code, message));
 	}
