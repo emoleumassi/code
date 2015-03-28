@@ -23,6 +23,8 @@ import de.emo.cit.tuberlin.model.UDDISLA;
  */
 public class CheckJsonData {
 
+	private final Status code = Response.Status.BAD_REQUEST;
+
 	public CheckJsonData(ThesisRoot thesisRoot) {
 
 		UDDISLA uddisla = thesisRoot.getUddisla();
@@ -32,7 +34,7 @@ public class CheckJsonData {
 		List<GuaranteeTerms> guaranteeTermsList = sla.getGuaranteeTerms();
 
 		if (serviceTermsList.size() != guaranteeTermsList.size()) {
-			Status code = Response.Status.BAD_REQUEST;
+
 			String message = "HTTP/1.1 "
 					+ code.getStatusCode()
 					+ " Bad Request. You have more serviceTerms as guaranteeTerms "
@@ -50,7 +52,24 @@ public class CheckJsonData {
 
 			if (guaranteeTerms.getObligated().isEmpty())
 				guaranteeTerms.setObligated("provider");
-			checkGuaranteeParam(guaranteeTerms.getServiceName());
+
+			String serviceName = guaranteeTerms.getServiceName();
+			checkGuaranteeParam(serviceName);
+
+			boolean nameEquals = false;
+			for (ServiceTerms serviceTerms : serviceTermsList) {
+				if (serviceTerms.getName().equals(serviceName)) {
+					nameEquals = true;
+					break;
+				}
+			}
+
+			if (!nameEquals) {
+				String message = "HTTP/1.1 " + code.getStatusCode()
+						+ " Bad Request. '" + serviceName
+						+ "' doesn't have any reference in the serviceTerms.\n";
+				throw new ClientRequestException(code, message);
+			}
 
 			List<KeyPerformanceIndicator> kpiList = guaranteeTerms
 					.getKeyPerformanceIndicator();
@@ -109,7 +128,6 @@ public class CheckJsonData {
 	private void throwException(String value, String element) {
 
 		if (value.isEmpty() || value == null) {
-			Status code = Response.Status.BAD_REQUEST;
 			String message = "HTTP/1.1 " + code.getStatusCode()
 					+ " Bad Request. '" + element + "' is mandatory.\n";
 			throw new ClientRequestException(code, message);
