@@ -34,7 +34,9 @@ public class ThesisHelp {
 	 */
 	public static void validateUUID(String uuid, String element) {
 		boolean valid = uuid
-				.matches("/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
+				.trim()
+				.matches(
+						"[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}");
 		if (!valid) {
 			ResponseHelp.BAD_REQUEST_MESSAGE += "Check the " + element
 					+ " please!.\n";

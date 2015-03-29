@@ -10,5 +10,5 @@ import de.emo.cit.tuberlin.model.ThesisRoot;
  */
 public interface PostService {
 
-	public void setUUID(ThesisRoot thesisRoot);
+	public void createServices(ThesisRoot thesisRoot);
 }

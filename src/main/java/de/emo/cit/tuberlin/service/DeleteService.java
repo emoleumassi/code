@@ -8,5 +8,5 @@ package de.emo.cit.tuberlin.service;
  */
 public interface DeleteService {
 
-	public int deleteById(String uddislaId);
+	public void deleteById(String uddislaId);
 }

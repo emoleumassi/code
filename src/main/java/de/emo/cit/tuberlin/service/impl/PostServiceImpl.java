@@ -43,7 +43,7 @@ public class PostServiceImpl implements PostService {
 	private List<KeyPerformanceIndicator> kpiList;
 
 	@Override
-	public void setUUID(ThesisRoot thesisRoot) {
+	public void createServices(ThesisRoot thesisRoot) {
 		
 		uddisla = thesisRoot.getUddisla();
 		uddisla.setUddislaId(ThesisHelp.newUUID());

@@ -58,7 +58,7 @@ public class ThesisController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/")
-	public Response postUDDISLA(ThesisRoot thesisRoot) {
+	public Response create(ThesisRoot thesisRoot) {
 
 		new CheckJsonData(thesisRoot);
 
@@ -68,7 +68,7 @@ public class ThesisController {
 				.getAutowireCapableBeanFactory();
 		acbFactory.autowireBean(this);
 
-		postService.setUUID(thesisRoot);
+		postService.createServices(thesisRoot);
 
 		return ResponseHelp.currentResponse(ResponseHelp.OK, thesisRoot);
 	}
@@ -112,7 +112,7 @@ public class ThesisController {
 
 	@GET
 	@Path("/{uddislaId}/sla/service/{serviceTermId}")
-	public Response getTerms(@PathParam("uddislaId") String uddislaId,
+	public Response getTermById(@PathParam("uddislaId") String uddislaId,
 			@PathParam("serviceTermId") String serviceTermId) {
 
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
