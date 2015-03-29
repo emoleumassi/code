@@ -15,6 +15,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
+import de.emo.cit.tuberlin.help.ThesisHelp;
 import de.emo.cit.tuberlin.model.SLA;
 import de.emo.cit.tuberlin.model.UDDI;
 import de.emo.cit.tuberlin.model.UDDISLA;
@@ -58,6 +59,7 @@ public class GetController {
 	@Path("/{uddislaId}/uddi")
 	public Response getUDDI(@PathParam("uddislaId") String uddislaId) {
 
+		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 		getService.setClazz(UDDI.class);
 		UDDI uddi = (UDDI) getService.getUddiOrSla(uddislaId);
 		return Response.status(200).entity(uddi).build();
@@ -67,6 +69,7 @@ public class GetController {
 	@Path("/{uddislaId}/sla")
 	public Response getSLA(@PathParam("uddislaId") String uddislaId) {
 
+		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 		getService.setClazz(SLA.class);
 		SLA sla = (SLA) getService.getUddiOrSla(uddislaId);
 		return Response.status(200).entity(sla).build();
@@ -77,6 +80,8 @@ public class GetController {
 	public Response getTerms(@PathParam("uddislaId") String uddislaId,
 			@PathParam("serviceTermId") String serviceTermId) {
 
+		ThesisHelp.validateUUID(uddislaId, "uddislaID");
+		ThesisHelp.validateUUID(serviceTermId, "serviceID");
 		List terms = getService.getTerms(uddislaId, serviceTermId);
 		return Response.status(200).entity(terms).build();
 	}

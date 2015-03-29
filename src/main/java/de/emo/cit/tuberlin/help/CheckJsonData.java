@@ -4,8 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import de.emo.cit.tuberlin.exception.ClientRequestException;
 import de.emo.cit.tuberlin.model.GuaranteeTerms;
@@ -23,8 +21,6 @@ import de.emo.cit.tuberlin.model.UDDISLA;
  */
 public class CheckJsonData {
 
-	private final Status code = Response.Status.BAD_REQUEST;
-
 	public CheckJsonData(ThesisRoot thesisRoot) {
 
 		UDDISLA uddisla = thesisRoot.getUddisla();
@@ -36,10 +32,10 @@ public class CheckJsonData {
 		if (serviceTermsList.size() != guaranteeTermsList.size()) {
 
 			String message = "HTTP/1.1 "
-					+ code.getStatusCode()
+					+ ThesisHelp.CODE.getStatusCode()
 					+ " Bad Request. You have more serviceTerms as guaranteeTerms "
 					+ "or more guaranteeTerms as serviceTerms.\n";
-			throw new ClientRequestException(code, message);
+			throw new ClientRequestException(ThesisHelp.CODE, message);
 		}
 
 		for (ServiceTerms serviceTerms : serviceTermsList)
@@ -65,10 +61,10 @@ public class CheckJsonData {
 			}
 
 			if (!nameEquals) {
-				String message = "HTTP/1.1 " + code.getStatusCode()
+				String message = "HTTP/1.1 " + ThesisHelp.CODE.getStatusCode()
 						+ " Bad Request. '" + serviceName
 						+ "' doesn't have any reference in the serviceTerms.\n";
-				throw new ClientRequestException(code, message);
+				throw new ClientRequestException(ThesisHelp.CODE, message);
 			}
 
 			List<KeyPerformanceIndicator> kpiList = guaranteeTerms
@@ -128,9 +124,9 @@ public class CheckJsonData {
 	private void throwException(String value, String element) {
 
 		if (value.isEmpty() || value == null) {
-			String message = "HTTP/1.1 " + code.getStatusCode()
+			String message = "HTTP/1.1 " + ThesisHelp.CODE.getStatusCode()
 					+ " Bad Request. '" + element + "' is mandatory.\n";
-			throw new ClientRequestException(code, message);
+			throw new ClientRequestException(ThesisHelp.CODE, message);
 		}
 	}
 }

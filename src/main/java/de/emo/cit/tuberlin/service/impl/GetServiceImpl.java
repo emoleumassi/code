@@ -54,7 +54,6 @@ public class GetServiceImpl<T> implements GetService {
 		String query = "FROM UDDISLA WHERE uddislaId = :id OR name = :name";
 		LOGGER.info(query);
 		try {
-			// return entityManager.find(UDDISLA.class, id);
 			return (List<UDDISLA>) entityManager.createQuery(query)
 					.setParameter("id", idName).setParameter("name", idName)
 					.getResultList();
@@ -87,11 +86,6 @@ public class GetServiceImpl<T> implements GetService {
 				+ "WHERE s.name = g.serviceName AND s.serviceTermId = :serviceId"
 				+ " AND s.sla = (SELECT slaId FROM SLA WHERE uddislaId = :id)"
 				+ " AND g.sla = (SELECT slaId FROM SLA WHERE uddislaId = :id)";
-		// query = "SELECT * FROM ServiceTerms s, GuaranteeTerms g WHERE s.name
-		// = g.serviceName AND
-		// s.serviceTermId = '60f44c42-33d9-4ce9-9662-dacd942dee0d'
-		// AND slaId = (SELECT slaId FROM SLA WHERE uddislaId =
-		// '45e22db0-23fc-4331-9917-f0d9b9d5baf4')";
 		LOGGER.info(query);
 		try {
 			return (List) entityManager.createQuery(query)
