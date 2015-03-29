@@ -18,8 +18,6 @@ import de.emo.cit.tuberlin.exception.ClientRequestException;
  */
 public class ThesisHelp {
 
-	public static final Status CODE = Response.Status.BAD_REQUEST;
-
 	private final static UUID createUUID() {
 		return UUID.randomUUID();
 	}
@@ -42,10 +40,10 @@ public class ThesisHelp {
 		boolean valid = uuid
 				.matches("/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
 		if (!valid) {
-
-			String message = "HTTP/1.1 " + CODE.getStatusCode()
-					+ " Bad Request. Check the " + element + " please!.\n";
-			throw new ClientRequestException(CODE, message);
+			RequestHelp.BAD_REQUEST_MESSAGE += "Check the " + element
+					+ " please!.\n";
+			throw new ClientRequestException(RequestHelp.BAD_REQUEST_STATUS,
+					RequestHelp.BAD_REQUEST_MESSAGE);
 		}
 
 	}

@@ -31,11 +31,10 @@ public class CheckJsonData {
 
 		if (serviceTermsList.size() != guaranteeTermsList.size()) {
 
-			String message = "HTTP/1.1 "
-					+ ThesisHelp.CODE.getStatusCode()
-					+ " Bad Request. You have more serviceTerms as guaranteeTerms "
+			RequestHelp.BAD_REQUEST_MESSAGE += "You have more serviceTerms as guaranteeTerms "
 					+ "or more guaranteeTerms as serviceTerms.\n";
-			throw new ClientRequestException(ThesisHelp.CODE, message);
+			throw new ClientRequestException(RequestHelp.BAD_REQUEST_STATUS,
+					RequestHelp.BAD_REQUEST_MESSAGE);
 		}
 
 		for (ServiceTerms serviceTerms : serviceTermsList)
@@ -61,10 +60,10 @@ public class CheckJsonData {
 			}
 
 			if (!nameEquals) {
-				String message = "HTTP/1.1 " + ThesisHelp.CODE.getStatusCode()
-						+ " Bad Request. '" + serviceName
+				RequestHelp.BAD_REQUEST_MESSAGE += "'" + serviceName
 						+ "' doesn't have any reference in the serviceTerms.\n";
-				throw new ClientRequestException(ThesisHelp.CODE, message);
+				throw new ClientRequestException(RequestHelp.BAD_REQUEST_STATUS,
+						RequestHelp.BAD_REQUEST_MESSAGE);
 			}
 
 			List<KeyPerformanceIndicator> kpiList = guaranteeTerms
@@ -124,9 +123,10 @@ public class CheckJsonData {
 	private void throwException(String value, String element) {
 
 		if (value.isEmpty() || value == null) {
-			String message = "HTTP/1.1 " + ThesisHelp.CODE.getStatusCode()
-					+ " Bad Request. '" + element + "' is mandatory.\n";
-			throw new ClientRequestException(ThesisHelp.CODE, message);
+			RequestHelp.BAD_REQUEST_MESSAGE += "'" + element
+					+ "' is mandatory.\n";
+			throw new ClientRequestException(RequestHelp.BAD_REQUEST_STATUS,
+					RequestHelp.BAD_REQUEST_MESSAGE);
 		}
 	}
 }

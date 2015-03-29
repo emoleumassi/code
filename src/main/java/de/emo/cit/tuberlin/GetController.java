@@ -15,6 +15,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
+import de.emo.cit.tuberlin.help.RequestHelp;
 import de.emo.cit.tuberlin.help.ThesisHelp;
 import de.emo.cit.tuberlin.model.SLA;
 import de.emo.cit.tuberlin.model.UDDI;
@@ -43,7 +44,7 @@ public class GetController {
 	public Response getAll() {
 
 		List entities = getService.getAllEntities();
-		return Response.status(200).entity(entities).build();
+		return Response.status(RequestHelp.OK).entity(entities).build();
 	}
 
 	@GET
@@ -52,7 +53,7 @@ public class GetController {
 			@PathParam("uddislaIdName") String uddislaIdName) {
 
 		List<UDDISLA> uddisla = getService.getUDDISLAByIdName(uddislaIdName);
-		return Response.status(200).entity(uddisla).build();
+		return Response.status(RequestHelp.OK).entity(uddisla).build();
 	}
 
 	@GET
@@ -62,7 +63,7 @@ public class GetController {
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 		getService.setClazz(UDDI.class);
 		UDDI uddi = (UDDI) getService.getUddiOrSla(uddislaId);
-		return Response.status(200).entity(uddi).build();
+		return Response.status(RequestHelp.OK).entity(uddi).build();
 	}
 
 	@GET
@@ -72,7 +73,7 @@ public class GetController {
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 		getService.setClazz(SLA.class);
 		SLA sla = (SLA) getService.getUddiOrSla(uddislaId);
-		return Response.status(200).entity(sla).build();
+		return Response.status(RequestHelp.OK).entity(sla).build();
 	}
 
 	@GET
@@ -83,6 +84,6 @@ public class GetController {
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 		ThesisHelp.validateUUID(serviceTermId, "serviceID");
 		List terms = getService.getTerms(uddislaId, serviceTermId);
-		return Response.status(200).entity(terms).build();
+		return Response.status(RequestHelp.OK).entity(terms).build();
 	}
 }

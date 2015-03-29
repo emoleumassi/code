@@ -14,6 +14,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
 import de.emo.cit.tuberlin.help.CheckJsonData;
+import de.emo.cit.tuberlin.help.RequestHelp;
 import de.emo.cit.tuberlin.model.ThesisRoot;
 import de.emo.cit.tuberlin.service.PostService;
 
@@ -46,6 +47,6 @@ public class PostController {
 
 		postService.setUUID(thesisRoot);
 
-		return Response.status(Response.Status.OK).entity(thesisRoot).build();
+		return Response.status(RequestHelp.OK).entity(thesisRoot).build();
 	}
 }
