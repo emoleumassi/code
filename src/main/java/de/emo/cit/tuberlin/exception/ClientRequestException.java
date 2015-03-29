@@ -3,7 +3,7 @@ package de.emo.cit.tuberlin.exception;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response.Status;
 
-import de.emo.cit.tuberlin.help.ThesisHelp;
+import de.emo.cit.tuberlin.help.ResponseHelp;
 
 /**
  * 
@@ -16,6 +16,6 @@ public class ClientRequestException extends WebApplicationException {
 
 	public ClientRequestException(Status code, String message) {
 
-		super(ThesisHelp.currentResponse(code, message));
+		super(ResponseHelp.currentResponse(code, message));
 	}
 }

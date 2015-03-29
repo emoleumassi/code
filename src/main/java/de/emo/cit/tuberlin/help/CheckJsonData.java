@@ -31,10 +31,10 @@ public class CheckJsonData {
 
 		if (serviceTermsList.size() != guaranteeTermsList.size()) {
 
-			RequestHelp.BAD_REQUEST_MESSAGE += "You have more serviceTerms as guaranteeTerms "
+			ResponseHelp.BAD_REQUEST_MESSAGE += "You have more serviceTerms as guaranteeTerms "
 					+ "or more guaranteeTerms as serviceTerms.\n";
-			throw new ClientRequestException(RequestHelp.BAD_REQUEST_STATUS,
-					RequestHelp.BAD_REQUEST_MESSAGE);
+			throw new ClientRequestException(ResponseHelp.BAD_REQUEST_STATUS,
+					ResponseHelp.BAD_REQUEST_MESSAGE);
 		}
 
 		for (ServiceTerms serviceTerms : serviceTermsList)
@@ -60,10 +60,10 @@ public class CheckJsonData {
 			}
 
 			if (!nameEquals) {
-				RequestHelp.BAD_REQUEST_MESSAGE += "'" + serviceName
+				ResponseHelp.BAD_REQUEST_MESSAGE += "'" + serviceName
 						+ "' doesn't have any reference in the serviceTerms.\n";
-				throw new ClientRequestException(RequestHelp.BAD_REQUEST_STATUS,
-						RequestHelp.BAD_REQUEST_MESSAGE);
+				throw new ClientRequestException(ResponseHelp.BAD_REQUEST_STATUS,
+						ResponseHelp.BAD_REQUEST_MESSAGE);
 			}
 
 			List<KeyPerformanceIndicator> kpiList = guaranteeTerms
@@ -123,10 +123,10 @@ public class CheckJsonData {
 	private void throwException(String value, String element) {
 
 		if (value.isEmpty() || value == null) {
-			RequestHelp.BAD_REQUEST_MESSAGE += "'" + element
+			ResponseHelp.BAD_REQUEST_MESSAGE += "'" + element
 					+ "' is mandatory.\n";
-			throw new ClientRequestException(RequestHelp.BAD_REQUEST_STATUS,
-					RequestHelp.BAD_REQUEST_MESSAGE);
+			throw new ClientRequestException(ResponseHelp.BAD_REQUEST_STATUS,
+					ResponseHelp.BAD_REQUEST_MESSAGE);
 		}
 	}
 }

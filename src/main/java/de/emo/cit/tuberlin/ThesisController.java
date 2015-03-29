@@ -18,7 +18,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
 import de.emo.cit.tuberlin.help.CheckJsonData;
-import de.emo.cit.tuberlin.help.RequestHelp;
+import de.emo.cit.tuberlin.help.ResponseHelp;
 import de.emo.cit.tuberlin.help.ThesisHelp;
 import de.emo.cit.tuberlin.model.SLA;
 import de.emo.cit.tuberlin.model.ThesisRoot;
@@ -66,15 +66,15 @@ public class ThesisController {
 
 		postService.setUUID(thesisRoot);
 
-		return Response.status(RequestHelp.OK).entity(thesisRoot).build();
+		return ResponseHelp.currentResponse(ResponseHelp.OK, thesisRoot);
 	}
-	
+
 	@GET
 	@Path("/")
 	public Response getAll() {
 
 		List entities = getService.getAllEntities();
-		return Response.status(RequestHelp.OK).entity(entities).build();
+		return ResponseHelp.currentResponse(ResponseHelp.OK, entities);
 	}
 
 	@GET
@@ -83,7 +83,7 @@ public class ThesisController {
 			@PathParam("uddislaIdName") String uddislaIdName) {
 
 		List<UDDISLA> uddisla = getService.getUDDISLAByIdName(uddislaIdName);
-		return Response.status(RequestHelp.OK).entity(uddisla).build();
+		return ResponseHelp.currentResponse(ResponseHelp.OK, uddisla);
 	}
 
 	@GET
@@ -93,7 +93,7 @@ public class ThesisController {
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 		getService.setClazz(UDDI.class);
 		UDDI uddi = (UDDI) getService.getUddiOrSla(uddislaId);
-		return Response.status(RequestHelp.OK).entity(uddi).build();
+		return ResponseHelp.currentResponse(ResponseHelp.OK, uddi);
 	}
 
 	@GET
@@ -103,7 +103,7 @@ public class ThesisController {
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 		getService.setClazz(SLA.class);
 		SLA sla = (SLA) getService.getUddiOrSla(uddislaId);
-		return Response.status(RequestHelp.OK).entity(sla).build();
+		return ResponseHelp.currentResponse(ResponseHelp.OK, sla);
 	}
 
 	@GET
@@ -114,6 +114,6 @@ public class ThesisController {
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 		ThesisHelp.validateUUID(serviceTermId, "serviceID");
 		List terms = getService.getTerms(uddislaId, serviceTermId);
-		return Response.status(RequestHelp.OK).entity(terms).build();
+		return ResponseHelp.currentResponse(ResponseHelp.OK, terms);
 	}
 }
