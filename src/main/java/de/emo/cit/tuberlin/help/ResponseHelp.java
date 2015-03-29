@@ -3,7 +3,11 @@ package de.emo.cit.tuberlin.help;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-
+/**
+ * 
+ * @author emoleumassi
+ *
+ */
 public class ResponseHelp {
 
 	public static final Status BAD_REQUEST_STATUS = Response.Status.BAD_REQUEST;

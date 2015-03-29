@@ -1,7 +1,5 @@
 package de.emo.cit.tuberlin.service.impl;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -11,11 +9,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import de.emo.cit.tuberlin.service.ThesisService;
-
+/**
+ * 
+ * @author emoleumassi
+ *
+ * @param <T>
+ */
 @Transactional
 @Service("thesisService")
 public class ThesisServiceImpl<T> implements ThesisService<T> {
 
+	@SuppressWarnings("unused")
 	private Class<T> clazz;
 
 	@PersistenceContext
@@ -26,18 +30,6 @@ public class ThesisServiceImpl<T> implements ThesisService<T> {
 
 	public void setClazz(final Class<T> clazzToSet) {
 		this.clazz = clazzToSet;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<T> listEntity() {
-		return entityManager.createQuery("from " + clazz.getName())
-				.getResultList();
-	}
-
-	@Override
-	public T getEntityById(String id) {
-		return entityManager.find(clazz, id);
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package de.emo.cit.tuberlin;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -24,6 +25,7 @@ import de.emo.cit.tuberlin.model.SLA;
 import de.emo.cit.tuberlin.model.ThesisRoot;
 import de.emo.cit.tuberlin.model.UDDI;
 import de.emo.cit.tuberlin.model.UDDISLA;
+import de.emo.cit.tuberlin.service.DeleteService;
 import de.emo.cit.tuberlin.service.GetService;
 import de.emo.cit.tuberlin.service.PostService;
 
@@ -41,6 +43,8 @@ public class ThesisController {
 	GetService getService;
 	@Autowired
 	PostService postService;
+	@Autowired
+	DeleteService deleteService;
 
 	public ThesisController() {
 		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
@@ -115,5 +119,15 @@ public class ThesisController {
 		ThesisHelp.validateUUID(serviceTermId, "serviceID");
 		List terms = getService.getTerms(uddislaId, serviceTermId);
 		return ResponseHelp.currentResponse(ResponseHelp.OK, terms);
+	}
+	
+	
+	@DELETE
+	@Path("/{uddislaId}")
+	public Response delete(@PathParam("uddislaId") String uddislaId) {
+
+		ThesisHelp.validateUUID(uddislaId, "uddislaID");
+		String message = "Webservice with the id: " + uddislaId + " successfully deleted";
+		return ResponseHelp.currentResponse(ResponseHelp.OK, message);
 	}
 }
