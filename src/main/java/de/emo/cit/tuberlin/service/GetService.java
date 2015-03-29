@@ -9,16 +9,16 @@ import de.emo.cit.tuberlin.model.UDDISLA;
  * @author emoleumassi
  * 
  */
+@SuppressWarnings("rawtypes")
 public interface GetService<T> {
 
-	@SuppressWarnings("rawtypes")
 	public List getAllEntities();
 
 	public List<UDDISLA> getUDDISLAByIdName(String idname);
 
 	public T getUddiOrSla(String uddislaId);
 
-	public T getTerms(String uddislaId, String termId, String col);
+	public List getTerms(String uddislaId, String serviceId);
 
 	public void setClazz(Class<T> clazzToSet);
 }
