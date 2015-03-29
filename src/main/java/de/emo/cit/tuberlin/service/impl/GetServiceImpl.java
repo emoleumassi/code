@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.RollbackException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,7 @@ public class GetServiceImpl<T> implements GetService {
 		LOGGER.info(query);
 		try {
 			return entityManager.createQuery(query).getResultList();
-		} catch (Exception e) {
+		} catch (SecurityException | IllegalStateException | RollbackException e) {
 			LOGGER.info(e.getMessage());
 		}
 		return null;
@@ -57,7 +58,7 @@ public class GetServiceImpl<T> implements GetService {
 			return (List<UDDISLA>) entityManager.createQuery(query)
 					.setParameter("id", idName).setParameter("name", idName)
 					.getResultList();
-		} catch (Exception e) {
+		} catch (SecurityException | IllegalStateException | RollbackException e) {
 			LOGGER.info(e.getMessage());
 		}
 		return null;
@@ -73,7 +74,7 @@ public class GetServiceImpl<T> implements GetService {
 		try {
 			return (T) entityManager.createQuery(query)
 					.setParameter("id", uddislaId).getSingleResult();
-		} catch (Exception e) {
+		} catch (SecurityException | IllegalStateException | RollbackException e) {
 			LOGGER.info(e.getMessage());
 		}
 		return null;
@@ -91,7 +92,7 @@ public class GetServiceImpl<T> implements GetService {
 			return (List) entityManager.createQuery(query)
 					.setParameter("serviceId", serviceId)
 					.setParameter("id", uddislaId).getResultList();
-		} catch (Exception e) {
+		} catch (SecurityException | IllegalStateException | RollbackException e) {
 			LOGGER.info(e.getMessage());
 		}
 		return null;

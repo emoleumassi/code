@@ -1,7 +1,10 @@
 package de.emo.cit.tuberlin.service.impl;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.RollbackException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +22,6 @@ import de.emo.cit.tuberlin.service.ThesisService;
 @Service("thesisService")
 public class ThesisServiceImpl<T> implements ThesisService<T> {
 
-	@SuppressWarnings("unused")
 	private Class<T> clazz;
 
 	@PersistenceContext
@@ -32,13 +34,25 @@ public class ThesisServiceImpl<T> implements ThesisService<T> {
 		this.clazz = clazzToSet;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> listEntity() {
+		return entityManager.createQuery("from " + clazz.getName())
+				.getResultList();
+	}
+
+	@Override
+	public T getEntityById(Class<T> clazzToSet, String id) {
+		return entityManager.find(clazzToSet, id);
+	}
+
 	@Override
 	public void createEntity(T t) {
 
 		try {
 			entityManager.persist(t);
 			LOGGER.info(t.toString());
-		} catch (Exception e) {
+		} catch (SecurityException | IllegalStateException | RollbackException e) {
 			LOGGER.info(e.getMessage());
 		}
 	}
@@ -51,7 +65,7 @@ public class ThesisServiceImpl<T> implements ThesisService<T> {
 		LOGGER.info(query);
 		try {
 			entityManager.createQuery(query).executeUpdate();
-		} catch (Exception e) {
+		} catch (SecurityException | IllegalStateException | RollbackException e) {
 			LOGGER.info(e.getMessage());
 		}
 	}

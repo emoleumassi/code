@@ -1,5 +1,6 @@
 package de.emo.cit.tuberlin.service;
 
+import java.util.List;
 /**
  * 
  * @author emoleumassi
@@ -9,6 +10,10 @@ package de.emo.cit.tuberlin.service;
 public interface ThesisService<T> {
 
 	public void setClazz(final Class<T> clazzToSet);
+	
+	public List<T> listEntity();
+
+	public T getEntityById(Class<T> clazzToSet, String id);
 
 	public void createEntity(T t);
 	

@@ -127,6 +127,7 @@ public class ThesisController {
 	public Response delete(@PathParam("uddislaId") String uddislaId) {
 
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
+		deleteService.deleteById(uddislaId);
 		String message = "Webservice with the id: " + uddislaId + " successfully deleted";
 		return ResponseHelp.currentResponse(ResponseHelp.OK, message);
 	}
