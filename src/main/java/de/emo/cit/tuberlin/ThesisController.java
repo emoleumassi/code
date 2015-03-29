@@ -2,7 +2,9 @@ package de.emo.cit.tuberlin;
 
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -15,23 +17,32 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
+import de.emo.cit.tuberlin.help.CheckJsonData;
 import de.emo.cit.tuberlin.help.RequestHelp;
 import de.emo.cit.tuberlin.help.ThesisHelp;
 import de.emo.cit.tuberlin.model.SLA;
+import de.emo.cit.tuberlin.model.ThesisRoot;
 import de.emo.cit.tuberlin.model.UDDI;
 import de.emo.cit.tuberlin.model.UDDISLA;
 import de.emo.cit.tuberlin.service.GetService;
+import de.emo.cit.tuberlin.service.PostService;
 
-@SuppressWarnings({ "unchecked", "rawtypes" })
-@Path("/uddisla")
+/**
+ * 
+ * @author emoleumassi
+ * 
+ */
+@SuppressWarnings({ "unchecked", "rawtypes", "resource" })
+@Path("/webservice")
 @Produces(MediaType.APPLICATION_JSON)
-public class GetController {
+public class ThesisController {
 
 	@Autowired
 	GetService getService;
+	@Autowired
+	PostService postService;
 
-	@SuppressWarnings("resource")
-	public GetController() {
+	public ThesisController() {
 		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
 				ThesisConfiguration.class);
 		AutowireCapableBeanFactory acbFactory = applicationContext
@@ -39,6 +50,25 @@ public class GetController {
 		acbFactory.autowireBean(this);
 	}
 
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/")
+	public Response postUDDISLA(ThesisRoot thesisRoot) {
+
+		new CheckJsonData(thesisRoot);
+
+		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
+				ThesisConfiguration.class);
+		AutowireCapableBeanFactory acbFactory = applicationContext
+				.getAutowireCapableBeanFactory();
+		acbFactory.autowireBean(this);
+
+		postService.setUUID(thesisRoot);
+
+		return Response.status(RequestHelp.OK).entity(thesisRoot).build();
+	}
+	
 	@GET
 	@Path("/")
 	public Response getAll() {
