@@ -32,12 +32,12 @@ public class DeleteServiceImpl implements DeleteService {
 
 		try {
 			String query = "SET FOREIGN_KEY_CHECKS=0";
-			entityManager.createQuery(query).executeUpdate();
+			entityManager.createNativeQuery(query).executeUpdate();
 			query = "DELETE FROM UDDISLA WHERE uddislaId = :uddislaId";
 			entityManager.createQuery(query)
 					.setParameter("uddislaId", uddislaId).executeUpdate();
 			query = "SET FOREIGN_KEY_CHECKS=1";
-			entityManager.createQuery(query).executeUpdate();
+			entityManager.createNativeQuery(query).executeUpdate();
 		} catch (SecurityException | IllegalStateException | RollbackException e) {
 			LOGGER.info(e.getMessage());
 		}
