@@ -98,4 +98,19 @@ public class GetServiceImpl<T> implements GetService {
 		}
 		return null;
 	}
+
+	@Override
+	public List<UDDISLA> getServiceByName(String serviceName) {
+
+		String query = "from  UDDISLA WHERE uddislaId = (select s.uddisla from SLA s,"
+				+ " ServiceTerms st WHERE s.slaId = st.sla AND st.name = :name)";
+		LOGGER.info(query);
+		try {
+			return (List<UDDISLA>) entityManager.createQuery(query)
+					.setParameter("name", serviceName).getResultList();
+		} catch (SecurityException | IllegalStateException | RollbackException e) {
+			LOGGER.info(e.getMessage());
+		}
+		return null;
+	}
 }

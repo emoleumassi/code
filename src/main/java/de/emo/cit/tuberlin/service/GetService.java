@@ -19,6 +19,8 @@ public interface GetService<T> {
 	public T getUddiOrSla(String uddislaId);
 
 	public List getTerms(String uddislaId, String serviceId);
+	
+	public List<UDDISLA> getServiceByName(String serviceName);
 
 	public void setClazz(Class<T> clazzToSet);
 }

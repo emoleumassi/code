@@ -35,7 +35,7 @@ import de.emo.cit.tuberlin.service.PostService;
  * 
  */
 @SuppressWarnings({ "unchecked", "rawtypes", "resource" })
-@Path("/webservice")
+@Path("/webservices")
 @Produces(MediaType.APPLICATION_JSON)
 public class ThesisController {
 
@@ -62,14 +62,7 @@ public class ThesisController {
 
 		new CheckJsonData(thesisRoot);
 
-		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
-				ThesisConfiguration.class);
-		AutowireCapableBeanFactory acbFactory = applicationContext
-				.getAutowireCapableBeanFactory();
-		acbFactory.autowireBean(this);
-
 		postService.createServices(thesisRoot);
-
 		return ResponseHelp.currentResponse(ResponseHelp.OK, thesisRoot);
 	}
 
@@ -79,6 +72,15 @@ public class ThesisController {
 
 		List entities = getService.getAllEntities();
 		return ResponseHelp.currentResponse(ResponseHelp.OK, entities);
+	}
+
+	@GET
+	@Path("/services/{serviceName}")
+	public Response getServiceByName(
+			@PathParam("serviceName") String serviceName) {
+
+		List<UDDISLA> uddislas = getService.getServiceByName(serviceName);
+		return ResponseHelp.currentResponse(ResponseHelp.OK, uddislas);
 	}
 
 	@GET
@@ -111,7 +113,7 @@ public class ThesisController {
 	}
 
 	@GET
-	@Path("/{uddislaId}/sla/service/{serviceTermId}")
+	@Path("/{uddislaId}/sla/services/{serviceTermId}")
 	public Response getTermById(@PathParam("uddislaId") String uddislaId,
 			@PathParam("serviceTermId") String serviceTermId) {
 
@@ -120,15 +122,15 @@ public class ThesisController {
 		List terms = getService.getTerms(uddislaId, serviceTermId);
 		return ResponseHelp.currentResponse(ResponseHelp.OK, terms);
 	}
-	
-	
+
 	@DELETE
 	@Path("/{uddislaId}")
 	public Response delete(@PathParam("uddislaId") String uddislaId) {
 
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 		deleteService.deleteById(uddislaId);
-		String message = "Webservice with the id: " + uddislaId + " successfully deleted";
+		String message = "Webservice with the id: " + uddislaId
+				+ " successfully deleted";
 		return ResponseHelp.currentResponse(ResponseHelp.OK, message);
 	}
 }
