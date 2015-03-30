@@ -53,7 +53,7 @@ public class ThesisControllerTest {
 	}
 
 	@Test
-	public void testGetUDDISLA() {
+	public void testGetAll() {
 
 		client = Client.create(new DefaultClientConfig());
 		WebResource webResource = client.resource(getBaseURI());
