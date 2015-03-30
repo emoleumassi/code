@@ -57,7 +57,6 @@ public class ThesisController {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/")
 	public Response create(ThesisRoot thesisRoot) {
 
 		new CheckJsonData(thesisRoot);
@@ -67,7 +66,6 @@ public class ThesisController {
 	}
 
 	@GET
-	@Path("/")
 	public Response getAll() {
 
 		List entities = getService.getAllEntities();

@@ -12,6 +12,8 @@ import org.glassfish.grizzly.http.server.HttpServer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -25,6 +27,9 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
  */
 public class ThesisControllerTest {
 
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(ThesisControllerTest.class);
+	
 	private static final int PORT = 8080;
 	private static final String LOCALHOST = "http://localhost";
 	private static final String HOST = "http://emo.cit.tu-berlin.de";
@@ -55,6 +60,8 @@ public class ThesisControllerTest {
 		ClientResponse response = webResource.path(GLOBAL_PATH)
 				.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 
+		LOGGER.info(URI.toString());
+		LOGGER.info(response.toString());
 		assertEquals(200, response.getStatus());
 	}
 
