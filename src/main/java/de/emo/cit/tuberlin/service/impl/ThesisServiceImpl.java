@@ -37,7 +37,9 @@ public class ThesisServiceImpl<T> implements ThesisService<T> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> listEntity() {
-		return entityManager.createQuery("from " + clazz.getName())
+		String query = "from " + clazz.getName();
+		LOGGER.info(query);
+		return entityManager.createQuery(query)
 				.getResultList();
 	}
 

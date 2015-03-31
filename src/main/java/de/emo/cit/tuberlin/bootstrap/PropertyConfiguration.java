@@ -33,6 +33,9 @@ public class PropertyConfiguration implements InitializingBean {
 	
 	@Value("${jdbc.driverClassName}")
 	private String jdbcDriverClassName;
+	
+	@Value("{thesis.host}")
+	private String thesisHost;
 
 	public String getJdbcDialect() {
 		return jdbcDialect;
@@ -61,6 +64,10 @@ public class PropertyConfiguration implements InitializingBean {
 	public String getJdbcDriverClassName() {
 		return jdbcDriverClassName;
 	}
+	
+	public String getThesisHost() {
+		return thesisHost;
+	}
 
 	//@Override
 	public void afterPropertiesSet() throws Exception {
@@ -71,5 +78,6 @@ public class PropertyConfiguration implements InitializingBean {
 		LOGGER.info("jdbcShowSql.............................: " + jdbcShowSql);
 		LOGGER.info("jdbcDialect.............................: " + jdbcDialect);
 		LOGGER.info("jdbcHbm2ddlAuto.........................: " + jdbcHbm2ddlAuto);
+		LOGGER.info("thesisHost..............................: " + thesisHost);
 	}
 }
