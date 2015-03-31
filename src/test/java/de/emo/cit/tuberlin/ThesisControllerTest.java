@@ -33,7 +33,7 @@ public class ThesisControllerTest {
 	private static final int PORT = 8080;
 	private static final String LOCALHOST = "http://localhost";
 	private static final String HOST = "http://emo.cit.tu-berlin.de";
-	private static final String GLOBAL_PATH = "/thesis/webservices/";
+	private static final String GLOBAL_PATH = "/webservices/";
 	
 	private static final URI URI = getBaseURI();
 
