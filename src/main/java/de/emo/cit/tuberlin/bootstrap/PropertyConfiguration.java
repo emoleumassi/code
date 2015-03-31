@@ -34,7 +34,7 @@ public class PropertyConfiguration implements InitializingBean {
 	@Value("${jdbc.driverClassName}")
 	private String jdbcDriverClassName;
 	
-	@Value("{thesis.host}")
+	@Value("${thesis.host}")
 	private String thesisHost;
 
 	public String getJdbcDialect() {
