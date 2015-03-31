@@ -1,6 +1,7 @@
 package de.emo.cit.tuberlin;
 
 import static junit.framework.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.net.URI;
@@ -11,6 +12,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.hibernate.jpa.criteria.expression.SearchedCaseExpression.WhenClause;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +30,7 @@ import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 import de.emo.cit.tuberlin.bootstrap.PropertyConfiguration;
+import de.emo.cit.tuberlin.help.ThesisHelp;
 import de.emo.cit.tuberlin.model.UDDISLA;
 import de.emo.cit.tuberlin.service.impl.GetServiceImpl;
 
@@ -45,7 +48,7 @@ public class ThesisControllerTest {
 	
 	@SuppressWarnings("rawtypes")
 	@Mock
-	GetServiceImpl getServiceImpl = new GetServiceImpl();;
+	GetServiceImpl getServiceImpl = new GetServiceImpl();
 
 	@Mock
 	static PropertyConfiguration propertyConfiguration;
