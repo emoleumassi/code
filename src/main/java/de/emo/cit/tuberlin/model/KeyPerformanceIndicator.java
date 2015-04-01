@@ -8,7 +8,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Check;
+
 @Entity
+@Check(constraints = "designation in('availability', 'MTTR', 'MTBF', 'response time', 'latency')")
 @Table
 public class KeyPerformanceIndicator {
 
@@ -27,11 +30,6 @@ public class KeyPerformanceIndicator {
 
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String description;
-	// @OneToOne(targetEntity = Method.class, fetch = FetchType.LAZY)
-	// @JoinColumn(name = "methodId", columnDefinition =
-	// "VARCHAR(50) default 'xxxxx'", referencedColumnName = "methodId",
-	// insertable = true, updatable = true, nullable = true)
-	// private Method method;
 
 	@ManyToOne(targetEntity = GuaranteeTerms.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "guaranteeTermId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "guaranteeTermId", insertable = true, updatable = true, nullable = true)
