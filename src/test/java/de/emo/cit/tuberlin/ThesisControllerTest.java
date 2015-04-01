@@ -29,6 +29,8 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 import de.emo.cit.tuberlin.bootstrap.PropertyConfiguration;
 import de.emo.cit.tuberlin.help.ThesisHelp;
+import de.emo.cit.tuberlin.model.SLA;
+import de.emo.cit.tuberlin.model.UDDI;
 import de.emo.cit.tuberlin.model.UDDISLA;
 
 /**
@@ -48,6 +50,12 @@ public class ThesisControllerTest {
 
 	@Mock
 	UDDISLA uddisla;
+
+	@Mock
+	UDDI uddi;
+
+	@Mock
+	SLA sla;
 
 	@Mock
 	static PropertyConfiguration propertyConfiguration;
@@ -91,6 +99,14 @@ public class ThesisControllerTest {
 		assertEquals(200, getBaseResource(GLOBAL_PATH).getStatus());
 	}
 
+//	@Test
+//	public void testWrongId() {
+//
+//		String path = GLOBAL_PATH + ThesisHelp.newUUID();
+//		LOGGER.info(getBaseResource(path).toString());
+//		assertEquals(404, getBaseResource(path).getStatus());
+//	}
+
 	@Test
 	public void testGetUDDIById() {
 
@@ -106,7 +122,7 @@ public class ThesisControllerTest {
 		LOGGER.info(getBaseResource(path).toString());
 		assertEquals(200, getBaseResource(path).getStatus());
 	}
-	
+
 	@Test
 	public void testGetUDDIByName() {
 
@@ -123,6 +139,32 @@ public class ThesisControllerTest {
 		LOGGER.info(getBaseResource(path).toString());
 		assertEquals(200, getBaseResource(path).getStatus());
 	}
+
+//	@Test
+//	public void testGetUDDI() {
+//
+//		String uddislaId = ThesisHelp.newUUID();
+//		uddisla.setUddislaId(uddislaId);
+//		entityManager.persist(uddisla);
+//
+//		when(entityManager.createQuery("FROM UDDISLA")).thenReturn(query);
+//		when(query.getSingleResult()).thenReturn(uddisla);
+//		when(uddisla.getUddislaId()).thenReturn(uddislaId);
+
+//		String uddiId = ThesisHelp.newUUID();
+//		uddi.setUddiId(uddiId);
+//		entityManager.persist(uddi);
+//
+//		String q = "FROM UDDI u WHERE u.uddisla ="
+//				+ " (SELECT uddislaId FROM UDDISLA WHERE uddislaId = :id)";
+//		when(entityManager.createQuery(q).setParameter("id", uddislaId))
+//				.thenReturn(query);
+//		when(query.getSingleResult()).thenReturn(uddi);
+//
+//		String path = GLOBAL_PATH + uddislaId + "/uddi";
+//		LOGGER.info(getBaseResource(path).toString());
+//		assertEquals(200, getBaseResource(path).getStatus());
+//	}
 
 	@After()
 	public void stopServer() {
