@@ -18,6 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import de.emo.cit.tuberlin.help.ThesisHelp;
 
+/**
+ * 
+ * @author emoleumassi
+ *
+ */
 @RunWith(MockitoJUnitRunner.class)
 @Transactional
 public class ModelTest {

@@ -5,19 +5,17 @@ import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 
 import org.glassfish.grizzly.http.server.HttpServer;
-import org.hibernate.jpa.criteria.expression.SearchedCaseExpression.WhenClause;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
@@ -32,7 +30,6 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 import de.emo.cit.tuberlin.bootstrap.PropertyConfiguration;
 import de.emo.cit.tuberlin.help.ThesisHelp;
 import de.emo.cit.tuberlin.model.UDDISLA;
-import de.emo.cit.tuberlin.service.impl.GetServiceImpl;
 
 /**
  * 
@@ -45,10 +42,12 @@ public class ThesisControllerTest {
 
 	@Mock
 	EntityManager entityManager;
-	
-	@SuppressWarnings("rawtypes")
+
 	@Mock
-	GetServiceImpl getServiceImpl = new GetServiceImpl();
+	Query query;
+
+	@Mock
+	UDDISLA uddisla;
 
 	@Mock
 	static PropertyConfiguration propertyConfiguration;
@@ -92,19 +91,37 @@ public class ThesisControllerTest {
 		assertEquals(200, getBaseResource(GLOBAL_PATH).getStatus());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testGetUDDIById() {
-		// LOGGER.info(propertyConfiguration.toString());
-//		getServiceImpl.setClazz(UDDISLA.class);
-//		List<UDDISLA> uddislas = getServiceImpl.getAllEntities();
-//
-//		assertEquals(false, uddislas.isEmpty());
 
-//		String uddislaId = uddislas.get(0).getUddislaId().trim();
-//		String path = GLOBAL_PATH + "/" + uddislaId;
-//		LOGGER.info(getBaseResource(path).toString());
-//		assertEquals(200, getBaseResource(path).getStatus());
+		String id = ThesisHelp.newUUID();
+		uddisla.setUddislaId(id);
+		entityManager.persist(uddisla);
+
+		when(entityManager.createQuery("FROM UDDISLA")).thenReturn(query);
+		when(query.getSingleResult()).thenReturn(uddisla);
+		when(uddisla.getUddislaId()).thenReturn(id);
+
+		String path = GLOBAL_PATH + uddisla.getUddislaId();
+		LOGGER.info(getBaseResource(path).toString());
+		assertEquals(200, getBaseResource(path).getStatus());
+	}
+	
+	@Test
+	public void testGetUDDIByName() {
+
+		String name = "emoleumassi";
+		uddisla.setUddislaId(ThesisHelp.newUUID());
+		uddisla.setName(name);
+		entityManager.persist(uddisla);
+
+		when(entityManager.createQuery("FROM UDDISLA")).thenReturn(query);
+		when(query.getSingleResult()).thenReturn(uddisla);
+		when(uddisla.getName()).thenReturn(name);
+
+		String path = GLOBAL_PATH + uddisla.getName();
+		LOGGER.info(getBaseResource(path).toString());
+		assertEquals(200, getBaseResource(path).getStatus());
 	}
 
 	@After()
