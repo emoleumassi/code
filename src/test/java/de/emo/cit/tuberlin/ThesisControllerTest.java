@@ -150,18 +150,19 @@ public class ThesisControllerTest {
 //		when(entityManager.createQuery("FROM UDDISLA")).thenReturn(query);
 //		when(query.getSingleResult()).thenReturn(uddisla);
 //		when(uddisla.getUddislaId()).thenReturn(uddislaId);
-
+//
 //		String uddiId = ThesisHelp.newUUID();
 //		uddi.setUddiId(uddiId);
 //		entityManager.persist(uddi);
 //
-//		String q = "FROM UDDI u WHERE u.uddisla ="
-//				+ " (SELECT uddislaId FROM UDDISLA WHERE uddislaId = :id)";
+//		when(uddisla.getUddi()).thenReturn(uddi);
+//		
+//		String q = "FROM UDDI u WHERE u.uddisla = :id)";
 //		when(entityManager.createQuery(q).setParameter("id", uddislaId))
 //				.thenReturn(query);
 //		when(query.getSingleResult()).thenReturn(uddi);
 //
-//		String path = GLOBAL_PATH + uddislaId + "/uddi";
+//		String path = GLOBAL_PATH + uddisla.getUddislaId() + "/uddi";
 //		LOGGER.info(getBaseResource(path).toString());
 //		assertEquals(200, getBaseResource(path).getStatus());
 //	}
