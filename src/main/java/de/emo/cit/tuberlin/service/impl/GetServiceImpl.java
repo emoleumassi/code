@@ -67,9 +67,7 @@ public class GetServiceImpl<T> implements GetService {
 	@Override
 	public T getUddiOrSla(String uddislaId) {
 
-		String query = "FROM "
-				+ clazz.getName()
-				+ " WHERE uddislaId = (SELECT uddislaId FROM UDDISLA WHERE uddislaId = :id)";
+		String query = "FROM " + clazz.getName() + " WHERE uddislaId = :id";
 		LOGGER.info(query);
 		try {
 			return (T) entityManager.createQuery(query)
@@ -102,7 +100,7 @@ public class GetServiceImpl<T> implements GetService {
 	@Override
 	public List<UDDISLA> getServiceByName(String serviceName) {
 
-		String query = "from UDDISLA WHERE uddislaId = (select s.uddisla from SLA s,"
+		String query = "from UDDISLA WHERE uddislaId = ANY (select s.uddisla from SLA s,"
 				+ " ServiceTerms st, GuaranteeTerms gt "
 				+ "WHERE s.slaId = st.sla AND gt.serviceName = st.name AND st.name = :name)";
 		LOGGER.info(query);
