@@ -103,7 +103,8 @@ public class GetServiceImpl<T> implements GetService {
 	public List<UDDISLA> getServiceByName(String serviceName) {
 
 		String query = "from UDDISLA WHERE uddislaId = (select s.uddisla from SLA s,"
-				+ " ServiceTerms st WHERE s.slaId = st.sla AND st.name = :name)";
+				+ " ServiceTerms st, GuaranteeTerms gt "
+				+ "WHERE s.slaId = st.sla AND gt.serviceName = st.name AND st.name = :name)";
 		LOGGER.info(query);
 		try {
 			return (List<UDDISLA>) entityManager.createQuery(query)
