@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.LazyCollection;
@@ -32,6 +33,9 @@ public class GuaranteeTerms {
 	@JoinColumn(name = "slaId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "slaId", insertable = true, updatable = true, nullable = true)
 	private SLA sla;
 
+	@OneToOne(mappedBy = "guaranteeTerms", targetEntity = Reward.class, cascade = CascadeType.ALL)
+	private Reward reward;
+	
 	@OneToMany(mappedBy = "guaranteeTerms", targetEntity = KeyPerformanceIndicator.class, cascade = CascadeType.ALL)
 	@LazyCollection(LazyCollectionOption.FALSE)
 	private List<KeyPerformanceIndicator> keyPerformanceIndicator;
@@ -58,6 +62,14 @@ public class GuaranteeTerms {
 
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
+	}
+
+	public Reward getReward() {
+		return reward;
+	}
+
+	public void setReward(Reward reward) {
+		this.reward = reward;
 	}
 
 	public List<KeyPerformanceIndicator> getKeyPerformanceIndicator() {
