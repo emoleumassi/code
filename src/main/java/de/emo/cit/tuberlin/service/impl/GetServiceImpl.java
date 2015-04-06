@@ -82,7 +82,7 @@ public class GetServiceImpl<T> implements GetService {
 	public List getTerms(String uddislaId, String serviceId) {
 
 		String query = "FROM ServiceTerms s, GuaranteeTerms g "
-				+ "WHERE s.name = g.serviceName AND s.serviceTermId = :serviceId"
+				+ "WHERE s.serviceName = g.serviceName AND s.serviceTermId = :serviceId"
 				+ " AND s.sla = (SELECT slaId FROM SLA WHERE uddislaId = :id)"
 				+ " AND g.sla = (SELECT slaId FROM SLA WHERE uddislaId = :id)"
 				+ " AND g.sla = s.sla";
@@ -101,8 +101,8 @@ public class GetServiceImpl<T> implements GetService {
 	public List<UDDISLA> getServiceByName(String serviceName) {
 
 		String query = "from UDDISLA WHERE uddislaId = ANY (select s.uddisla from SLA s,"
-				+ " ServiceTerms st, GuaranteeTerms gt "
-				+ "WHERE s.slaId = st.sla AND gt.serviceName = st.name AND st.name = :name)";
+				+ " ServiceTerms st, GuaranteeTerms gt WHERE s.slaId = st.sla AND gt.serviceName "
+				+ "= st.serviceName AND st.name = :name)";
 		LOGGER.info(query);
 		try {
 			return (List<UDDISLA>) entityManager.createQuery(query)
