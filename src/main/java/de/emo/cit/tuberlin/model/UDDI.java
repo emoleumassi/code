@@ -16,6 +16,9 @@ public class UDDI {
 	@Column(columnDefinition = "VARCHAR(50)", nullable = false)
 	private String uddiId;
 
+	@Column(columnDefinition = "VARCHAR(100)")
+	private String name;
+	
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String description;
 
@@ -32,6 +35,14 @@ public class UDDI {
 
 	public void setUddiId(String uddiId) {
 		this.uddiId = uddiId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getDescription() {
