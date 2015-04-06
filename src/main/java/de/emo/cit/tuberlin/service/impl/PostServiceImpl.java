@@ -11,6 +11,7 @@ import de.emo.cit.tuberlin.help.ThesisHelp;
 import de.emo.cit.tuberlin.model.GuaranteeTerms;
 import de.emo.cit.tuberlin.model.KeyPerformanceIndicator;
 import de.emo.cit.tuberlin.model.OverviewDoc;
+import de.emo.cit.tuberlin.model.Reward;
 import de.emo.cit.tuberlin.model.SLA;
 import de.emo.cit.tuberlin.model.ServiceTerms;
 import de.emo.cit.tuberlin.model.ThesisRoot;
@@ -64,6 +65,8 @@ public class PostServiceImpl implements PostService {
 
 		for (GuaranteeTerms guaranteeTerms : guaranteeTermsList) {
 			guaranteeTerms.setGuaranteeTermId(ThesisHelp.newUUID());
+			Reward reward = guaranteeTerms.getReward();
+			reward.setRewardId(ThesisHelp.newUUID());
 			kpiList = guaranteeTerms.getKeyPerformanceIndicator();
 			for (KeyPerformanceIndicator kpi : kpiList)
 				kpi.setKeyPerformanceIndicatorId(ThesisHelp.newUUID());
@@ -101,6 +104,9 @@ public class PostServiceImpl implements PostService {
 		for (GuaranteeTerms guaranteeTerms : guaranteeTermsList) {
 			thesisServive.updateColumnById("GuaranteeTerms", "slaId",
 					"guaranteeTermId", sla.getSlaId(),
+					guaranteeTerms.getGuaranteeTermId());
+			thesisServive.updateColumnById("Reward", "guaranteeTermId",
+					"rewardId", guaranteeTerms.getReward().getRewardId(),
 					guaranteeTerms.getGuaranteeTermId());
 			kpiList = guaranteeTerms.getKeyPerformanceIndicator();
 			for (KeyPerformanceIndicator kpi : kpiList)
