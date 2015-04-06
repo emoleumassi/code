@@ -9,6 +9,7 @@ import de.emo.cit.tuberlin.exception.ClientRequestException;
 import de.emo.cit.tuberlin.model.GuaranteeTerms;
 import de.emo.cit.tuberlin.model.KeyPerformanceIndicator;
 import de.emo.cit.tuberlin.model.OverviewDoc;
+import de.emo.cit.tuberlin.model.Reward;
 import de.emo.cit.tuberlin.model.SLA;
 import de.emo.cit.tuberlin.model.ServiceTerms;
 import de.emo.cit.tuberlin.model.ThesisRoot;
@@ -48,7 +49,9 @@ public class CheckJsonData {
 		for (GuaranteeTerms guaranteeTerms : guaranteeTermsList) {
 
 			String serviceName = guaranteeTerms.getServiceName();
-			checkGuaranteeParam(serviceName);
+			Reward reward = guaranteeTerms.getReward();
+			checkGuaranteeParam(serviceName, reward.getTimeInterval(),
+					reward.getCount(), reward.getValueUnit());
 
 			boolean nameEquals = false;
 			for (ServiceTerms serviceTerms : serviceTermsList)
@@ -90,13 +93,19 @@ public class CheckJsonData {
 	private void checkServiceParam(@QueryParam("name") String name,
 			@QueryParam("serviceName") String serviceName) {
 
-		throwException(name, "name");
+		throwException(name, "name of a service term");
 		throwException(serviceName, "serviceName of a service term");
 	}
 
 	private void checkGuaranteeParam(
-			@QueryParam("serviceName") String serviceName) {
+			@QueryParam("serviceName") String serviceName,
+			@QueryParam("timeInterval") String timeInterval,
+			@QueryParam("count") int count,
+			@QueryParam("valueUnit") float valueUnit) {
 		throwException(serviceName, "serviceName of a guarantee term");
+		throwException(timeInterval, "timeInterval of a reward");
+		throwException(String.valueOf(count), "count of a reward");
+		throwException(String.valueOf(valueUnit), "valueUnit of a reward");
 	}
 
 	private void checkKPIParam(@QueryParam("name") String name,
