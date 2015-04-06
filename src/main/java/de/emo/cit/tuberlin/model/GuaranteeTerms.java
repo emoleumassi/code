@@ -11,12 +11,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Check;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
-@Check(constraints = "obligated in('provide', 'customer')")
 @Table
 public class GuaranteeTerms {
 
@@ -24,8 +22,8 @@ public class GuaranteeTerms {
 	@Column(columnDefinition = "VARCHAR(50)", nullable = false)
 	private String guaranteeTermId;
 
-	@Column(columnDefinition = "VARCHAR(10)", nullable = false)
-	private String obligated;
+	@Column(columnDefinition = "TEXT")
+	private String description;
 
 	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
 	private String serviceName;
@@ -46,12 +44,12 @@ public class GuaranteeTerms {
 		this.guaranteeTermId = guaranteeTermId;
 	}
 
-	public String getObligated() {
-		return obligated;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setObligated(String obligated) {
-		this.obligated = obligated;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getServiceName() {

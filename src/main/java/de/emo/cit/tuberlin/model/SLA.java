@@ -1,6 +1,5 @@
 package de.emo.cit.tuberlin.model;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,8 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -30,16 +27,17 @@ public class SLA {
 	@Column(columnDefinition = "VARCHAR(50)", nullable = false)
 	private String slaId;
 
-	@Column(columnDefinition = "TEXT", nullable = false)
+	@Column(columnDefinition = "VARCHAR(100)")
+	private String name;
+	
+	@Column(columnDefinition = "TEXT")
 	private String description;
 
-	@Column(nullable = false)
-	@Temporal(TemporalType.DATE)
-	private Date startTime;
-
-	@Column(nullable = false)
-	@Temporal(TemporalType.DATE)
-	private Date endTime;
+	@Column(columnDefinition = "VARCHAR(50)")
+	private String templateId;
+	
+	@Column(columnDefinition = "VARCHAR(50)")
+	private String templateName;
 
 	@OneToOne(targetEntity = UDDISLA.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "uddislaId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "uddislaId", insertable = true, updatable = true, nullable = true)
@@ -69,20 +67,28 @@ public class SLA {
 		this.description = description;
 	}
 
-	public Date getStartTime() {
-		return startTime;
+	public String getName() {
+		return name;
 	}
 
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public Date getEndTime() {
-		return endTime;
+	public String getTemplateId() {
+		return templateId;
 	}
 
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
+	public void setTemplateId(String templateId) {
+		this.templateId = templateId;
+	}
+
+	public String getTemplateName() {
+		return templateName;
+	}
+
+	public void setTemplateName(String templateName) {
+		this.templateName = templateName;
 	}
 
 	public List<GuaranteeTerms> getGuaranteeTerms() {

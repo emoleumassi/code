@@ -1,83 +1,49 @@
 {
     "uddisla": {
-        "name": "Strato",
-        "description": "this describes a document for uddi, sla and ....",
-        "state": "pending",
-        "email": "uddisla@strato.de",
-        "phone": "004944782734",
-        "version": "01.2",
+        "name": "",
+        "description": "",
+        "startTime": "",
+        "endTime": "",
+        "email": "",
+        "phone": "",
+        "version": "",
         "uddi": {
-            "description": "this is a uddi part....",
+            "name": "",
+            "description": "",
             "overviewDoc": {
-                "description": "this a part for the wsdl'reference....",
-                "overviewURL": "http://www.strato.de/thesis/master/strato.wsdl"
+                "description": "",
+                "overviewURL": ""
             }
         },
         "sla": {
-            "description": "This is a sla part....",
-            "startTime": "2015-02-03",
-            "endTime": "2017-02-03",
+            "name": "",
+            "description": "",
+            "templateId": "",
+            "templateName" ""
             "serviceTerms": [
             {
-            	"name": "ServerStrato",
-                "designation": "server",
-                "description": "This is a server for...",
-                "costPerUnitOfAccount": "50",
-                "unitOfAccount": 4
-             },
-             {
-                "name": "DatabaseStrato",
-                "designation": "databasesystem",
-                "description": "a database'system for....",
-                "costPerUnitOfAccount": "100",
-                "unitOfAccount": 2
-             }],
+                    "name": "",
+                    "serviceName": "",
+                    "description": "" 
+            }],
             "guaranteeTerms": [
             {
-            	"obligated": "provider",
-                "serviceName": "ServerStrato",
-                "keyPerformanceIndicator": [
-                {
-                    "designation": "availability",
-                    "qualifyingCondiction": "98%",
-                    "targetValue": "99%",
-                    "description": "this is a availability of ...."
-                },
-                {
-                    "designation": "response time",
-                    "qualifyingCondiction": "5ms",
-                    "targetValue": "3ms",
-                    "description": "this is a response time of ...."
-                }]
-             },
-             {
-                "obligated": "provider",
-                "serviceName": "DatabaseStrato",
-                "keyPerformanceIndicator": [
-                {
-                    "designation": "MTBF",
-                    "qualifyingCondiction": "2h",
-                    "targetValue": "10h",
-                    "description": "this is a mean time to between failure ...."
-                },
-                {
-                    "designation": "MTTR",
-                    "qualifyingCondiction": "1h",
-                    "targetValue": "0.5h",
-                    "description": "this is a mean time to repair a ...."
-                }]
-             }]
+                    "serviceName": "",
+                    "description": "",
+                    "reward":{
+                        "timeInterval": "",
+                        "count": ,
+                        "valueUnit": "",
+                        "description": "" 
+                    },
+                    "keyPerformanceIndicator": [
+                    {
+                        "name": "",
+                        "qualifyingCondiction": "",
+                        "targetValue": "",
+                        "description": ""
+                    }]
+           }]
         }
-    },
-    "method": [
-    {
-		"name": "amazon",
-        "url": "http://aws.amazon.com/de/ec2/sla",
-    },{
-    	"name": "msazure",
-    	"url": "http://azure.microsoft.com/eu-us/support/legal/sla"
-    },{
-    	"name": "rackspace",
-    	"url": "http://www.rackspace.com/managed_hosting/support/servicelevels/managedsla"
-    }]
+	}
 }

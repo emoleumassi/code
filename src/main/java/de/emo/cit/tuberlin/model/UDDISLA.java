@@ -1,13 +1,15 @@
 package de.emo.cit.tuberlin.model;
 
+import java.util.Date;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.Check;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  * 
@@ -15,7 +17,6 @@ import org.hibernate.annotations.Check;
  *
  */
 @Entity
-@Check(constraints = "state in('pending', 'observed', 'rejected', 'completed')")
 @Table
 public class UDDISLA {
 
@@ -26,11 +27,16 @@ public class UDDISLA {
 	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
 	private String name;
 
-	@Column(columnDefinition = "TEXT", nullable = false)
+	@Column(columnDefinition = "TEXT")
 	private String description;
 
-	@Column(columnDefinition = "VARCHAR(10)", nullable = false)
-	private String state;
+	@Column(nullable = false)
+	@Temporal(TemporalType.DATE)
+	private Date startTime;
+
+	@Column(nullable = false)
+	@Temporal(TemporalType.DATE)
+	private Date endTime;
 
 	@Column(columnDefinition = "VARCHAR(50)", nullable = false)
 	private String email;
@@ -71,12 +77,20 @@ public class UDDISLA {
 		this.description = description;
 	}
 
-	public String getState() {
-		return state;
+	public Date getStartTime() {
+		return startTime;
 	}
 
-	public void setState(String state) {
-		this.state = state;
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
 	}
 
 	public String getEmail() {

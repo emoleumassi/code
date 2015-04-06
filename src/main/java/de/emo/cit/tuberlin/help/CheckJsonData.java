@@ -29,6 +29,10 @@ public class CheckJsonData {
 		List<ServiceTerms> serviceTermsList = sla.getServiceTerms();
 		List<GuaranteeTerms> guaranteeTermsList = sla.getGuaranteeTerms();
 
+		checkQueryParam(uddisla.getName(), uddisla.getVersion(),
+				overviewDoc.getOverviewURL(), uddisla.getStartTime(),
+				uddisla.getEndTime());
+
 		if (serviceTermsList.size() != guaranteeTermsList.size()) {
 
 			ResponseHelp.BAD_REQUEST_MESSAGE += "You have more serviceTerms as guaranteeTerms "
@@ -39,44 +43,35 @@ public class CheckJsonData {
 
 		for (ServiceTerms serviceTerms : serviceTermsList)
 			checkServiceParam(serviceTerms.getName(),
-					serviceTerms.getDesignation(),
-					serviceTerms.getCostPerUnitOfAccount(),
-					String.valueOf(serviceTerms.getUnitOfAccount()));
+					serviceTerms.getServiceName());
 
 		for (GuaranteeTerms guaranteeTerms : guaranteeTermsList) {
-
-			if (guaranteeTerms.getObligated().isEmpty())
-				guaranteeTerms.setObligated("provider");
 
 			String serviceName = guaranteeTerms.getServiceName();
 			checkGuaranteeParam(serviceName);
 
 			boolean nameEquals = false;
-			for (ServiceTerms serviceTerms : serviceTermsList) {
-				if (serviceTerms.getName().equals(serviceName)) {
+			for (ServiceTerms serviceTerms : serviceTermsList)
+				if (serviceTerms.getServiceName().equals(serviceName)) {
 					nameEquals = true;
 					break;
 				}
-			}
 
 			if (!nameEquals) {
 				ResponseHelp.BAD_REQUEST_MESSAGE += "'" + serviceName
 						+ "' doesn't have any reference in the serviceTerms.\n";
-				throw new ClientRequestException(ResponseHelp.BAD_REQUEST_STATUS,
+				throw new ClientRequestException(
+						ResponseHelp.BAD_REQUEST_STATUS,
 						ResponseHelp.BAD_REQUEST_MESSAGE);
 			}
 
 			List<KeyPerformanceIndicator> kpiList = guaranteeTerms
 					.getKeyPerformanceIndicator();
 			for (KeyPerformanceIndicator kpi : kpiList) {
-				checkKPIParam(kpi.getDesignation(),
-						kpi.getQualifyingCondiction(), kpi.getTargetValue());
+				checkKPIParam(kpi.getName(), kpi.getQualifyingCondiction(),
+						kpi.getTargetValue());
 			}
 		}
-
-		checkQueryParam(uddisla.getName(), uddisla.getVersion(),
-				overviewDoc.getOverviewURL(), sla.getStartTime(),
-				sla.getEndTime());
 	}
 
 	private void checkQueryParam(@QueryParam("name") String name,
@@ -85,7 +80,7 @@ public class CheckJsonData {
 			@QueryParam("startTime") Date startTime,
 			@QueryParam("endTime") Date endTime) {
 
-		throwException(name, "name");
+		throwException(name, "name of an uddisla");
 		throwException(version, "version");
 		throwException(overviewURL, "overviewURL");
 		throwException(startTime.toString(), "startTime");
@@ -93,30 +88,26 @@ public class CheckJsonData {
 	}
 
 	private void checkServiceParam(@QueryParam("name") String name,
-			@QueryParam("designation") String designation,
-			@QueryParam("costPerUnitOfAccount") String costPerUnitOfAccount,
-			@QueryParam("unitOfAccount") String unitOfAccount) {
+			@QueryParam("serviceName") String serviceName) {
 
 		throwException(name, "name");
-		throwException(designation, "designation");
-		throwException(costPerUnitOfAccount, "costPerUnitOfAccount");
-		throwException(unitOfAccount, "unitOfAccount");
+		throwException(serviceName, "serviceName of a service term");
 	}
 
 	private void checkGuaranteeParam(
 			@QueryParam("serviceName") String serviceName) {
-
-		throwException(serviceName, "serviceName");
-
+		throwException(serviceName, "serviceName of a guarantee term");
 	}
 
-	private void checkKPIParam(@QueryParam("designation") String designation,
+	private void checkKPIParam(@QueryParam("name") String name,
 			@QueryParam("qualifyingCondiction") String qualifyingCondiction,
 			@QueryParam("targetValue") String targetValue) {
 
-		throwException(designation, "designation");
-		throwException(qualifyingCondiction, "qualifyingCondiction");
-		throwException(targetValue, "targetValue");
+		throwException(name, "name of a Key Performance Indicator");
+		throwException(qualifyingCondiction,
+				"qualifyingCondiction of a Key Performance Indicator");
+		throwException(targetValue,
+				"targetValue of a Key Performance Indicator");
 
 	}
 

@@ -20,7 +20,7 @@ public class KeyPerformanceIndicator {
 	private String keyPerformanceIndicatorId;
 
 	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
-	private String designation;
+	private String name;
 
 	@Column(columnDefinition = "VARCHAR(5)", nullable = false)
 	private String targetValue;
@@ -43,12 +43,12 @@ public class KeyPerformanceIndicator {
 		this.keyPerformanceIndicatorId = keyPerformanceIndicatorId;
 	}
 
-	public String getDesignation() {
-		return designation;
+	public String getName() {
+		return name;
 	}
 
-	public void setDesignation(String designation) {
-		this.designation = designation;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getTargetValue() {

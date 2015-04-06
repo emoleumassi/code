@@ -59,6 +59,7 @@ public class ModelTest {
 		when(entityManager.find((Class<?>) any(), any())).thenReturn(null);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testUDDISLA() {
 		uddisla.setUddislaId(ThesisHelp.newUUID());
@@ -66,7 +67,8 @@ public class ModelTest {
 		uddisla.setEmail("myemail@email.com");
 		uddisla.setName("Test");
 		uddisla.setPhone("0027369");
-		uddisla.setState("pending");
+		uddisla.setEndTime(new Date(2017, 02, 15));
+		uddisla.setStartTime(new Date(2015, 02, 15));
 		uddisla.setVersion("1.4");
 		entityManager.persist(uddisla);
 		assertNotNull(uddisla);
@@ -80,13 +82,10 @@ public class ModelTest {
 		assertNotNull(uddi);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Test
 	public void testSLA() {
 		sla.setSlaId(ThesisHelp.newUUID());
 		sla.setDescription("a sla description test ...");
-		sla.setEndTime(new Date(2017, 02, 15));
-		sla.setStartTime(new Date(2015, 02, 15));
 		entityManager.persist(sla);
 		assertNotNull(sla);
 	}
@@ -103,6 +102,7 @@ public class ModelTest {
 	@Test
 	public void testServiceTerms() {
 		serviceTerms.setServiceTermId(ThesisHelp.newUUID());
+		serviceTerms.setServiceName("Strato");
 		entityManager.persist(serviceTerms);
 		assertNotNull(serviceTerms);
 	}
@@ -110,7 +110,6 @@ public class ModelTest {
 	@Test
 	public void testGuaranteeTerms() {
 		guaranteeTerms.setGuaranteeTermId(ThesisHelp.newUUID());
-		guaranteeTerms.setObligated("provider");
 		guaranteeTerms.setServiceName("Strato");
 		entityManager.persist(guaranteeTerms);
 		assertNotNull(guaranteeTerms);
@@ -120,7 +119,7 @@ public class ModelTest {
 	public void testKeyPerformance() {
 		keyPerformanceIndicator.setKeyPerformanceIndicatorId(ThesisHelp.newUUID());
 		keyPerformanceIndicator.setDescription("a kpi description");
-		keyPerformanceIndicator.setDesignation("availability");
+		keyPerformanceIndicator.setName("availability");
 		keyPerformanceIndicator.setQualifyingCondiction("10%");
 		keyPerformanceIndicator.setTargetValue("90%");
 		entityManager.persist(keyPerformanceIndicator);
