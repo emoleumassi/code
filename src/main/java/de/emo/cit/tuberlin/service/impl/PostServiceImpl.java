@@ -106,8 +106,8 @@ public class PostServiceImpl implements PostService {
 					"guaranteeTermId", sla.getSlaId(),
 					guaranteeTerms.getGuaranteeTermId());
 			thesisServive.updateColumnById("Reward", "guaranteeTermId",
-					"rewardId", guaranteeTerms.getReward().getRewardId(),
-					guaranteeTerms.getGuaranteeTermId());
+					"rewardId", guaranteeTerms.getGuaranteeTermId(),
+					guaranteeTerms.getReward().getRewardId());
 			kpiList = guaranteeTerms.getKeyPerformanceIndicator();
 			for (KeyPerformanceIndicator kpi : kpiList)
 				thesisServive.updateColumnById("KeyPerformanceIndicator",
