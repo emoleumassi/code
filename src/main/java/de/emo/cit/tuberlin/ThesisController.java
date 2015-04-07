@@ -59,10 +59,15 @@ public class ThesisController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response create(ThesisRoot thesisRoot) {
 
-		new CheckJsonData(thesisRoot);
-
-		postService.createServices(thesisRoot);
-		return ResponseHelp.currentResponse(ResponseHelp.OK, thesisRoot);
+		if (thesisRoot.getUddisla() == null)
+			return ResponseHelp.currentResponse(
+					ResponseHelp.INTERNAL_SERVER_ERROR,
+					"Internal Server Error, please post a document!");
+		else {
+			new CheckJsonData(thesisRoot);
+			postService.createServices(thesisRoot);
+			return ResponseHelp.currentResponse(ResponseHelp.OK, thesisRoot);
+		}
 	}
 
 	@GET

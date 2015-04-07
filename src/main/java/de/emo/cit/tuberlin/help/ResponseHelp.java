@@ -16,6 +16,7 @@ public class ResponseHelp {
 			+ BAD_REQUEST_STATUS.getStatusCode() + " Bad Request. ";
 
 	public static final Status OK = Response.Status.OK;
+	public static final Status INTERNAL_SERVER_ERROR = Response.Status.INTERNAL_SERVER_ERROR;
 
 	/**
 	 * Create a response for the HTTP-Request.
