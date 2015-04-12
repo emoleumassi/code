@@ -1,6 +1,7 @@
 package de.emo.cit.tuberlin;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -59,7 +60,7 @@ public class ThesisController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response create(ThesisRoot thesisRoot) {
 
-		if (thesisRoot.getUddisla() == null)
+		if (Objects.isNull(thesisRoot.getUddisla()))
 			return ResponseHelp.currentResponse(
 					ResponseHelp.INTERNAL_SERVER_ERROR,
 					"Internal Server Error, please post a document!");
@@ -74,7 +75,11 @@ public class ThesisController {
 	public Response getAll() {
 
 		List entities = getService.getAllEntities();
-		return ResponseHelp.currentResponse(ResponseHelp.OK, entities);
+		if (entities.isEmpty())
+			return ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
+					ResponseHelp.NOT_FOUND_MESSAGE);
+		else
+			return ResponseHelp.currentResponse(ResponseHelp.OK, entities);
 	}
 
 	@GET
@@ -83,7 +88,11 @@ public class ThesisController {
 			@PathParam("serviceName") String serviceName) {
 
 		List<UDDISLA> uddislas = getService.getServiceByName(serviceName);
-		return ResponseHelp.currentResponse(ResponseHelp.OK, uddislas);
+		if (uddislas.isEmpty())
+			return ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
+					ResponseHelp.NOT_FOUND_MESSAGE);
+		else
+			return ResponseHelp.currentResponse(ResponseHelp.OK, uddislas);
 	}
 
 	@GET
@@ -92,7 +101,11 @@ public class ThesisController {
 			@PathParam("uddislaIdName") String uddislaIdName) {
 
 		List<UDDISLA> uddisla = getService.getUDDISLAByIdName(uddislaIdName);
-		return ResponseHelp.currentResponse(ResponseHelp.OK, uddisla);
+		if (uddisla.isEmpty())
+			return ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
+					ResponseHelp.NOT_FOUND_MESSAGE);
+		else
+			return ResponseHelp.currentResponse(ResponseHelp.OK, uddisla);
 	}
 
 	@GET
@@ -102,7 +115,11 @@ public class ThesisController {
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 		getService.setClazz(UDDI.class);
 		UDDI uddi = (UDDI) getService.getUddiOrSla(uddislaId);
-		return ResponseHelp.currentResponse(ResponseHelp.OK, uddi);
+		if (Objects.isNull(uddi))
+			return ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
+					ResponseHelp.NOT_FOUND_MESSAGE);
+		else
+			return ResponseHelp.currentResponse(ResponseHelp.OK, uddi);
 	}
 
 	@GET
@@ -112,7 +129,11 @@ public class ThesisController {
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 		getService.setClazz(SLA.class);
 		SLA sla = (SLA) getService.getUddiOrSla(uddislaId);
-		return ResponseHelp.currentResponse(ResponseHelp.OK, sla);
+		if (Objects.isNull(sla))
+			return ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
+					ResponseHelp.NOT_FOUND_MESSAGE);
+		else
+			return ResponseHelp.currentResponse(ResponseHelp.OK, sla);
 	}
 
 	@GET
@@ -123,7 +144,11 @@ public class ThesisController {
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 		ThesisHelp.validateUUID(serviceTermId, "serviceID");
 		List terms = getService.getTerms(uddislaId, serviceTermId);
-		return ResponseHelp.currentResponse(ResponseHelp.OK, terms);
+		if (terms.isEmpty())
+			return ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
+					ResponseHelp.NOT_FOUND_MESSAGE);
+		else
+			return ResponseHelp.currentResponse(ResponseHelp.OK, terms);
 	}
 
 	@DELETE
@@ -134,6 +159,6 @@ public class ThesisController {
 		deleteService.deleteById(uddislaId);
 		String message = "Webservice with the id: " + uddislaId
 				+ " successfully deleted";
-		return ResponseHelp.currentResponse(ResponseHelp.OK, message);
+		return ResponseHelp.currentResponse(ResponseHelp.NO_CONTENT, message);
 	}
 }
