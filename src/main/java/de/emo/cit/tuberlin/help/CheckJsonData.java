@@ -3,6 +3,7 @@ package de.emo.cit.tuberlin.help;
 import java.util.Date;
 import java.util.List;
 
+import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 
 import de.emo.cit.tuberlin.exception.ClientRequestException;
@@ -30,7 +31,7 @@ public class CheckJsonData {
 		List<ServiceTerms> serviceTermsList = sla.getServiceTerms();
 		List<GuaranteeTerms> guaranteeTermsList = sla.getGuaranteeTerms();
 
-		checkQueryParam(uddisla.getName(), uddisla.getVersion(),
+		checkPathParam(uddisla.getName(), uddisla.getVersion(),
 				overviewDoc.getOverviewURL(), uddisla.getStartTime(),
 				uddisla.getEndTime());
 
@@ -77,11 +78,11 @@ public class CheckJsonData {
 		}
 	}
 
-	private void checkQueryParam(@QueryParam("name") String name,
-			@QueryParam("version") String version,
-			@QueryParam("overviewURL") String overviewURL,
-			@QueryParam("startTime") Date startTime,
-			@QueryParam("endTime") Date endTime) {
+	private void checkPathParam(@PathParam("name") String name,
+			@PathParam("version") String version,
+			@PathParam("overviewURL") String overviewURL,
+			@PathParam("startTime") Date startTime,
+			@PathParam("endTime") Date endTime) {
 
 		throwException(name, "name of an uddisla");
 		throwException(version, "version");
@@ -90,27 +91,27 @@ public class CheckJsonData {
 		throwException(endTime.toString(), "endTime");
 	}
 
-	private void checkServiceParam(@QueryParam("name") String name,
-			@QueryParam("serviceName") String serviceName) {
+	private void checkServiceParam(@PathParam("name") String name,
+			@PathParam("serviceName") String serviceName) {
 
 		throwException(name, "name of a service term");
 		throwException(serviceName, "serviceName of a service term");
 	}
 
 	private void checkGuaranteeParam(
-			@QueryParam("serviceName") String serviceName,
-			@QueryParam("timeInterval") String timeInterval,
+			@PathParam("serviceName") String serviceName,
+			@PathParam("timeInterval") String timeInterval,
 			@QueryParam("count") int count,
-			@QueryParam("valueUnit") float valueUnit) {
+			@PathParam("valueUnit") float valueUnit) {
 		throwException(serviceName, "serviceName of a guarantee term");
 		throwException(timeInterval, "timeInterval of a reward");
 		throwException(String.valueOf(count), "count of a reward");
 		throwException(String.valueOf(valueUnit), "valueUnit of a reward");
 	}
 
-	private void checkKPIParam(@QueryParam("name") String name,
-			@QueryParam("qualifyingCondiction") String qualifyingCondiction,
-			@QueryParam("targetValue") String targetValue) {
+	private void checkKPIParam(@PathParam("name") String name,
+			@PathParam("qualifyingCondiction") String qualifyingCondiction,
+			@PathParam("targetValue") String targetValue) {
 
 		throwException(name, "name of a Key Performance Indicator");
 		throwException(qualifyingCondiction,
