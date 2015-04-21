@@ -20,7 +20,6 @@ import de.emo.cit.tuberlin.service.DeleteService;
 @Service("deleteService")
 public class DeleteServiceImpl implements DeleteService {
 
-
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(DeleteServiceImpl.class);
 

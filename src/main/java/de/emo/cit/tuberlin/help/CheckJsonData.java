@@ -71,15 +71,11 @@ public class CheckJsonData {
 
 			List<KeyPerformanceIndicator> kpiList = guaranteeTerms
 					.getKeyPerformanceIndicator();
-			// try {
+
 			for (KeyPerformanceIndicator kpi : kpiList) {
 				checkKPIParam(kpi.getName(), kpi.getQualifyingCondiction(),
 						kpi.getTargetValue());
 			}
-			// } catch (ClientRequestException e) {
-			// throw new ClientRequestException(
-			// ResponseHelp.BAD_REQUEST_STATUS, "check typ of ...");
-			// }
 		}
 	}
 
@@ -118,9 +114,6 @@ public class CheckJsonData {
 			@PathParam("qualifyingCondiction") short qualifyingCondiction,
 			@PathParam("targetValue") short targetValue) {
 
-		// typException(Short.valueOf(qualifyingCondiction),
-		// "qualifyingCondiction");
-
 		emptyException(name, "name of a Key Performance Indicator");
 		emptyException(String.valueOf(qualifyingCondiction),
 				"qualifyingCondiction of a Key Performance Indicator");
@@ -138,21 +131,4 @@ public class CheckJsonData {
 					ResponseHelp.BAD_REQUEST_MESSAGE);
 		}
 	}
-
-	// private void typException(Short value, String element) {
-	//
-	// if (value instanceof Short) {
-	// ResponseHelp.BAD_REQUEST_MESSAGE += "'" + element
-	// + "' is not a number.\n";
-	// throw new ClientRequestException(ResponseHelp.BAD_REQUEST_STATUS,
-	// ResponseHelp.BAD_REQUEST_MESSAGE);
-	// }
-	// }
-	//
-	// private void newException(String element) {
-	//
-	// ResponseHelp.BAD_REQUEST_MESSAGE += "'" + element + "' is mandatory.\n";
-	// throw new ClientRequestException(ResponseHelp.BAD_REQUEST_STATUS,
-	// ResponseHelp.BAD_REQUEST_MESSAGE);
-	// }
 }

@@ -73,6 +73,8 @@ public class ThesisController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response create(ThesisRoot thesisRoot) {
 
+		long startTime = System.currentTimeMillis();
+		
 		if (Objects.isNull(thesisRoot.getUddisla()))
 			response = ResponseHelp.currentResponse(
 					ResponseHelp.INTERNAL_SERVER_ERROR,
@@ -83,6 +85,9 @@ public class ThesisController {
 			response = ResponseHelp
 					.currentResponse(ResponseHelp.OK, thesisRoot);
 		}
+		long elapsedTime = System.currentTimeMillis() - startTime;
+		LOGGER.info("Time to POST: " + elapsedTime + " ms");
+		
 		return response;
 	}
 
@@ -99,7 +104,7 @@ public class ThesisController {
 			response = ResponseHelp.currentResponse(ResponseHelp.OK, entities);
 
 		long elapsedTime = System.currentTimeMillis() - startTime;
-		LOGGER.info("Time for the getAll: " + elapsedTime);
+		LOGGER.info("Time to get All: " + elapsedTime + " ms");
 
 		return response;
 	}
@@ -109,6 +114,8 @@ public class ThesisController {
 	public Response getServiceByName(
 			@PathParam("serviceName") String serviceName) {
 
+		long startTime = System.currentTimeMillis();
+		
 		List<UDDISLA> uddislas = getService.getServiceByName(serviceName);
 		if (uddislas.isEmpty())
 			response = ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
@@ -116,6 +123,9 @@ public class ThesisController {
 		else
 			response = ResponseHelp.currentResponse(ResponseHelp.OK, uddislas);
 
+		long elapsedTime = System.currentTimeMillis() - startTime;
+		LOGGER.info("Time get serviceByName: " + elapsedTime + " ms");
+		
 		return response;
 	}
 
@@ -125,6 +135,8 @@ public class ThesisController {
 			@PathParam("serviceName") String serviceName,
 			@Context UriInfo uriInfo) {
 
+		long startTime = System.currentTimeMillis();
+		
 		List<UDDISLA> uddislas = getService.getServiceByName(serviceName);
 		if (uddislas.isEmpty())
 			response = ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
@@ -149,6 +161,9 @@ public class ThesisController {
 			response = ResponseHelp
 					.currentResponse(ResponseHelp.OK, targetList);
 		}
+		long elapsedTime = System.currentTimeMillis() - startTime;
+		LOGGER.info("Time to get service with kpi: " + elapsedTime  + " ms");
+		
 		return response;
 	}
 
@@ -157,12 +172,18 @@ public class ThesisController {
 	public Response getUDDISLAById(
 			@PathParam("uddislaIdName") String uddislaIdName) {
 
+		long startTime = System.currentTimeMillis();
+		
 		List<UDDISLA> uddisla = getService.getUDDISLAByIdName(uddislaIdName);
 		if (uddisla.isEmpty())
 			response = ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
 					ResponseHelp.NOT_FOUND_MESSAGE);
 		else
 			response = ResponseHelp.currentResponse(ResponseHelp.OK, uddisla);
+		
+		long elapsedTime = System.currentTimeMillis() - startTime;
+		LOGGER.info("Time to get UDDISLA by Id: " + elapsedTime + " ms");
+		
 		return response;
 	}
 
@@ -170,6 +191,8 @@ public class ThesisController {
 	@Path("/{uddislaId}/uddi")
 	public Response getUDDI(@PathParam("uddislaId") String uddislaId) {
 
+		long startTime = System.currentTimeMillis();
+		
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 		getService.setClazz(UDDI.class);
 		UDDI uddi = (UDDI) getService.getUddiOrSla(uddislaId);
@@ -179,6 +202,9 @@ public class ThesisController {
 		else
 			response = ResponseHelp.currentResponse(ResponseHelp.OK, uddi);
 
+		long elapsedTime = System.currentTimeMillis() - startTime;
+		LOGGER.info("Time to get UDDI: " + elapsedTime + " ms");
+		
 		return response;
 	}
 
@@ -186,6 +212,8 @@ public class ThesisController {
 	@Path("/{uddislaId}/sla")
 	public Response getSLA(@PathParam("uddislaId") String uddislaId) {
 
+		long startTime = System.currentTimeMillis();
+		
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 		getService.setClazz(SLA.class);
 		SLA sla = (SLA) getService.getUddiOrSla(uddislaId);
@@ -195,6 +223,9 @@ public class ThesisController {
 		else
 			response = ResponseHelp.currentResponse(ResponseHelp.OK, sla);
 
+		long elapsedTime = System.currentTimeMillis() - startTime;
+		LOGGER.info("Time to get SLA: " + elapsedTime + " ms");
+		
 		return response;
 	}
 
@@ -203,6 +234,8 @@ public class ThesisController {
 	public Response getTermById(@PathParam("uddislaId") String uddislaId,
 			@PathParam("serviceTermId") String serviceTermId) {
 
+		long startTime = System.currentTimeMillis();
+		
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 		ThesisHelp.validateUUID(serviceTermId, "serviceID");
 		List terms = getService.getTerms(uddislaId, serviceTermId);
@@ -212,6 +245,9 @@ public class ThesisController {
 		else
 			response = ResponseHelp.currentResponse(ResponseHelp.OK, terms);
 
+		long elapsedTime = System.currentTimeMillis() - startTime;
+		LOGGER.info("Time get termById: " + elapsedTime + " ms");
+		
 		return response;
 	}
 
@@ -219,10 +255,17 @@ public class ThesisController {
 	@Path("/{uddislaId}")
 	public Response delete(@PathParam("uddislaId") String uddislaId) {
 
+		long startTime = System.currentTimeMillis();
+		
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 		deleteService.deleteById(uddislaId);
 		String message = "Webservice with the id: " + uddislaId
 				+ " successfully deleted";
-		return ResponseHelp.currentResponse(ResponseHelp.NO_CONTENT, message);
+		response = ResponseHelp.currentResponse(ResponseHelp.NO_CONTENT, message);
+		
+		long elapsedTime = System.currentTimeMillis() - startTime;
+		LOGGER.info("Time to delete an uddisla: " + elapsedTime + " ms");
+		
+		return response;
 	}
 }

@@ -2,8 +2,6 @@ package de.emo.cit.tuberlin.service.impl;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,18 +21,18 @@ import de.emo.cit.tuberlin.service.ThesisService;
 /**
  * 
  * @author emoleumassi
- *
+ * 
  */
 @Service
 public class PostServiceImpl implements PostService {
 
-	private static final Logger LOGGER = LoggerFactory
-			.getLogger(PostServiceImpl.class);
-	
+	// private static final Logger LOGGER = LoggerFactory
+	// .getLogger(PostServiceImpl.class);
+
 	@SuppressWarnings("rawtypes")
 	@Autowired
 	ThesisService thesisServive;
-	
+
 	private SLA sla;
 	private UDDI uddi;
 	private UDDISLA uddisla;
@@ -45,7 +43,7 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public void createServices(ThesisRoot thesisRoot) {
-		
+
 		uddisla = thesisRoot.getUddisla();
 		uddisla.setUddislaId(ThesisHelp.newUUID());
 
@@ -73,7 +71,7 @@ public class PostServiceImpl implements PostService {
 		}
 
 		setEntity(uddisla);
-		LOGGER.info("succefull insert all the data!!!");
+		// LOGGER.info("succefull insert all the data!!!");
 
 		updateEntities();
 
@@ -115,7 +113,7 @@ public class PostServiceImpl implements PostService {
 						guaranteeTerms.getGuaranteeTermId(),
 						kpi.getKeyPerformanceIndicatorId());
 		}
-		
-		LOGGER.info("succefull update all the foreign key!!!");
+
+		// LOGGER.info("succefull update all the foreign key!!!");
 	}
 }

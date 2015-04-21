@@ -51,12 +51,11 @@ public class GetServiceImpl<T> implements GetService {
 	@Override
 	public List<UDDISLA> getUDDISLAByIdName(String idName) {
 
-		String query = "FROM UDDISLA WHERE uddislaId = :id OR name = :name";
-		LOGGER.info(query);
+		String query = "FROM UDDISLA WHERE uddislaId = :id OR name LIKE :name OR description LIKE :name";
 		try {
 			return (List<UDDISLA>) entityManager.createQuery(query)
-					.setParameter("id", idName).setParameter("name", idName)
-					.getResultList();
+					.setParameter("id", idName)
+					.setParameter("name", "%" + idName + "%").getResultList();
 		} catch (SecurityException | IllegalStateException | RollbackException e) {
 			LOGGER.info(e.getMessage());
 		}
@@ -67,7 +66,6 @@ public class GetServiceImpl<T> implements GetService {
 	public T getUddiOrSla(String uddislaId) {
 
 		String query = "FROM " + clazz.getName() + " WHERE uddislaId = :id";
-		LOGGER.info(query);
 		try {
 			return (T) entityManager.createQuery(query)
 					.setParameter("id", uddislaId).getSingleResult();
@@ -85,7 +83,6 @@ public class GetServiceImpl<T> implements GetService {
 				+ " AND s.sla = (SELECT slaId FROM SLA WHERE uddislaId = :id)"
 				+ " AND g.sla = (SELECT slaId FROM SLA WHERE uddislaId = :id)"
 				+ " AND g.sla = s.sla";
-		LOGGER.info(query);
 		try {
 			return (List) entityManager.createQuery(query)
 					.setParameter("serviceId", serviceId)
@@ -100,12 +97,13 @@ public class GetServiceImpl<T> implements GetService {
 	public List<UDDISLA> getServiceByName(String serviceName) {
 
 		String query = "from UDDISLA WHERE uddislaId = ANY (select s.uddisla from SLA s,"
-				+ " ServiceTerms st, GuaranteeTerms gt WHERE s.slaId = st.sla AND gt.serviceName "
-				+ "= st.serviceName AND st.serviceName = :name)";
-		LOGGER.info(query);
+				+ " ServiceTerms st, GuaranteeTerms gt WHERE s.slaId = st.sla AND "
+				+ "gt.serviceName = st.serviceName AND st.serviceName LIKE :name "
+				+ "OR st.name LIKE :name OR st.description LIKE :name)";
 		try {
 			return (List<UDDISLA>) entityManager.createQuery(query)
-					.setParameter("name", serviceName).getResultList();
+					.setParameter("name", "%" + serviceName + "%")
+					.getResultList();
 		} catch (SecurityException | IllegalStateException | RollbackException e) {
 			LOGGER.info(e.getMessage());
 		}
