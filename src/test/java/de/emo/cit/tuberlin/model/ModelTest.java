@@ -120,8 +120,8 @@ public class ModelTest {
 		keyPerformanceIndicator.setKeyPerformanceIndicatorId(ThesisHelp.newUUID());
 		keyPerformanceIndicator.setDescription("a kpi description");
 		keyPerformanceIndicator.setName("availability");
-		keyPerformanceIndicator.setQualifyingCondiction("10%");
-		keyPerformanceIndicator.setTargetValue("90%");
+		keyPerformanceIndicator.setQualifyingCondiction((short) 10);
+		keyPerformanceIndicator.setTargetValue((short) 90);
 		entityManager.persist(keyPerformanceIndicator);
 		assertNotNull(keyPerformanceIndicator);
 	}

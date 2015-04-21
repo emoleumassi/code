@@ -28,7 +28,7 @@ public class Reward {
 	private String description;
 
 	@Column(columnDefinition = "DECIMAL(10, 2)", nullable = false)
-	private float valueUnit;
+	private short valueUnit;
 
 	@Column(columnDefinition = "VARCHAR(10)", nullable = false)
 	private String timeInterval;
@@ -61,11 +61,11 @@ public class Reward {
 		this.description = description;
 	}
 
-	public float getValueUnit() {
+	public short getValueUnit() {
 		return valueUnit;
 	}
 
-	public void setValueUnit(float valueUnit) {
+	public void setValueUnit(short valueUnit) {
 		this.valueUnit = valueUnit;
 	}
 

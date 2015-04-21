@@ -110,13 +110,13 @@ public class CheckJsonData {
 	}
 
 	private void checkKPIParam(@PathParam("name") String name,
-			@PathParam("qualifyingCondiction") String qualifyingCondiction,
-			@PathParam("targetValue") String targetValue) {
+			@PathParam("qualifyingCondiction") short qualifyingCondiction,
+			@PathParam("targetValue") short targetValue) {
 
 		throwException(name, "name of a Key Performance Indicator");
-		throwException(qualifyingCondiction,
+		throwException(String.valueOf(qualifyingCondiction),
 				"qualifyingCondiction of a Key Performance Indicator");
-		throwException(targetValue,
+		throwException(String.valueOf(targetValue),
 				"targetValue of a Key Performance Indicator");
 
 	}

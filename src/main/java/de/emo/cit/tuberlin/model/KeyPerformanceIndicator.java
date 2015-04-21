@@ -22,11 +22,11 @@ public class KeyPerformanceIndicator {
 	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
 	private String name;
 
-	@Column(columnDefinition = "VARCHAR(5)", nullable = false)
-	private String targetValue;
+	@Column(columnDefinition = "DECIMAL(10, 2)", nullable = false)
+	private short targetValue;
 
-	@Column(columnDefinition = "VARCHAR(5)", nullable = false)
-	private String qualifyingCondiction;
+	@Column(columnDefinition = "DECIMAL(10, 2)", nullable = false)
+	private short qualifyingCondiction;
 
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String description;
@@ -51,19 +51,19 @@ public class KeyPerformanceIndicator {
 		this.name = name;
 	}
 
-	public String getTargetValue() {
+	public short getTargetValue() {
 		return targetValue;
 	}
 
-	public void setTargetValue(String targetValue) {
+	public void setTargetValue(short targetValue) {
 		this.targetValue = targetValue;
 	}
 
-	public String getQualifyingCondiction() {
+	public short getQualifyingCondiction() {
 		return qualifyingCondiction;
 	}
 
-	public void setQualifyingCondiction(String qualifyingCondiction) {
+	public void setQualifyingCondiction(short qualifyingCondiction) {
 		this.qualifyingCondiction = qualifyingCondiction;
 	}
 

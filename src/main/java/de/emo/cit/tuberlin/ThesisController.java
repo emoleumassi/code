@@ -10,6 +10,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -22,6 +23,8 @@ import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
 import de.emo.cit.tuberlin.help.CheckJsonData;
 import de.emo.cit.tuberlin.help.ResponseHelp;
 import de.emo.cit.tuberlin.help.ThesisHelp;
+import de.emo.cit.tuberlin.model.GuaranteeTerms;
+import de.emo.cit.tuberlin.model.KeyPerformanceIndicator;
 import de.emo.cit.tuberlin.model.SLA;
 import de.emo.cit.tuberlin.model.ThesisRoot;
 import de.emo.cit.tuberlin.model.UDDI;
@@ -93,6 +96,32 @@ public class ThesisController {
 					ResponseHelp.NOT_FOUND_MESSAGE);
 		else
 			return ResponseHelp.currentResponse(ResponseHelp.OK, uddislas);
+	}
+
+	@GET
+	@Path("/services/{serviceName}/kpi")
+	public Response getServiceByKPI(
+			@PathParam("serviceName") String serviceName,
+			@QueryParam("name") String name, @QueryParam("value") String value) {
+
+		List<UDDISLA> uddislas = getService.getServiceByName(serviceName);
+		if (uddislas.isEmpty())
+			return ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
+					ResponseHelp.NOT_FOUND_MESSAGE);
+		else {
+//			for (UDDISLA uddisla : uddislas) {
+//				for (GuaranteeTerms terms : uddisla.getSla()
+//						.getGuaranteeTerms()) {
+//					for (KeyPerformanceIndicator kpi : terms
+//							.getKeyPerformanceIndicator()) {
+//						if (name.equals(kpi.getName()) && value.) {
+//							
+//						} 
+//					}
+//				}
+//			}
+			return ResponseHelp.currentResponse(ResponseHelp.OK, uddislas);
+		}
 	}
 
 	@GET
