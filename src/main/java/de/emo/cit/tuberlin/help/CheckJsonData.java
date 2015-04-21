@@ -71,10 +71,15 @@ public class CheckJsonData {
 
 			List<KeyPerformanceIndicator> kpiList = guaranteeTerms
 					.getKeyPerformanceIndicator();
+			// try {
 			for (KeyPerformanceIndicator kpi : kpiList) {
 				checkKPIParam(kpi.getName(), kpi.getQualifyingCondiction(),
 						kpi.getTargetValue());
 			}
+			// } catch (ClientRequestException e) {
+			// throw new ClientRequestException(
+			// ResponseHelp.BAD_REQUEST_STATUS, "check typ of ...");
+			// }
 		}
 	}
 
@@ -84,18 +89,18 @@ public class CheckJsonData {
 			@PathParam("startTime") Date startTime,
 			@PathParam("endTime") Date endTime) {
 
-		throwException(name, "name of an uddisla");
-		throwException(version, "version");
-		throwException(overviewURL, "overviewURL");
-		throwException(startTime.toString(), "startTime");
-		throwException(endTime.toString(), "endTime");
+		emptyException(name, "name of an uddisla");
+		emptyException(version, "version");
+		emptyException(overviewURL, "overviewURL");
+		emptyException(startTime.toString(), "startTime");
+		emptyException(endTime.toString(), "endTime");
 	}
 
 	private void checkServiceParam(@PathParam("name") String name,
 			@PathParam("serviceName") String serviceName) {
 
-		throwException(name, "name of a service term");
-		throwException(serviceName, "serviceName of a service term");
+		emptyException(name, "name of a service term");
+		emptyException(serviceName, "serviceName of a service term");
 	}
 
 	private void checkGuaranteeParam(
@@ -103,25 +108,28 @@ public class CheckJsonData {
 			@PathParam("timeInterval") String timeInterval,
 			@QueryParam("count") int count,
 			@PathParam("valueUnit") float valueUnit) {
-		throwException(serviceName, "serviceName of a guarantee term");
-		throwException(timeInterval, "timeInterval of a reward");
-		throwException(String.valueOf(count), "count of a reward");
-		throwException(String.valueOf(valueUnit), "valueUnit of a reward");
+		emptyException(serviceName, "serviceName of a guarantee term");
+		emptyException(timeInterval, "timeInterval of a reward");
+		emptyException(String.valueOf(count), "count of a reward");
+		emptyException(String.valueOf(valueUnit), "valueUnit of a reward");
 	}
 
 	private void checkKPIParam(@PathParam("name") String name,
 			@PathParam("qualifyingCondiction") short qualifyingCondiction,
 			@PathParam("targetValue") short targetValue) {
 
-		throwException(name, "name of a Key Performance Indicator");
-		throwException(String.valueOf(qualifyingCondiction),
+		// typException(Short.valueOf(qualifyingCondiction),
+		// "qualifyingCondiction");
+
+		emptyException(name, "name of a Key Performance Indicator");
+		emptyException(String.valueOf(qualifyingCondiction),
 				"qualifyingCondiction of a Key Performance Indicator");
-		throwException(String.valueOf(targetValue),
+		emptyException(String.valueOf(targetValue),
 				"targetValue of a Key Performance Indicator");
 
 	}
 
-	private void throwException(String value, String element) {
+	private void emptyException(String value, String element) {
 
 		if (value.isEmpty() || value == null) {
 			ResponseHelp.BAD_REQUEST_MESSAGE += "'" + element
@@ -130,4 +138,21 @@ public class CheckJsonData {
 					ResponseHelp.BAD_REQUEST_MESSAGE);
 		}
 	}
+
+	// private void typException(Short value, String element) {
+	//
+	// if (value instanceof Short) {
+	// ResponseHelp.BAD_REQUEST_MESSAGE += "'" + element
+	// + "' is not a number.\n";
+	// throw new ClientRequestException(ResponseHelp.BAD_REQUEST_STATUS,
+	// ResponseHelp.BAD_REQUEST_MESSAGE);
+	// }
+	// }
+	//
+	// private void newException(String element) {
+	//
+	// ResponseHelp.BAD_REQUEST_MESSAGE += "'" + element + "' is mandatory.\n";
+	// throw new ClientRequestException(ResponseHelp.BAD_REQUEST_STATUS,
+	// ResponseHelp.BAD_REQUEST_MESSAGE);
+	// }
 }

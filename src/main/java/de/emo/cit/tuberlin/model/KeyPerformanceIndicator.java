@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.Check;
 
 @Entity
-@Check(constraints = "designation in('availability', 'MTTR', 'MTBF', 'response time', 'latency')")
+@Check(constraints = "designation in('availability', 'MTTR', 'MTBF', 'responsetime', 'latency')")
 @Table
 public class KeyPerformanceIndicator {
 

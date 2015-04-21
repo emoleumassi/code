@@ -1,5 +1,6 @@
 package de.emo.cit.tuberlin;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,10 +11,14 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -50,6 +55,11 @@ public class ThesisController {
 	@Autowired
 	DeleteService deleteService;
 
+	Response response;
+
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(ThesisController.class);
+	
 	public ThesisController() {
 		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(
 				ThesisConfiguration.class);
@@ -64,25 +74,34 @@ public class ThesisController {
 	public Response create(ThesisRoot thesisRoot) {
 
 		if (Objects.isNull(thesisRoot.getUddisla()))
-			return ResponseHelp.currentResponse(
+			response = ResponseHelp.currentResponse(
 					ResponseHelp.INTERNAL_SERVER_ERROR,
 					"Internal Server Error, please post a document!");
 		else {
 			new CheckJsonData(thesisRoot);
 			postService.createServices(thesisRoot);
-			return ResponseHelp.currentResponse(ResponseHelp.OK, thesisRoot);
+			response = ResponseHelp
+					.currentResponse(ResponseHelp.OK, thesisRoot);
 		}
+		return response;
 	}
 
 	@GET
 	public Response getAll() {
 
+		long startTime = System.currentTimeMillis();
+
 		List entities = getService.getAllEntities();
 		if (entities.isEmpty())
-			return ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
+			response = ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
 					ResponseHelp.NOT_FOUND_MESSAGE);
 		else
-			return ResponseHelp.currentResponse(ResponseHelp.OK, entities);
+			response = ResponseHelp.currentResponse(ResponseHelp.OK, entities);
+
+		long elapsedTime = System.currentTimeMillis() - startTime;
+		LOGGER.info("Time for the getAll: " + elapsedTime);
+
+		return response;
 	}
 
 	@GET
@@ -92,36 +111,45 @@ public class ThesisController {
 
 		List<UDDISLA> uddislas = getService.getServiceByName(serviceName);
 		if (uddislas.isEmpty())
-			return ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
+			response = ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
 					ResponseHelp.NOT_FOUND_MESSAGE);
 		else
-			return ResponseHelp.currentResponse(ResponseHelp.OK, uddislas);
+			response = ResponseHelp.currentResponse(ResponseHelp.OK, uddislas);
+
+		return response;
 	}
 
 	@GET
 	@Path("/services/{serviceName}/kpi")
 	public Response getServiceByKPI(
 			@PathParam("serviceName") String serviceName,
-			@QueryParam("name") String name, @QueryParam("value") String value) {
+			@Context UriInfo uriInfo) {
 
 		List<UDDISLA> uddislas = getService.getServiceByName(serviceName);
 		if (uddislas.isEmpty())
-			return ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
+			response = ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
 					ResponseHelp.NOT_FOUND_MESSAGE);
 		else {
-//			for (UDDISLA uddisla : uddislas) {
-//				for (GuaranteeTerms terms : uddisla.getSla()
-//						.getGuaranteeTerms()) {
-//					for (KeyPerformanceIndicator kpi : terms
-//							.getKeyPerformanceIndicator()) {
-//						if (name.equals(kpi.getName()) && value.) {
-//							
-//						} 
-//					}
-//				}
-//			}
-			return ResponseHelp.currentResponse(ResponseHelp.OK, uddislas);
+			MultivaluedMap<String, String> hashMap = uriInfo
+					.getQueryParameters();
+			List<UDDISLA> targetList = new ArrayList<>();
+			for (UDDISLA uddisla : uddislas) {
+				for (GuaranteeTerms terms : uddisla.getSla()
+						.getGuaranteeTerms()) {
+					for (KeyPerformanceIndicator kpi : terms
+							.getKeyPerformanceIndicator()) {
+						if (hashMap.containsKey(kpi.getName())
+								&& Short.valueOf(hashMap.getFirst(kpi.getName())) <= kpi
+										.getQualifyingCondiction()) {
+							targetList.add(uddisla);
+						}
+					}
+				}
+			}
+			response = ResponseHelp
+					.currentResponse(ResponseHelp.OK, targetList);
 		}
+		return response;
 	}
 
 	@GET
@@ -131,10 +159,11 @@ public class ThesisController {
 
 		List<UDDISLA> uddisla = getService.getUDDISLAByIdName(uddislaIdName);
 		if (uddisla.isEmpty())
-			return ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
+			response = ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
 					ResponseHelp.NOT_FOUND_MESSAGE);
 		else
-			return ResponseHelp.currentResponse(ResponseHelp.OK, uddisla);
+			response = ResponseHelp.currentResponse(ResponseHelp.OK, uddisla);
+		return response;
 	}
 
 	@GET
@@ -145,10 +174,12 @@ public class ThesisController {
 		getService.setClazz(UDDI.class);
 		UDDI uddi = (UDDI) getService.getUddiOrSla(uddislaId);
 		if (Objects.isNull(uddi))
-			return ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
+			response = ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
 					ResponseHelp.NOT_FOUND_MESSAGE);
 		else
-			return ResponseHelp.currentResponse(ResponseHelp.OK, uddi);
+			response = ResponseHelp.currentResponse(ResponseHelp.OK, uddi);
+
+		return response;
 	}
 
 	@GET
@@ -159,10 +190,12 @@ public class ThesisController {
 		getService.setClazz(SLA.class);
 		SLA sla = (SLA) getService.getUddiOrSla(uddislaId);
 		if (Objects.isNull(sla))
-			return ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
+			response = ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
 					ResponseHelp.NOT_FOUND_MESSAGE);
 		else
-			return ResponseHelp.currentResponse(ResponseHelp.OK, sla);
+			response = ResponseHelp.currentResponse(ResponseHelp.OK, sla);
+
+		return response;
 	}
 
 	@GET
@@ -174,10 +207,12 @@ public class ThesisController {
 		ThesisHelp.validateUUID(serviceTermId, "serviceID");
 		List terms = getService.getTerms(uddislaId, serviceTermId);
 		if (terms.isEmpty())
-			return ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
+			response = ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
 					ResponseHelp.NOT_FOUND_MESSAGE);
 		else
-			return ResponseHelp.currentResponse(ResponseHelp.OK, terms);
+			response = ResponseHelp.currentResponse(ResponseHelp.OK, terms);
+
+		return response;
 	}
 
 	@DELETE

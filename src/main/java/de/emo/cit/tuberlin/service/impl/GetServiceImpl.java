@@ -40,7 +40,6 @@ public class GetServiceImpl<T> implements GetService {
 	@Override
 	public List getAllEntities() {
 		String query = "FROM UDDISLA";
-		LOGGER.info(query);
 		try {
 			return entityManager.createQuery(query).getResultList();
 		} catch (SecurityException | IllegalStateException | RollbackException e) {
