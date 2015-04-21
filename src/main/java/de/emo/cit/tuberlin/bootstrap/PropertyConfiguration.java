@@ -1,7 +1,5 @@
 package de.emo.cit.tuberlin.bootstrap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +9,8 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource(value = { "classpath:database.properties" })
 public class PropertyConfiguration implements InitializingBean {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(PropertyConfiguration.class);
+	// private static final Logger LOGGER =
+	// LoggerFactory.getLogger(PropertyConfiguration.class);
 
 	@Value("${jdbc.username}")
 	private String jdbcUsername;
@@ -30,10 +29,10 @@ public class PropertyConfiguration implements InitializingBean {
 
 	@Value("${hibernate.hbm2ddl.auto}")
 	private String jdbcHbm2ddlAuto;
-	
+
 	@Value("${jdbc.driverClassName}")
 	private String jdbcDriverClassName;
-	
+
 	@Value("${thesis.host}")
 	private String thesisHost;
 
@@ -56,7 +55,7 @@ public class PropertyConfiguration implements InitializingBean {
 	public String getJdbcShowSql() {
 		return jdbcShowSql;
 	}
-	
+
 	public String getJdbcHbm2ddlAuto() {
 		return jdbcHbm2ddlAuto;
 	}
@@ -64,20 +63,27 @@ public class PropertyConfiguration implements InitializingBean {
 	public String getJdbcDriverClassName() {
 		return jdbcDriverClassName;
 	}
-	
+
 	public String getThesisHost() {
 		return thesisHost;
 	}
 
-	//@Override
+	// @Override
 	public void afterPropertiesSet() throws Exception {
-		LOGGER.info("jdbcDriverClassName.....................: " + jdbcDriverClassName);
-		LOGGER.info("jdbcUsername............................: " + jdbcUsername);
-		LOGGER.info("jdbcPassword............................: " + jdbcPassword);
-		LOGGER.info("jdbcUrl.................................: " + jdbcUrl);
-		LOGGER.info("jdbcShowSql.............................: " + jdbcShowSql);
-		LOGGER.info("jdbcDialect.............................: " + jdbcDialect);
-		LOGGER.info("jdbcHbm2ddlAuto.........................: " + jdbcHbm2ddlAuto);
-		LOGGER.info("thesisHost..............................: " + thesisHost);
+		// LOGGER.info("jdbcDriverClassName.....................: " +
+		// jdbcDriverClassName);
+		// LOGGER.info("jdbcUsername............................: " +
+		// jdbcUsername);
+		// LOGGER.info("jdbcPassword............................: " +
+		// jdbcPassword);
+		// LOGGER.info("jdbcUrl.................................: " + jdbcUrl);
+		// LOGGER.info("jdbcShowSql.............................: " +
+		// jdbcShowSql);
+		// LOGGER.info("jdbcDialect.............................: " +
+		// jdbcDialect);
+		// LOGGER.info("jdbcHbm2ddlAuto.........................: " +
+		// jdbcHbm2ddlAuto);
+		// LOGGER.info("thesisHost..............................: " +
+		// thesisHost);
 	}
 }
