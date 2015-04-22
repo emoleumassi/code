@@ -2,6 +2,7 @@ package de.emo.cit.tuberlin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Objects;
 
 import javax.ws.rs.Consumes;
@@ -108,7 +109,7 @@ public class ThesisController {
 			@PathParam("serviceName") String serviceName) {
 
 		long startTime = System.currentTimeMillis();
-		setResponse(getService.getAllEntities());
+		setResponse(getService.getServiceByName(serviceName));
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		LOGGER.info("Time get serviceByName: " + elapsedTime + " ms");
 
@@ -122,31 +123,30 @@ public class ThesisController {
 			@Context UriInfo uriInfo) {
 
 		long startTime = System.currentTimeMillis();
-
 		List<UDDISLA> uddislas = getService.getServiceByName(serviceName);
-		if (uddislas.isEmpty())
-			response = ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
-					ResponseHelp.NOT_FOUND_MESSAGE);
-		else {
-			MultivaluedMap<String, String> hashMap = uriInfo
-					.getQueryParameters();
-			List<UDDISLA> targetList = new ArrayList<>();
-			for (UDDISLA uddisla : uddislas) {
-				for (GuaranteeTerms terms : uddisla.getSla()
-						.getGuaranteeTerms()) {
+		setResponse(uddislas);
+
+		MultivaluedMap<String, String> hashMap = uriInfo.getQueryParameters();
+		List<UDDISLA> targetList = new ArrayList<>();
+		for (UDDISLA uddisla : uddislas) {
+			for (GuaranteeTerms terms : uddisla.getSla().getGuaranteeTerms()) {
+				int counter = 0;
+				for (Entry<String, List<String>> entry : hashMap.entrySet()) {
 					for (KeyPerformanceIndicator kpi : terms
 							.getKeyPerformanceIndicator()) {
-						if (hashMap.containsKey(kpi.getName())
-								&& Short.valueOf(hashMap.getFirst(kpi.getName())) <= kpi
+						if (entry.getKey().equals(kpi.getName())
+								&& Short.valueOf(entry.getValue().get(0)) <= kpi
 										.getQualifyingCondiction()) {
-							targetList.add(uddisla);
+							counter++;
 						}
 					}
+					if (counter == hashMap.size())
+						targetList.add(uddisla);
 				}
 			}
-			response = ResponseHelp
-					.currentResponse(ResponseHelp.OK, targetList);
 		}
+		setResponse(targetList);
+		
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		LOGGER.info("Time to get service with kpi: " + elapsedTime + " ms");
 
@@ -172,7 +172,7 @@ public class ThesisController {
 
 		long startTime = System.currentTimeMillis();
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
-		
+
 		getService.setClazz(UDDI.class);
 		setResponse(getService.getUddiOrSla(uddislaId));
 		long elapsedTime = System.currentTimeMillis() - startTime;
@@ -187,7 +187,7 @@ public class ThesisController {
 
 		long startTime = System.currentTimeMillis();
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
-		
+
 		getService.setClazz(SLA.class);
 		setResponse(getService.getUddiOrSla(uddislaId));
 		long elapsedTime = System.currentTimeMillis() - startTime;
