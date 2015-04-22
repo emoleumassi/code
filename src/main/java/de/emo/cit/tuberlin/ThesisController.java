@@ -135,8 +135,9 @@ public class ThesisController {
 					for (KeyPerformanceIndicator kpi : terms
 							.getKeyPerformanceIndicator()) {
 						if (entry.getKey().equals(kpi.getName())
-								&& Short.valueOf(entry.getValue().get(0)) <= kpi
-										.getQualifyingCondiction()) {
+								&& compareKPI(kpi, entry.getValue().get(0))) {
+							// && Short.valueOf(entry.getValue().get(0)) <= kpi
+							// .getQualifyingCondiction()
 							counter++;
 						}
 					}
@@ -146,7 +147,7 @@ public class ThesisController {
 			}
 		}
 		setResponse(targetList);
-		
+
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		LOGGER.info("Time to get service with kpi: " + elapsedTime + " ms");
 
@@ -241,5 +242,14 @@ public class ThesisController {
 		else
 			response = ResponseHelp.currentResponse(ResponseHelp.OK, element);
 		return response;
+	}
+
+	private boolean compareKPI(KeyPerformanceIndicator kpi, String value) {
+
+		if (kpi.getName().equals("availability")
+				|| kpi.getName().toLowerCase().equals("mtbf"))
+			return Short.valueOf(value) >= kpi.getQualifyingCondiction();
+		else
+			return Short.valueOf(value) <= kpi.getQualifyingCondiction();
 	}
 }
