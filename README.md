@@ -6,6 +6,8 @@ curl -H 'Content-Type: application/json' -X GET http://HOST:8080/thesis-0.1/webs
 
 curl -H 'Content-Type: application/json' -X GET http://HOST:8080/thesis-0.1/webservices/services/{serviceName} --> GET all service by name
 
+curl -H 'Content-Type: application/json' -X GET http://HOST:8080/thesis-0.1/webservices/services/{serviceName}/kpi?key=value --> GET all service by kpi
+
 curl -H 'Content-Type: application/json' -X GET http://HOST:8080/thesis-0.1/webservices/{uddislaId} --> GET Webservice by uddislaId
 
 curl -H 'Content-Type: application/json' -X GET http://HOST:8080/thesis-0.1/webservices/{uddislaName} --> GET Webservice by Webservicenamen
