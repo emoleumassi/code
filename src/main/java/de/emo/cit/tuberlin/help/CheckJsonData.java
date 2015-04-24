@@ -15,6 +15,7 @@ import de.emo.cit.tuberlin.model.SLA;
 import de.emo.cit.tuberlin.model.ServiceTerms;
 import de.emo.cit.tuberlin.model.ThesisRoot;
 import de.emo.cit.tuberlin.model.UDDISLA;
+import de.emo.cit.tuberlin.service.GetService;
 
 /**
  * 
@@ -23,7 +24,8 @@ import de.emo.cit.tuberlin.model.UDDISLA;
  */
 public class CheckJsonData {
 
-	public CheckJsonData(ThesisRoot thesisRoot) {
+	@SuppressWarnings("rawtypes")
+	public CheckJsonData(ThesisRoot thesisRoot, GetService getService) {
 
 		UDDISLA uddisla = thesisRoot.getUddisla();
 		OverviewDoc overviewDoc = uddisla.getUddi().getOverviewDoc();
@@ -34,6 +36,13 @@ public class CheckJsonData {
 		checkPathParam(uddisla.getName(), uddisla.getVersion(),
 				overviewDoc.getOverviewURL(), uddisla.getStartTime(),
 				uddisla.getEndTime());
+
+		String templateId = sla.getTemplateId();
+		String templateName = sla.getTemplateName();
+		if (!templateId.isEmpty())
+			checkSLATemplate(templateId, getService);
+		if (!templateName.isEmpty())
+			checkSLATemplate(templateName, getService);
 
 		if (serviceTermsList.size() != guaranteeTermsList.size()) {
 
@@ -127,6 +136,20 @@ public class CheckJsonData {
 		if (value.isEmpty() || value == null) {
 			ResponseHelp.BAD_REQUEST_MESSAGE += "'" + element
 					+ "' is mandatory.\n";
+			throw new ClientRequestException(ResponseHelp.BAD_REQUEST_STATUS,
+					ResponseHelp.BAD_REQUEST_MESSAGE);
+		}
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void checkSLATemplate(String template, GetService getService) {
+
+		List<UDDISLA> uddislas = getService.getUDDISLAByIdName(template);
+		if (uddislas.isEmpty()) {
+			ResponseHelp.BAD_REQUEST_MESSAGE += " There is not reference with "
+					+ "the templateId or templateName: '"
+					+ template
+					+ "' in the registry.\n";
 			throw new ClientRequestException(ResponseHelp.BAD_REQUEST_STATUS,
 					ResponseHelp.BAD_REQUEST_MESSAGE);
 		}

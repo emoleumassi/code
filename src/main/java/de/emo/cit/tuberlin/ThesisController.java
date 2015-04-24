@@ -81,7 +81,7 @@ public class ThesisController {
 					ResponseHelp.INTERNAL_SERVER_ERROR,
 					"Internal Server Error, please post a document!");
 		else {
-			new CheckJsonData(thesisRoot);
+			new CheckJsonData(thesisRoot, getService);
 			postService.createServices(thesisRoot);
 			response = ResponseHelp
 					.currentResponse(ResponseHelp.OK, thesisRoot);
@@ -136,8 +136,6 @@ public class ThesisController {
 							.getKeyPerformanceIndicator()) {
 						if (entry.getKey().equals(kpi.getName())
 								&& compareKPI(kpi, entry.getValue().get(0))) {
-							// && Short.valueOf(entry.getValue().get(0)) <= kpi
-							// .getQualifyingCondiction()
 							counter++;
 						}
 					}
