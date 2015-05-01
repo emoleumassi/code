@@ -65,7 +65,8 @@ public class CheckJsonData {
 
 			boolean nameEquals = false;
 			for (ServiceTerms serviceTerms : serviceTermsList)
-				if (serviceTerms.getServiceName().equals(serviceName)) {
+				if (serviceTerms.getServiceName().trim().toLowerCase()
+						.equals(serviceName.trim().toLowerCase())) {
 					nameEquals = true;
 					break;
 				}
@@ -147,8 +148,7 @@ public class CheckJsonData {
 		List<UDDISLA> uddislas = getService.getUDDISLAByIdName(template);
 		if (uddislas.isEmpty()) {
 			ResponseHelp.BAD_REQUEST_MESSAGE += " There is not reference with "
-					+ "the templateId or templateName: '"
-					+ template
+					+ "the templateId or templateName: '" + template
 					+ "' in the registry.\n";
 			throw new ClientRequestException(ResponseHelp.BAD_REQUEST_STATUS,
 					ResponseHelp.BAD_REQUEST_MESSAGE);
