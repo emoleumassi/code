@@ -96,9 +96,13 @@ public class GetServiceImpl<T> implements GetService {
 	@Override
 	public List<UDDISLA> getServiceByName(String serviceName) {
 
+//		String query = "from UDDISLA WHERE uddislaId = ANY (select s.uddisla from SLA s,"
+//				+ " ServiceTerms st, GuaranteeTerms gt WHERE s.slaId = st.sla AND "
+//				+ "gt.serviceName = st.serviceName AND st.serviceName LIKE :name OR st.description LIKE :name)";
+		
 		String query = "from UDDISLA WHERE uddislaId = ANY (select s.uddisla from SLA s,"
-				+ " ServiceTerms st, GuaranteeTerms gt WHERE s.slaId = st.sla AND "
-				+ "gt.serviceName = st.serviceName AND st.serviceName LIKE :name OR st.description LIKE :name)";
+				+ " ServiceTerms st WHERE s.slaId = st.sla AND "
+				+ "st.serviceName LIKE :name)";
 		try {
 			return (List<UDDISLA>) entityManager.createQuery(query)
 					.setParameter("name", "%" + serviceName + "%")
