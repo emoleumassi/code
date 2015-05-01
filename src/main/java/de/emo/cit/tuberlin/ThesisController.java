@@ -136,7 +136,11 @@ public class ThesisController {
 				if (kpiList.size() < hashMap.size())
 					break second;
 				int counter = 0;
-				for (Entry<String, List<String>> entry : hashMap.entrySet()) {
+				third: for (Entry<String, List<String>> entry : hashMap
+						.entrySet()) {
+					if (!terms.getServiceName().toLowerCase()
+							.equals(serviceName.toLowerCase().trim()))
+						break third;
 					for (KeyPerformanceIndicator kpi : kpiList) {
 						if (entry.getKey().equals(kpi.getName())
 								&& compareKPI(kpi, entry.getValue().get(0))) {
@@ -251,10 +255,10 @@ public class ThesisController {
 		String name = kpi.getName().trim().toLowerCase();
 		boolean isGreathan = (name.equals("availability") || name
 				.equals("mtbf"))
-				&& Short.valueOf(value) >= kpi.getQualifyingCondiction();
+				&& Short.valueOf(value) <= kpi.getQualifyingCondiction();
 		boolean isLesshan = !isGreathan
 				&& !(name.equals("availability") || name.equals("mtbf"))
-				&& Short.valueOf(value) <= kpi.getQualifyingCondiction();
+				&& Short.valueOf(value) >= kpi.getQualifyingCondiction();
 
 		if (isGreathan || isLesshan)
 			return true;
