@@ -129,19 +129,23 @@ public class ThesisController {
 		MultivaluedMap<String, String> hashMap = uriInfo.getQueryParameters();
 		List<UDDISLA> targetList = new ArrayList<>();
 		for (UDDISLA uddisla : uddislas) {
-			for (GuaranteeTerms terms : uddisla.getSla().getGuaranteeTerms()) {
+			second: for (GuaranteeTerms terms : uddisla.getSla()
+					.getGuaranteeTerms()) {
+				List<KeyPerformanceIndicator> kpiList = terms
+						.getKeyPerformanceIndicator();
+				if (kpiList.size() < hashMap.size())
+					break second;
 				int counter = 0;
 				for (Entry<String, List<String>> entry : hashMap.entrySet()) {
-					for (KeyPerformanceIndicator kpi : terms
-							.getKeyPerformanceIndicator()) {
+					for (KeyPerformanceIndicator kpi : kpiList) {
 						if (entry.getKey().equals(kpi.getName())
 								&& compareKPI(kpi, entry.getValue().get(0))) {
 							counter++;
 						}
 					}
-					if (counter == hashMap.size())
-						targetList.add(uddisla);
 				}
+				if (counter == hashMap.size())
+					targetList.add(uddisla);
 			}
 		}
 		setResponse(targetList);
@@ -244,10 +248,17 @@ public class ThesisController {
 
 	private boolean compareKPI(KeyPerformanceIndicator kpi, String value) {
 
-		if (kpi.getName().equals("availability")
-				|| kpi.getName().toLowerCase().equals("mtbf"))
-			return Short.valueOf(value) >= kpi.getQualifyingCondiction();
+		String name = kpi.getName().trim().toLowerCase();
+		boolean isGreathan = (name.equals("availability") || name
+				.equals("mtbf"))
+				&& Short.valueOf(value) >= kpi.getQualifyingCondiction();
+		boolean isLesshan = !isGreathan
+				&& !(name.equals("availability") || name.equals("mtbf"))
+				&& Short.valueOf(value) <= kpi.getQualifyingCondiction();
+
+		if (isGreathan || isLesshan)
+			return true;
 		else
-			return Short.valueOf(value) <= kpi.getQualifyingCondiction();
+			return false;
 	}
 }
