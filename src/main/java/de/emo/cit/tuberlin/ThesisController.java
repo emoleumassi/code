@@ -121,7 +121,15 @@ public class ThesisController {
 	public Response getServiceByKPI(
 			@PathParam("serviceName") String serviceName,
 			@Context UriInfo uriInfo) {
+		// public Response getServiceByKPI(
+		// @PathParam("serviceName") String serviceName,
+		// @QueryParam("mttr") short mttr, @QueryParam("mtbf") short mtbf,
+		// @QueryParam("latency") short latency,
+		// @QueryParam("availability") short availability,
+		// @QueryParam("response time") short responseTime) {
 
+		// setResponse(getService.getDummy(serviceName, mttr, mtbf, latency,
+		// responseTime, availability));
 		long startTime = System.currentTimeMillis();
 		List<UDDISLA> uddislas = getService.getServiceByName(serviceName);
 		setResponse(uddislas);
@@ -129,18 +137,20 @@ public class ThesisController {
 		MultivaluedMap<String, String> hashMap = uriInfo.getQueryParameters();
 		List<UDDISLA> targetList = new ArrayList<>();
 		for (UDDISLA uddisla : uddislas) {
-			second: for (GuaranteeTerms terms : uddisla.getSla()
-					.getGuaranteeTerms()) {
+			List<GuaranteeTerms> guaranteeTerms = uddisla.getSla()
+					.getGuaranteeTerms();
+			second: for (GuaranteeTerms terms : guaranteeTerms) {
 				List<KeyPerformanceIndicator> kpiList = terms
 						.getKeyPerformanceIndicator();
-				if (kpiList.size() < hashMap.size())
+				boolean contains = terms.getServiceName().toLowerCase()
+						.contains(serviceName.toLowerCase());
+				if (!contains) {
+					//guaranteeTerms.remove(terms);
+					continue;
+				} else if (kpiList.size() < hashMap.size())
 					break second;
 				int counter = 0;
-				third: for (Entry<String, List<String>> entry : hashMap
-						.entrySet()) {
-					if (!terms.getServiceName().toLowerCase()
-							.equals(serviceName.toLowerCase().trim()))
-						break third;
+				for (Entry<String, List<String>> entry : hashMap.entrySet()) {
 					for (KeyPerformanceIndicator kpi : kpiList) {
 						if (entry.getKey().equals(kpi.getName())
 								&& compareKPI(kpi, entry.getValue().get(0))) {

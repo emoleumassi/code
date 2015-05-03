@@ -96,10 +96,12 @@ public class GetServiceImpl<T> implements GetService {
 	@Override
 	public List<UDDISLA> getServiceByName(String serviceName) {
 
-//		String query = "from UDDISLA WHERE uddislaId = ANY (select s.uddisla from SLA s,"
-//				+ " ServiceTerms st, GuaranteeTerms gt WHERE s.slaId = st.sla AND "
-//				+ "gt.serviceName = st.serviceName AND st.serviceName LIKE :name OR st.description LIKE :name)";
-		
+		// select * from ServiceTerms st, GuaranteeTerms g,
+		// KeyPerformanceIndicator k
+		// where st.serviceName like '%sms%' and st.serviceName = g.serviceName
+		// and g.guaranteeTermId = k.guaranteeTermId and k.name = 'availability'
+		// and k.qualifyingCondiction > 96;
+
 		String query = "from UDDISLA WHERE uddislaId = ANY (select s.uddisla from SLA s,"
 				+ " ServiceTerms st WHERE s.slaId = st.sla AND "
 				+ "st.serviceName LIKE :name)";
@@ -107,6 +109,39 @@ public class GetServiceImpl<T> implements GetService {
 			return (List<UDDISLA>) entityManager.createQuery(query)
 					.setParameter("name", "%" + serviceName + "%")
 					.getResultList();
+		} catch (SecurityException | IllegalStateException | RollbackException e) {
+			LOGGER.info(e.getMessage());
+		}
+		return null;
+	}
+
+	@Override
+	public List getDummy(String serviceName, short mttr, short mtbf,
+			short latency, short responseTime, short availability) {
+
+		String query = "FROM ServiceTerms st, GuaranteeTerms g "
+				+ "WHERE st.serviceName = g.serviceName AND st.serviceName LIKE :serviceName AND "
+				+ "g.guaranteeTermId = ANY (SELECT guaranteeTerms FROM KeyPerformanceIndicator "
+				+ "WHERE CASE name WHEN 'availability' THEN qualifyingCondiction >= :value END)";
+
+		// if (availability != 0)
+		// query +=
+		// "WHEN name = 'availability' THEN qualifyingCondiction >= :value end)";
+		// else if (mtbf != 0)
+		// query += "WHEN name = 'mtbf' THEN qualifyingCondiction >= :value ";
+		// else if (mttr != 0)
+		// query += "WHEN name = 'mttr' THEN qualifyingCondiction <= :value ";
+		// else if (latency != 0)
+		// query +=
+		// "WHEN name = 'latency' THEN qualifyingCondiction <= :value ";
+		// else
+		// query +=
+		// "WHEN name = 'response time' THEN qualifyingCondiction <= :value ";
+		// query += "END)";
+		try {
+			return (List) entityManager.createQuery(query)
+					.setParameter("serviceName", "%" + serviceName + "%")
+					.setParameter("value", availability).getResultList();
 		} catch (SecurityException | IllegalStateException | RollbackException e) {
 			LOGGER.info(e.getMessage());
 		}

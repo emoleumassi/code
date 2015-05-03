@@ -19,8 +19,11 @@ public interface GetService<T> {
 	public T getUddiOrSla(String uddislaId);
 
 	public List getTerms(String uddislaId, String serviceId);
-	
+
 	public List<UDDISLA> getServiceByName(String serviceName);
+
+	public List getDummy(String serviceName, short mttr, short mtbf,
+			short latency, short responseTime, short availability);
 
 	public void setClazz(Class<T> clazzToSet);
 }
