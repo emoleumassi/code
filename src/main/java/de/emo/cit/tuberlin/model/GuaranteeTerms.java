@@ -31,7 +31,6 @@ public class GuaranteeTerms {
 	private Reward reward;
 
 	@OneToOne(mappedBy = "guaranteeTerms", targetEntity = KeyPerformanceIndicator.class, cascade = CascadeType.ALL)
-	// @LazyCollection(LazyCollectionOption.FALSE)
 	private KeyPerformanceIndicator keyPerformanceIndicator;
 
 	public String getGuaranteeTermId() {

@@ -19,12 +19,6 @@ public class KeyPerformanceIndicator {
 	@Column(columnDefinition = "VARCHAR(50)", nullable = false)
 	private String keyPerformanceIndicatorId;
 
-//	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
-//	private String name;
-//
-//	@Column(columnDefinition = "DECIMAL(10, 2)", nullable = false)
-//	private short targetValue;
-
 	@Column(columnDefinition = "DECIMAL(10, 2)", nullable = false)
 	private short availability;
 

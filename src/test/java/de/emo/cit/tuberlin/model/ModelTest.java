@@ -35,25 +35,25 @@ public class ModelTest {
 
 	@Mock
 	UDDISLA uddisla;
-	
+
 	@Mock
 	UDDI uddi;
-	
+
 	@Mock
 	SLA sla;
 
 	@Mock
 	OverviewDoc overviewDoc;
-	
+
 	@Mock
 	ServiceTerms serviceTerms;
-	
+
 	@Mock
 	GuaranteeTerms guaranteeTerms;
-	
+
 	@Mock
 	KeyPerformanceIndicator keyPerformanceIndicator;
-	
+
 	@Before
 	public void setUp() {
 		when(entityManager.find((Class<?>) any(), any())).thenReturn(null);
@@ -73,7 +73,7 @@ public class ModelTest {
 		entityManager.persist(uddisla);
 		assertNotNull(uddisla);
 	}
-	
+
 	@Test
 	public void testUDDI() {
 		uddi.setUddiId(ThesisHelp.newUUID());
@@ -81,7 +81,7 @@ public class ModelTest {
 		entityManager.persist(uddi);
 		assertNotNull(uddi);
 	}
-	
+
 	@Test
 	public void testSLA() {
 		sla.setSlaId(ThesisHelp.newUUID());
@@ -89,7 +89,7 @@ public class ModelTest {
 		entityManager.persist(sla);
 		assertNotNull(sla);
 	}
-	
+
 	@Test
 	public void testOverviewDoc() {
 		overviewDoc.setOverviewDocId(ThesisHelp.newUUID());
@@ -98,7 +98,7 @@ public class ModelTest {
 		entityManager.persist(overviewDoc);
 		assertNotNull(overviewDoc);
 	}
-	
+
 	@Test
 	public void testServiceTerms() {
 		serviceTerms.setServiceTermId(ThesisHelp.newUUID());
@@ -106,7 +106,7 @@ public class ModelTest {
 		entityManager.persist(serviceTerms);
 		assertNotNull(serviceTerms);
 	}
-	
+
 	@Test
 	public void testGuaranteeTerms() {
 		guaranteeTerms.setGuaranteeTermId(ThesisHelp.newUUID());
@@ -114,14 +114,17 @@ public class ModelTest {
 		entityManager.persist(guaranteeTerms);
 		assertNotNull(guaranteeTerms);
 	}
-	
+
 	@Test
 	public void testKeyPerformance() {
-		keyPerformanceIndicator.setKeyPerformanceIndicatorId(ThesisHelp.newUUID());
+		keyPerformanceIndicator.setKeyPerformanceIndicatorId(ThesisHelp
+				.newUUID());
 		keyPerformanceIndicator.setDescription("a kpi description");
-		keyPerformanceIndicator.setName("availability");
-		keyPerformanceIndicator.setQualifyingCondiction((short) 10);
-		keyPerformanceIndicator.setTargetValue((short) 90);
+		keyPerformanceIndicator.setMtbf((short) 98);
+		keyPerformanceIndicator.setMttr((short) 98);
+		keyPerformanceIndicator.setLatency((short) 98);
+		keyPerformanceIndicator.setAvailability((short) 98);
+		keyPerformanceIndicator.setResponseTime((short) 98);
 		entityManager.persist(keyPerformanceIndicator);
 		assertNotNull(keyPerformanceIndicator);
 	}

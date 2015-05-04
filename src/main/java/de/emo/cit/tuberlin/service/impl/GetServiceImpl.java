@@ -96,12 +96,6 @@ public class GetServiceImpl<T> implements GetService {
 	@Override
 	public List<UDDISLA> getServiceByName(String serviceName) {
 
-		// select * from ServiceTerms st, GuaranteeTerms g,
-		// KeyPerformanceIndicator k
-		// where st.serviceName like '%sms%' and st.serviceName = g.serviceName
-		// and g.guaranteeTermId = k.guaranteeTermId and k.name = 'availability'
-		// and k.qualifyingCondiction > 96;
-
 		String query = "from UDDISLA WHERE uddislaId = ANY (select s.uddisla from SLA s,"
 				+ " ServiceTerms st WHERE s.slaId = st.sla AND "
 				+ "st.serviceName LIKE :name)";
@@ -119,39 +113,50 @@ public class GetServiceImpl<T> implements GetService {
 	public List getDummy(String serviceName, short mttr, short mtbf,
 			short latency, short responseTime, short availability) {
 
-		// String query = "FROM ServiceTerms st, GuaranteeTerms g "
+		// String query =
+		// "from UDDISLA WHERE uddislaId = ANY (select s.uddisla from SLA s, ServiceTerms st, GuaranteeTerms g "
 		// +
-		// "WHERE st.serviceName = g.serviceName AND st.serviceName LIKE :serviceName AND "
+		// "WHERE s.slaId = st.sla AND g.sla = s.slaId AND st.serviceName = g.serviceName AND st.serviceName LIKE :serviceName AND "
 		// +
 		// "g.guaranteeTermId = ANY (SELECT guaranteeTerms FROM KeyPerformanceIndicator "
-		// +
-		// "WHERE CASE name WHEN 'availability' THEN qualifyingCondiction >= :value END)";
+		// + "WHERE availability >= :value AND latency <= :latency))";
 
 		String query = "FROM ServiceTerms st, GuaranteeTerms g "
 				+ "WHERE st.serviceName = g.serviceName AND st.serviceName LIKE :serviceName AND "
 				+ "g.guaranteeTermId = ANY (SELECT guaranteeTerms FROM KeyPerformanceIndicator "
 				+ "WHERE availability >= :value AND latency <= :latency)";
 
-		// if (availability != 0 && mttr != 0 && mtbf != 0 && latency != 0
-		// && responseTime != 0) {
-		// query +=
-		// "availability >= :availability AND mttr <= :mttr AND mtbf >= :mtbf AND "
-		// + "responseTime <= :responseTime AND latency <= :latency)";
-		// } else if (availability != 0 && mttr != 0 && mtbf != 0 && latency !=
-		// 0
-		// && responseTime != 0) {
-		// query +=
-		// "availability >= :availability AND mttr >= :mttr AND mtbf >= :mtbf AND "
-		// + "responseTime >= :responseTime AND latency >= :latency)";
-		// } else if (mttr != 0)
-		// query += "WHEN name = 'mttr' THEN qualifyingCondiction <= :value ";
-		// else if (latency != 0)
-		// query +=
-		// "WHEN name = 'latency' THEN qualifyingCondiction <= :value ";
-		// else
-		// query +=
-		// "WHEN name = 'response time' THEN qualifyingCondiction <= :value ";
-		// query += "END)";
+		if (mttr == 0)
+			query += "mtbf >= " + mtbf + " AND availability >= " + availability
+					+ " AND latency <= " + latency + " AND responseTime <= "
+					+ responseTime + " )";
+		if (mtbf == 0)
+			query += "mttr <= " + mttr + " AND availability >= " + availability
+					+ " AND latency <= " + latency + " AND responseTime <= "
+					+ responseTime + " )";
+		if (availability == 0)
+			query += "mttr <= " + mttr + " AND mtbf >= " + mtbf
+					+ " AND latency <= " + latency + " AND responseTime <= "
+					+ responseTime + " )";
+		if (responseTime == 0)
+			query += "mttr <= " + mttr + " AND availability >= " + availability
+					+ " AND latency <= " + latency + " AND mtbf >= " + mtbf
+					+ " )";
+		if (latency == 0)
+			query += "mttr <= " + mttr + " AND availability >= " + availability
+					+ " AND mtbf >= " + mtbf + " AND responseTime <= "
+					+ responseTime + " )";
+
+		// if (mtbf != 0)
+		// query += "mtbf >= " + mtbf;
+		// if (latency != 0)
+		// query += "latency <= " + latency;
+		// if (availability != 0)
+		// query += "availability >= " + availability;
+		// if (responseTime != 0)
+		// query += "responseTime <= " + responseTime;
+		//
+		// query += ")";
 		try {
 			return (List) entityManager.createQuery(query)
 					.setParameter("serviceName", "%" + serviceName + "%")
