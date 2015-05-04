@@ -65,9 +65,12 @@ public class PostServiceImpl implements PostService {
 			guaranteeTerms.setGuaranteeTermId(ThesisHelp.newUUID());
 			Reward reward = guaranteeTerms.getReward();
 			reward.setRewardId(ThesisHelp.newUUID());
-			kpiList = guaranteeTerms.getKeyPerformanceIndicator();
-			for (KeyPerformanceIndicator kpi : kpiList)
-				kpi.setKeyPerformanceIndicatorId(ThesisHelp.newUUID());
+			// kpiList = guaranteeTerms.getKeyPerformanceIndicator();
+			// for (KeyPerformanceIndicator kpi : kpiList)
+			// kpi.setKeyPerformanceIndicatorId(ThesisHelp.newUUID());
+
+			guaranteeTerms.getKeyPerformanceIndicator()
+					.setKeyPerformanceIndicatorId(ThesisHelp.newUUID());
 		}
 
 		setEntity(uddisla);
@@ -106,12 +109,18 @@ public class PostServiceImpl implements PostService {
 			thesisServive.updateColumnById("Reward", "guaranteeTermId",
 					"rewardId", guaranteeTerms.getGuaranteeTermId(),
 					guaranteeTerms.getReward().getRewardId());
-			kpiList = guaranteeTerms.getKeyPerformanceIndicator();
-			for (KeyPerformanceIndicator kpi : kpiList)
-				thesisServive.updateColumnById("KeyPerformanceIndicator",
-						"guaranteeTermId", "keyPerformanceIndicatorId",
-						guaranteeTerms.getGuaranteeTermId(),
-						kpi.getKeyPerformanceIndicatorId());
+			// kpiList = guaranteeTerms.getKeyPerformanceIndicator();
+			KeyPerformanceIndicator kpi = guaranteeTerms
+					.getKeyPerformanceIndicator();
+			thesisServive.updateColumnById("KeyPerformanceIndicator",
+					"guaranteeTermId", "keyPerformanceIndicatorId",
+					guaranteeTerms.getGuaranteeTermId(),
+					kpi.getKeyPerformanceIndicatorId());
+			// for (KeyPerformanceIndicator kpi : kpiList)
+			// thesisServive.updateColumnById("KeyPerformanceIndicator",
+			// "guaranteeTermId", "keyPerformanceIndicatorId",
+			// guaranteeTerms.getGuaranteeTermId(),
+			// kpi.getKeyPerformanceIndicatorId());
 		}
 
 		// LOGGER.info("succefull update all the foreign key!!!");

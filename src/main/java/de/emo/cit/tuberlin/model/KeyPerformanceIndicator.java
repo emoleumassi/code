@@ -5,13 +5,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Check;
 
 @Entity
-@Check(constraints = "designation in('availability', 'MTTR', 'MTBF', 'response time', 'latency')")
+@Check(constraints = "designation in('availability', 'mttr', 'mtbf', 'responseTime', 'latency')")
 @Table
 public class KeyPerformanceIndicator {
 
@@ -19,19 +19,31 @@ public class KeyPerformanceIndicator {
 	@Column(columnDefinition = "VARCHAR(50)", nullable = false)
 	private String keyPerformanceIndicatorId;
 
-	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
-	private String name;
+//	@Column(columnDefinition = "VARCHAR(100)", nullable = false)
+//	private String name;
+//
+//	@Column(columnDefinition = "DECIMAL(10, 2)", nullable = false)
+//	private short targetValue;
 
 	@Column(columnDefinition = "DECIMAL(10, 2)", nullable = false)
-	private short targetValue;
+	private short availability;
 
 	@Column(columnDefinition = "DECIMAL(10, 2)", nullable = false)
-	private short qualifyingCondiction;
-
+	private short mtbf;
+	
+	@Column(columnDefinition = "DECIMAL(10, 2)", nullable = false)
+	private short mttr;
+	
+	@Column(columnDefinition = "DECIMAL(10, 2)", nullable = false)
+	private short responseTime;
+	
+	@Column(columnDefinition = "DECIMAL(10, 2)", nullable = false)
+	private short latency;
+	
 	@Column(columnDefinition = "TEXT", nullable = false)
 	private String description;
 
-	@ManyToOne(targetEntity = GuaranteeTerms.class, cascade = CascadeType.ALL)
+	@OneToOne(targetEntity = GuaranteeTerms.class, cascade = CascadeType.ALL)
 	@JoinColumn(name = "guaranteeTermId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "guaranteeTermId", insertable = true, updatable = true, nullable = true)
 	private GuaranteeTerms guaranteeTerms;
 
@@ -43,28 +55,44 @@ public class KeyPerformanceIndicator {
 		this.keyPerformanceIndicatorId = keyPerformanceIndicatorId;
 	}
 
-	public String getName() {
-		return name;
+	public short getAvailability() {
+		return availability;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setAvailability(short availability) {
+		this.availability = availability;
 	}
 
-	public short getTargetValue() {
-		return targetValue;
+	public short getMtbf() {
+		return mtbf;
 	}
 
-	public void setTargetValue(short targetValue) {
-		this.targetValue = targetValue;
+	public void setMtbf(short mtbf) {
+		this.mtbf = mtbf;
 	}
 
-	public short getQualifyingCondiction() {
-		return qualifyingCondiction;
+	public short getMttr() {
+		return mttr;
 	}
 
-	public void setQualifyingCondiction(short qualifyingCondiction) {
-		this.qualifyingCondiction = qualifyingCondiction;
+	public void setMttr(short mttr) {
+		this.mttr = mttr;
+	}
+
+	public short getResponseTime() {
+		return responseTime;
+	}
+
+	public void setResponseTime(short responseTime) {
+		this.responseTime = responseTime;
+	}
+
+	public short getLatency() {
+		return latency;
+	}
+
+	public void setLatency(short latency) {
+		this.latency = latency;
 	}
 
 	public String getDescription() {

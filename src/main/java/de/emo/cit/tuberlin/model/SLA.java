@@ -1,5 +1,6 @@
 package de.emo.cit.tuberlin.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -43,13 +44,13 @@ public class SLA {
 	@JoinColumn(name = "uddislaId", columnDefinition = "VARCHAR(50) default 'xxxxx'", referencedColumnName = "uddislaId", insertable = true, updatable = true, nullable = true)
 	private UDDISLA uddisla;
 
-	@OneToMany(mappedBy = "sla", targetEntity = GuaranteeTerms.class, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "sla", targetEntity = GuaranteeTerms.class, cascade = CascadeType.ALL, orphanRemoval = true)
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<GuaranteeTerms> guaranteeTerms;
+	private List<GuaranteeTerms> guaranteeTerms = new ArrayList<>();
 
-	@OneToMany(mappedBy = "sla", targetEntity = ServiceTerms.class, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "sla", targetEntity = ServiceTerms.class, orphanRemoval = true, cascade = CascadeType.ALL)
 	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<ServiceTerms> serviceTerms;
+	private List<ServiceTerms> serviceTerms = new ArrayList<>();
 
 	public String getSlaId() {
 		return slaId;

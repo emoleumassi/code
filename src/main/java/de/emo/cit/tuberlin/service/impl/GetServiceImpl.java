@@ -119,17 +119,31 @@ public class GetServiceImpl<T> implements GetService {
 	public List getDummy(String serviceName, short mttr, short mtbf,
 			short latency, short responseTime, short availability) {
 
+		// String query = "FROM ServiceTerms st, GuaranteeTerms g "
+		// +
+		// "WHERE st.serviceName = g.serviceName AND st.serviceName LIKE :serviceName AND "
+		// +
+		// "g.guaranteeTermId = ANY (SELECT guaranteeTerms FROM KeyPerformanceIndicator "
+		// +
+		// "WHERE CASE name WHEN 'availability' THEN qualifyingCondiction >= :value END)";
+
 		String query = "FROM ServiceTerms st, GuaranteeTerms g "
 				+ "WHERE st.serviceName = g.serviceName AND st.serviceName LIKE :serviceName AND "
 				+ "g.guaranteeTermId = ANY (SELECT guaranteeTerms FROM KeyPerformanceIndicator "
-				+ "WHERE CASE name WHEN 'availability' THEN qualifyingCondiction >= :value END)";
+				+ "WHERE availability >= :value AND latency <= :latency)";
 
-		// if (availability != 0)
+		// if (availability != 0 && mttr != 0 && mtbf != 0 && latency != 0
+		// && responseTime != 0) {
 		// query +=
-		// "WHEN name = 'availability' THEN qualifyingCondiction >= :value end)";
-		// else if (mtbf != 0)
-		// query += "WHEN name = 'mtbf' THEN qualifyingCondiction >= :value ";
-		// else if (mttr != 0)
+		// "availability >= :availability AND mttr <= :mttr AND mtbf >= :mtbf AND "
+		// + "responseTime <= :responseTime AND latency <= :latency)";
+		// } else if (availability != 0 && mttr != 0 && mtbf != 0 && latency !=
+		// 0
+		// && responseTime != 0) {
+		// query +=
+		// "availability >= :availability AND mttr >= :mttr AND mtbf >= :mtbf AND "
+		// + "responseTime >= :responseTime AND latency >= :latency)";
+		// } else if (mttr != 0)
 		// query += "WHEN name = 'mttr' THEN qualifyingCondiction <= :value ";
 		// else if (latency != 0)
 		// query +=
@@ -141,7 +155,8 @@ public class GetServiceImpl<T> implements GetService {
 		try {
 			return (List) entityManager.createQuery(query)
 					.setParameter("serviceName", "%" + serviceName + "%")
-					.setParameter("value", availability).getResultList();
+					.setParameter("value", availability)
+					.setParameter("latency", latency).getResultList();
 		} catch (SecurityException | IllegalStateException | RollbackException e) {
 			LOGGER.info(e.getMessage());
 		}

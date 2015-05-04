@@ -1,8 +1,6 @@
 package de.emo.cit.tuberlin;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Objects;
 
 import javax.ws.rs.Consumes;
@@ -12,11 +10,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,12 +25,9 @@ import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
 import de.emo.cit.tuberlin.help.CheckJsonData;
 import de.emo.cit.tuberlin.help.ResponseHelp;
 import de.emo.cit.tuberlin.help.ThesisHelp;
-import de.emo.cit.tuberlin.model.GuaranteeTerms;
-import de.emo.cit.tuberlin.model.KeyPerformanceIndicator;
 import de.emo.cit.tuberlin.model.SLA;
 import de.emo.cit.tuberlin.model.ThesisRoot;
 import de.emo.cit.tuberlin.model.UDDI;
-import de.emo.cit.tuberlin.model.UDDISLA;
 import de.emo.cit.tuberlin.service.DeleteService;
 import de.emo.cit.tuberlin.service.GetService;
 import de.emo.cit.tuberlin.service.PostService;
@@ -118,51 +111,51 @@ public class ThesisController {
 
 	@GET
 	@Path("/services/{serviceName}/kpi")
-	public Response getServiceByKPI(
-			@PathParam("serviceName") String serviceName,
-			@Context UriInfo uriInfo) {
-		// public Response getServiceByKPI(
-		// @PathParam("serviceName") String serviceName,
-		// @QueryParam("mttr") short mttr, @QueryParam("mtbf") short mtbf,
-		// @QueryParam("latency") short latency,
-		// @QueryParam("availability") short availability,
-		// @QueryParam("response time") short responseTime) {
+//	public Response getServiceByKPI(
+//			@PathParam("serviceName") String serviceName,
+//			@Context UriInfo uriInfo) {
+		 public Response getServiceByKPI(
+		 @PathParam("serviceName") String serviceName,
+		 @QueryParam("mttr") short mttr, @QueryParam("mtbf") short mtbf,
+		 @QueryParam("latency") short latency,
+		 @QueryParam("availability") short availability,
+		 @QueryParam("response time") short responseTime) {
 
-		// setResponse(getService.getDummy(serviceName, mttr, mtbf, latency,
-		// responseTime, availability));
 		long startTime = System.currentTimeMillis();
-		List<UDDISLA> uddislas = getService.getServiceByName(serviceName);
-		setResponse(uddislas);
+		setResponse(getService.getDummy(serviceName, mttr, mtbf, latency,
+				responseTime, availability));
+		//		List<UDDISLA> uddislas = getService.getServiceByName(serviceName);
+//		setResponse(uddislas);
 
-		MultivaluedMap<String, String> hashMap = uriInfo.getQueryParameters();
-		List<UDDISLA> targetList = new ArrayList<>();
-		for (UDDISLA uddisla : uddislas) {
-			List<GuaranteeTerms> guaranteeTerms = uddisla.getSla()
-					.getGuaranteeTerms();
-			second: for (GuaranteeTerms terms : guaranteeTerms) {
-				List<KeyPerformanceIndicator> kpiList = terms
-						.getKeyPerformanceIndicator();
-				boolean contains = terms.getServiceName().toLowerCase()
-						.contains(serviceName.toLowerCase());
-				if (!contains) {
-					//guaranteeTerms.remove(terms);
-					continue;
-				} else if (kpiList.size() < hashMap.size())
-					break second;
-				int counter = 0;
-				for (Entry<String, List<String>> entry : hashMap.entrySet()) {
-					for (KeyPerformanceIndicator kpi : kpiList) {
-						if (entry.getKey().equals(kpi.getName())
-								&& compareKPI(kpi, entry.getValue().get(0))) {
-							counter++;
-						}
-					}
-				}
-				if (counter == hashMap.size())
-					targetList.add(uddisla);
-			}
-		}
-		setResponse(targetList);
+//		MultivaluedMap<String, String> hashMap = uriInfo.getQueryParameters();
+//		List<UDDISLA> targetList = new ArrayList<>();
+//		for (UDDISLA uddisla : uddislas) {
+//			List<GuaranteeTerms> guaranteeTerms = uddisla.getSla()
+//					.getGuaranteeTerms();
+//			second: for (GuaranteeTerms terms : guaranteeTerms) {
+//				List<KeyPerformanceIndicator> kpiList = terms
+//						.getKeyPerformanceIndicator();
+//				boolean contains = terms.getServiceName().toLowerCase()
+//						.contains(serviceName.toLowerCase());
+//				if (!contains) {
+//					guaranteeTerms.remove(terms);
+//					continue;
+//				} else if (kpiList.size() < hashMap.size())
+//					break second;
+//				int counter = 0;
+//				for (Entry<String, List<String>> entry : hashMap.entrySet()) {
+//					for (KeyPerformanceIndicator kpi : kpiList) {
+//						if (entry.getKey().equals(kpi.getName())
+//								&& compareKPI(kpi, entry.getValue().get(0))) {
+//							counter++;
+//						}
+//					}
+//				}
+//				if (counter == hashMap.size())
+//					targetList.add(uddisla);
+//			}
+//		}
+//		setResponse(targetList);
 
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		LOGGER.info("Time to get service with kpi: " + elapsedTime + " ms");
@@ -260,19 +253,19 @@ public class ThesisController {
 		return response;
 	}
 
-	private boolean compareKPI(KeyPerformanceIndicator kpi, String value) {
-
-		String name = kpi.getName().trim().toLowerCase();
-		boolean isGreathan = (name.equals("availability") || name
-				.equals("mtbf"))
-				&& Short.valueOf(value) <= kpi.getQualifyingCondiction();
-		boolean isLesshan = !isGreathan
-				&& !(name.equals("availability") || name.equals("mtbf"))
-				&& Short.valueOf(value) >= kpi.getQualifyingCondiction();
-
-		if (isGreathan || isLesshan)
-			return true;
-		else
-			return false;
-	}
+//	private boolean compareKPI(KeyPerformanceIndicator kpi, String value) {
+//
+//		String name = kpi.getName().trim().toLowerCase();
+//		boolean isGreathan = (name.equals("availability") || name
+//				.equals("mtbf"))
+//				&& Short.valueOf(value) <= kpi.getQualifyingCondiction();
+//		boolean isLesshan = !isGreathan
+//				&& !(name.equals("availability") || name.equals("mtbf"))
+//				&& Short.valueOf(value) >= kpi.getQualifyingCondiction();
+//
+//		if (isGreathan || isLesshan)
+//			return true;
+//		else
+//			return false;
+//	}
 }

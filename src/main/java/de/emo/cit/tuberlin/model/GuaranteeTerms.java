@@ -1,19 +1,13 @@
 package de.emo.cit.tuberlin.model;
 
-import java.util.List;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 @Entity
 @Table
@@ -35,10 +29,10 @@ public class GuaranteeTerms {
 
 	@OneToOne(mappedBy = "guaranteeTerms", targetEntity = Reward.class, cascade = CascadeType.ALL)
 	private Reward reward;
-	
-	@OneToMany(mappedBy = "guaranteeTerms", targetEntity = KeyPerformanceIndicator.class, cascade = CascadeType.ALL)
-	@LazyCollection(LazyCollectionOption.FALSE)
-	private List<KeyPerformanceIndicator> keyPerformanceIndicator;
+
+	@OneToOne(mappedBy = "guaranteeTerms", targetEntity = KeyPerformanceIndicator.class, cascade = CascadeType.ALL)
+	// @LazyCollection(LazyCollectionOption.FALSE)
+	private KeyPerformanceIndicator keyPerformanceIndicator;
 
 	public String getGuaranteeTermId() {
 		return guaranteeTermId;
@@ -72,12 +66,12 @@ public class GuaranteeTerms {
 		this.reward = reward;
 	}
 
-	public List<KeyPerformanceIndicator> getKeyPerformanceIndicator() {
+	public KeyPerformanceIndicator getKeyPerformanceIndicator() {
 		return keyPerformanceIndicator;
 	}
 
 	public void setKeyPerformanceIndicator(
-			List<KeyPerformanceIndicator> keyPerformanceIndicator) {
+			KeyPerformanceIndicator keyPerformanceIndicator) {
 		this.keyPerformanceIndicator = keyPerformanceIndicator;
 	}
 }

@@ -79,13 +79,17 @@ public class CheckJsonData {
 						ResponseHelp.BAD_REQUEST_MESSAGE);
 			}
 
-			List<KeyPerformanceIndicator> kpiList = guaranteeTerms
-					.getKeyPerformanceIndicator();
+			// List<KeyPerformanceIndicator> kpiList = guaranteeTerms
+			// .getKeyPerformanceIndicator();
 
-			for (KeyPerformanceIndicator kpi : kpiList) {
-				checkKPIParam(kpi.getName(), kpi.getQualifyingCondiction(),
-						kpi.getTargetValue());
-			}
+			// for (KeyPerformanceIndicator kpi : kpiList) {
+			// checkKPIParam(kpi.getName(), kpi.getQualifyingCondiction(),
+			// kpi.getTargetValue());
+			// }
+			KeyPerformanceIndicator kpi = guaranteeTerms
+					.getKeyPerformanceIndicator();
+			checkKPIParam(kpi.getAvailability(), kpi.getLatency(),
+					kpi.getMttr(), kpi.getMtbf(), kpi.getResponseTime());
 		}
 	}
 
@@ -120,15 +124,27 @@ public class CheckJsonData {
 		emptyException(String.valueOf(valueUnit), "valueUnit of a reward");
 	}
 
-	private void checkKPIParam(@PathParam("name") String name,
-			@PathParam("qualifyingCondiction") short qualifyingCondiction,
-			@PathParam("targetValue") short targetValue) {
+	// private void checkKPIParam(@PathParam("name") String name,
+	// @PathParam("qualifyingCondiction") short qualifyingCondiction,
+	// @PathParam("targetValue") short targetValue) {
 
-		emptyException(name, "name of a Key Performance Indicator");
-		emptyException(String.valueOf(qualifyingCondiction),
-				"qualifyingCondiction of a Key Performance Indicator");
-		emptyException(String.valueOf(targetValue),
-				"targetValue of a Key Performance Indicator");
+	private void checkKPIParam(@PathParam("availability") short availability,
+			@PathParam("latency") short latency, @PathParam("mttr") short mttr,
+			@PathParam("mtbf") short mtbf,
+			@PathParam("responseTime") short responseTime) {
+
+		// emptyException(name, "name of a Key Performance Indicator");
+		// emptyException(String.valueOf(qualifyingCondiction),
+		// "qualifyingCondiction of a Key Performance Indicator");
+		// emptyException(String.valueOf(targetValue),
+		// "targetValue of a Key Performance Indicator");
+
+		if (availability == 0 && latency == 0 && mttr == 0 && mtbf == 0
+				&& responseTime == 0) {
+			ResponseHelp.BAD_REQUEST_MESSAGE += "Please give minimun one KeyPerformanceIndicator.\n";
+			throw new ClientRequestException(ResponseHelp.BAD_REQUEST_STATUS,
+					ResponseHelp.BAD_REQUEST_MESSAGE);
+		}
 
 	}
 
