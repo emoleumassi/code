@@ -20,9 +20,7 @@ public interface GetService<T> {
 
 	public List getTerms(String uddislaId, String serviceId);
 
-	public List<UDDISLA> getServiceByName(String serviceName);
-
-	public List getServiceByKPI(String serviceName, String secondQuery);
+	public List<UDDISLA> getServices(String serviceName, String secondQuery);
 
 	public void setClazz(Class<T> clazzToSet);
 }

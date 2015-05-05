@@ -29,9 +29,12 @@ import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
 import de.emo.cit.tuberlin.help.CheckJsonData;
 import de.emo.cit.tuberlin.help.ResponseHelp;
 import de.emo.cit.tuberlin.help.ThesisHelp;
+import de.emo.cit.tuberlin.model.GuaranteeTerms;
 import de.emo.cit.tuberlin.model.SLA;
+import de.emo.cit.tuberlin.model.ServiceTerms;
 import de.emo.cit.tuberlin.model.ThesisRoot;
 import de.emo.cit.tuberlin.model.UDDI;
+import de.emo.cit.tuberlin.model.UDDISLA;
 import de.emo.cit.tuberlin.service.DeleteService;
 import de.emo.cit.tuberlin.service.GetService;
 import de.emo.cit.tuberlin.service.PostService;
@@ -106,7 +109,9 @@ public class ThesisController {
 			@PathParam("serviceName") String serviceName) {
 
 		long startTime = System.currentTimeMillis();
-		setResponse(getService.getServiceByName(serviceName));
+		List<UDDISLA> uddislas = getService.getServices(serviceName, "");
+		removeTerms(uddislas, serviceName);
+		setResponse(uddislas);
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		LOGGER.info("Time get serviceByName: " + elapsedTime + " ms");
 
@@ -128,8 +133,11 @@ public class ThesisController {
 				|| hashMap.containsKey("responsetime");
 		if (!notEmpty)
 			setResponse(new ArrayList<>());
-		else 
-			setResponse(buildQuery(serviceName, hashMap));
+		else {
+			List<UDDISLA> uddislas = buildQuery(serviceName, hashMap);
+			removeTerms(uddislas, serviceName);
+			setResponse(uddislas);
+		}
 
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		LOGGER.info("Time to get service with kpi: " + elapsedTime + " ms");
@@ -217,7 +225,7 @@ public class ThesisController {
 		return response;
 	}
 
-	private List buildQuery(String serviceName,
+	private List<UDDISLA> buildQuery(String serviceName,
 			MultivaluedMap<String, String> hashMap) {
 		String query = "";
 		int count = 0;
@@ -241,7 +249,7 @@ public class ThesisController {
 			count++;
 		}
 		LOGGER.info("KPI-Query:" + query);
-		return getService.getServiceByKPI(serviceName, query);
+		return getService.getServices(serviceName, query);
 	}
 
 	private Response setResponse(Object element) {
@@ -252,5 +260,35 @@ public class ThesisController {
 		else
 			response = ResponseHelp.currentResponse(ResponseHelp.OK, element);
 		return response;
+	}
+
+	private void removeTerms(List<UDDISLA> uddislas, String serviceName) {
+
+		for (UDDISLA uddisla : uddislas) {
+			SLA sla = uddisla.getSla();
+			List<ServiceTerms> serviceList = sla.getServiceTerms();
+			List<GuaranteeTerms> guaranteeList = sla.getGuaranteeTerms();
+
+			List<ServiceTerms> serviceTmp = new ArrayList(sla.getServiceTerms());
+			List<GuaranteeTerms> guaranteeTmp = new ArrayList(
+					sla.getGuaranteeTerms());
+
+			for (GuaranteeTerms guaranteeTerms : guaranteeList) {
+				boolean contains = guaranteeTerms.getServiceName()
+						.toLowerCase().contains(serviceName.toLowerCase());
+				if (!contains)
+					guaranteeTmp.remove(guaranteeTerms);
+			}
+
+			for (ServiceTerms serviceTerms : serviceList) {
+				boolean contains = serviceTerms.getServiceName().toLowerCase()
+						.contains(serviceName.toLowerCase());
+				if (!contains)
+					serviceTmp.remove(serviceTerms);
+			}
+			sla.setServiceTerms(serviceTmp);
+			sla.setGuaranteeTerms(guaranteeTmp);
+			uddisla.setSla(sla);
+		}
 	}
 }

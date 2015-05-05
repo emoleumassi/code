@@ -94,30 +94,20 @@ public class GetServiceImpl<T> implements GetService {
 	}
 
 	@Override
-	public List<UDDISLA> getServiceByName(String serviceName) {
+	public List<UDDISLA> getServices(String serviceName, String secondQuery) {
 
-		String query = "from UDDISLA WHERE uddislaId = ANY (select s.uddisla from SLA s,"
-				+ " ServiceTerms st WHERE s.slaId = st.sla AND "
-				+ "st.serviceName LIKE :name)";
+		String query = "FROM UDDISLA WHERE uddislaId = ANY (SELECT s.uddisla FROM SLA s, ServiceTerms st ";
+
+		if (secondQuery.isEmpty() || secondQuery == null)
+			query += "WHERE s.slaId = st.sla AND st.serviceName LIKE :serviceName)";
+		else
+			query += ", GuaranteeTerms g  WHERE s.slaId = st.sla AND st.serviceName = g.serviceName AND "
+					+ "st.serviceName LIKE :serviceName AND g.guaranteeTermId = ANY (SELECT guaranteeTerms "
+					+ "FROM KeyPerformanceIndicator WHERE"
+					+ secondQuery
+					+ " ))";
 		try {
 			return (List<UDDISLA>) entityManager.createQuery(query)
-					.setParameter("name", "%" + serviceName + "%")
-					.getResultList();
-		} catch (SecurityException | IllegalStateException | RollbackException e) {
-			LOGGER.info(e.getMessage());
-		}
-		return null;
-	}
-
-	@Override
-	public List getServiceByKPI(String serviceName, String secondQuery) {
-
-		String query = "FROM ServiceTerms st, GuaranteeTerms g "
-				+ "WHERE st.serviceName = g.serviceName AND st.serviceName LIKE :serviceName AND "
-				+ "g.guaranteeTermId = ANY (SELECT guaranteeTerms FROM KeyPerformanceIndicator "
-				+ "WHERE" + secondQuery + " )";
-		try {
-			return (List) entityManager.createQuery(query)
 					.setParameter("serviceName", "%" + serviceName + "%")
 					.getResultList();
 		} catch (SecurityException | IllegalStateException | RollbackException e) {
