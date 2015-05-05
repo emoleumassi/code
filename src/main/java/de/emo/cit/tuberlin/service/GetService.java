@@ -22,8 +22,7 @@ public interface GetService<T> {
 
 	public List<UDDISLA> getServiceByName(String serviceName);
 
-	public List getDummy(String serviceName, short mttr, short mtbf,
-			short latency, short responseTime, short availability);
+	public List getServiceByKPI(String serviceName, String secondQuery);
 
 	public void setClazz(Class<T> clazzToSet);
 }

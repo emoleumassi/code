@@ -2,6 +2,7 @@ package de.emo.cit.tuberlin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Objects;
 
 import javax.ws.rs.Consumes;
@@ -11,9 +12,11 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -114,18 +117,20 @@ public class ThesisController {
 	@Path("/services/{serviceName}/kpi")
 	public Response getServiceByKPI(
 			@PathParam("serviceName") String serviceName,
-			@QueryParam("mttr") short mttr, @QueryParam("mtbf") short mtbf,
-			@QueryParam("latency") short latency,
-			@QueryParam("availability") short availability,
-			@QueryParam("response time") short responseTime) {
+			@Context UriInfo uriInfo) {
 
 		long startTime = System.currentTimeMillis();
-		if (availability == 0 && latency == 0 && mttr == 0 && mtbf == 0
-				&& responseTime == 0)
+
+		MultivaluedMap<String, String> hashMap = uriInfo.getQueryParameters();
+		boolean notEmpty = hashMap.containsKey("availability")
+				|| hashMap.containsKey("latency")
+				|| hashMap.containsKey("mttr") || hashMap.containsKey("mtbf")
+				|| hashMap.containsKey("responsetime");
+		if (!notEmpty)
 			setResponse(new ArrayList<>());
-		else
-			setResponse(getService.getDummy(serviceName, mttr, mtbf, latency,
-					responseTime, availability));
+		else 
+			setResponse(buildQuery(serviceName, hashMap));
+
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		LOGGER.info("Time to get service with kpi: " + elapsedTime + " ms");
 
@@ -210,6 +215,33 @@ public class ThesisController {
 		LOGGER.info("Time to delete an uddisla: " + elapsedTime + " ms");
 
 		return response;
+	}
+
+	private List buildQuery(String serviceName,
+			MultivaluedMap<String, String> hashMap) {
+		String query = "";
+		int count = 0;
+
+		for (Entry<String, List<String>> entry : hashMap.entrySet()) {
+			if (count > 0)
+				query += " AND";
+			String element = entry.getKey().toLowerCase().trim();
+			short value = Short.valueOf(entry.getValue().get(0));
+
+			if (element.equals("latency"))
+				query += " latency <= " + value;
+			else if (element.equals("mttr"))
+				query += " mttr <= " + value;
+			else if (element.equals("responsetime"))
+				query += " responseTime <= " + value;
+			else if (element.equals("availability"))
+				query += " availability >= " + value;
+			else if (element.equals("mtbf"))
+				query += " mtbf >= " + value;
+			count++;
+		}
+		LOGGER.info("KPI-Query:" + query);
+		return getService.getServiceByKPI(serviceName, query);
 	}
 
 	private Response setResponse(Object element) {

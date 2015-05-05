@@ -110,58 +110,16 @@ public class GetServiceImpl<T> implements GetService {
 	}
 
 	@Override
-	public List getDummy(String serviceName, short mttr, short mtbf,
-			short latency, short responseTime, short availability) {
-
-		// String query =
-		// "from UDDISLA WHERE uddislaId = ANY (select s.uddisla from SLA s, ServiceTerms st, GuaranteeTerms g "
-		// +
-		// "WHERE s.slaId = st.sla AND g.sla = s.slaId AND st.serviceName = g.serviceName AND st.serviceName LIKE :serviceName AND "
-		// +
-		// "g.guaranteeTermId = ANY (SELECT guaranteeTerms FROM KeyPerformanceIndicator "
-		// + "WHERE availability >= :value AND latency <= :latency))";
+	public List getServiceByKPI(String serviceName, String secondQuery) {
 
 		String query = "FROM ServiceTerms st, GuaranteeTerms g "
 				+ "WHERE st.serviceName = g.serviceName AND st.serviceName LIKE :serviceName AND "
 				+ "g.guaranteeTermId = ANY (SELECT guaranteeTerms FROM KeyPerformanceIndicator "
-				+ "WHERE availability >= :value AND latency <= :latency)";
-
-		if (mttr == 0)
-			query += "mtbf >= " + mtbf + " AND availability >= " + availability
-					+ " AND latency <= " + latency + " AND responseTime <= "
-					+ responseTime + " )";
-		if (mtbf == 0)
-			query += "mttr <= " + mttr + " AND availability >= " + availability
-					+ " AND latency <= " + latency + " AND responseTime <= "
-					+ responseTime + " )";
-		if (availability == 0)
-			query += "mttr <= " + mttr + " AND mtbf >= " + mtbf
-					+ " AND latency <= " + latency + " AND responseTime <= "
-					+ responseTime + " )";
-		if (responseTime == 0)
-			query += "mttr <= " + mttr + " AND availability >= " + availability
-					+ " AND latency <= " + latency + " AND mtbf >= " + mtbf
-					+ " )";
-		if (latency == 0)
-			query += "mttr <= " + mttr + " AND availability >= " + availability
-					+ " AND mtbf >= " + mtbf + " AND responseTime <= "
-					+ responseTime + " )";
-
-		// if (mtbf != 0)
-		// query += "mtbf >= " + mtbf;
-		// if (latency != 0)
-		// query += "latency <= " + latency;
-		// if (availability != 0)
-		// query += "availability >= " + availability;
-		// if (responseTime != 0)
-		// query += "responseTime <= " + responseTime;
-		//
-		// query += ")";
+				+ "WHERE" + secondQuery + " )";
 		try {
 			return (List) entityManager.createQuery(query)
 					.setParameter("serviceName", "%" + serviceName + "%")
-					.setParameter("value", availability)
-					.setParameter("latency", latency).getResultList();
+					.getResultList();
 		} catch (SecurityException | IllegalStateException | RollbackException e) {
 			LOGGER.info(e.getMessage());
 		}
