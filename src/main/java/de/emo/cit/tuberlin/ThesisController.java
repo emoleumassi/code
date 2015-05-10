@@ -1,6 +1,7 @@
 package de.emo.cit.tuberlin;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -30,6 +31,7 @@ import de.emo.cit.tuberlin.help.CheckJsonData;
 import de.emo.cit.tuberlin.help.ResponseHelp;
 import de.emo.cit.tuberlin.help.ThesisHelp;
 import de.emo.cit.tuberlin.model.GuaranteeTerms;
+import de.emo.cit.tuberlin.model.KeyPerformanceIndicator;
 import de.emo.cit.tuberlin.model.SLA;
 import de.emo.cit.tuberlin.model.ServiceTerms;
 import de.emo.cit.tuberlin.model.ThesisRoot;
@@ -134,8 +136,11 @@ public class ThesisController {
 		if (!notEmpty)
 			setResponse(new ArrayList<>());
 		else {
-			List<UDDISLA> uddislas = buildQuery(serviceName, hashMap);
+			// List<UDDISLA> uddislas = buildQuery(serviceName, hashMap);
+			// removeTerms(uddislas, serviceName);
+			List<UDDISLA> uddislas = getService.getServices(serviceName, "");
 			removeTerms(uddislas, serviceName);
+			uddislas = compareKPI(uddislas, hashMap);
 			setResponse(uddislas);
 		}
 
@@ -252,16 +257,6 @@ public class ThesisController {
 		return getService.getServices(serviceName, query);
 	}
 
-	private Response setResponse(Object element) {
-		if ((element instanceof List && ((List) element).isEmpty())
-				|| Objects.isNull(element))
-			response = ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
-					ResponseHelp.NOT_FOUND_MESSAGE);
-		else
-			response = ResponseHelp.currentResponse(ResponseHelp.OK, element);
-		return response;
-	}
-
 	private void removeTerms(List<UDDISLA> uddislas, String serviceName) {
 
 		for (UDDISLA uddisla : uddislas) {
@@ -269,8 +264,9 @@ public class ThesisController {
 			List<ServiceTerms> serviceList = sla.getServiceTerms();
 			List<GuaranteeTerms> guaranteeList = sla.getGuaranteeTerms();
 
-			List<ServiceTerms> serviceTmp = new ArrayList(sla.getServiceTerms());
-			List<GuaranteeTerms> guaranteeTmp = new ArrayList(
+			List<ServiceTerms> serviceTmp = new LinkedList(
+					sla.getServiceTerms());
+			List<GuaranteeTerms> guaranteeTmp = new LinkedList(
 					sla.getGuaranteeTerms());
 
 			for (GuaranteeTerms guaranteeTerms : guaranteeList) {
@@ -290,5 +286,78 @@ public class ThesisController {
 			sla.setGuaranteeTerms(guaranteeTmp);
 			uddisla.setSla(sla);
 		}
+	}
+
+	private List<UDDISLA> compareKPI(List<UDDISLA> uddislas, MultivaluedMap<String, String> hashMap) {
+
+		List<UDDISLA> uddislaTmp = new LinkedList(uddislas);
+
+		for (UDDISLA uddisla : uddislas) {
+			int count = 0;
+			SLA sla = uddisla.getSla();
+			List<ServiceTerms> serviceList = sla.getServiceTerms();
+			List<GuaranteeTerms> guaranteeList = sla.getGuaranteeTerms();
+			
+			List<ServiceTerms> serviceTmp = new LinkedList(serviceList);
+			List<GuaranteeTerms> guaranteeTmp = new LinkedList(guaranteeList);
+
+			for (int i = 0; i < serviceList.size(); i++) {
+
+				boolean nothing = false;
+				ServiceTerms serviceTerms = serviceList.get(i);
+				GuaranteeTerms guaranteeTerms = guaranteeList.get(i);
+
+				KeyPerformanceIndicator kpi = guaranteeTerms
+						.getKeyPerformanceIndicator();
+
+				for (Entry<String, List<String>> entry : hashMap.entrySet()) {
+
+					String element = entry.getKey().toLowerCase().trim();
+					short value = Short.valueOf(entry.getValue().get(0));
+
+					if (element.equals("latency") && kpi.getLatency() != 0
+							&& value >= kpi.getLatency())
+						count++;
+					else if (element.equals("mttr") && kpi.getMttr() != 0
+							&& value >= kpi.getMttr())
+						count++;
+					else if (element.equals("responsetime")
+							&& kpi.getResponseTime() != 0
+							&& value >= kpi.getResponseTime())
+						count++;
+					else if (element.equals("availability")
+							&& kpi.getAvailability() != 0
+							&& value <= kpi.getAvailability())
+						count++;
+					else if (element.equals("mtbf") && kpi.getMtbf() != 0
+							&& value <= kpi.getMtbf())
+						count++;
+					else 
+						nothing = true;
+				}
+				if (nothing || hashMap.size() > count) {
+					serviceTmp.remove(serviceTerms);
+					guaranteeTmp.remove(guaranteeTerms);
+					if (guaranteeTmp.size() == 0 && serviceTmp.size() == 0) {
+						uddislaTmp.remove(uddisla);
+					} else {
+						sla.setServiceTerms(serviceTmp);
+						sla.setGuaranteeTerms(guaranteeTmp);
+						uddisla.setSla(sla);
+					}
+				}
+			}
+		}
+		return uddislaTmp;
+	}
+
+	private Response setResponse(Object element) {
+		if ((element instanceof List && ((List) element).isEmpty())
+				|| Objects.isNull(element))
+			response = ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
+					ResponseHelp.NOT_FOUND_MESSAGE);
+		else
+			response = ResponseHelp.currentResponse(ResponseHelp.OK, element);
+		return response;
 	}
 }
