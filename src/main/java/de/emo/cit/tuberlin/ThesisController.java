@@ -1,9 +1,7 @@
 package de.emo.cit.tuberlin;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Objects;
 
 import javax.ws.rs.Consumes;
@@ -28,12 +26,10 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import de.emo.cit.tuberlin.bootstrap.ThesisConfiguration;
 import de.emo.cit.tuberlin.help.CheckJsonData;
+import de.emo.cit.tuberlin.help.HelpController;
 import de.emo.cit.tuberlin.help.ResponseHelp;
 import de.emo.cit.tuberlin.help.ThesisHelp;
-import de.emo.cit.tuberlin.model.GuaranteeTerms;
-import de.emo.cit.tuberlin.model.KeyPerformanceIndicator;
 import de.emo.cit.tuberlin.model.SLA;
-import de.emo.cit.tuberlin.model.ServiceTerms;
 import de.emo.cit.tuberlin.model.ThesisRoot;
 import de.emo.cit.tuberlin.model.UDDI;
 import de.emo.cit.tuberlin.model.UDDISLA;
@@ -59,6 +55,9 @@ public class ThesisController {
 	DeleteService deleteService;
 
 	Response response;
+	
+	@Autowired
+	HelpController helpController;
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(ThesisController.class);
@@ -98,7 +97,7 @@ public class ThesisController {
 	public Response getAll() {
 
 		long startTime = System.currentTimeMillis();
-		setResponse(getService.getAllEntities());
+		response = helpController.setResponse(getService.getAllEntities());
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		LOGGER.info("Time to get All: " + elapsedTime + " ms");
 
@@ -111,9 +110,9 @@ public class ThesisController {
 			@PathParam("serviceName") String serviceName) {
 
 		long startTime = System.currentTimeMillis();
-		List<UDDISLA> uddislas = getService.getServices(serviceName, "");
-		removeTerms(uddislas, serviceName);
-		setResponse(uddislas);
+		List<UDDISLA> uddislas = getService.getServices(serviceName);
+		helpController.removeTerms(uddislas, serviceName);
+		response = helpController.setResponse(uddislas);
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		LOGGER.info("Time get serviceByName: " + elapsedTime + " ms");
 
@@ -134,14 +133,12 @@ public class ThesisController {
 				|| hashMap.containsKey("mttr") || hashMap.containsKey("mtbf")
 				|| hashMap.containsKey("responsetime");
 		if (!notEmpty)
-			setResponse(new ArrayList<>());
+			response = helpController.setResponse(new ArrayList<>());
 		else {
-			// List<UDDISLA> uddislas = buildQuery(serviceName, hashMap);
-			// removeTerms(uddislas, serviceName);
-			List<UDDISLA> uddislas = getService.getServices(serviceName, "");
-			removeTerms(uddislas, serviceName);
-			uddislas = compareKPI(uddislas, hashMap);
-			setResponse(uddislas);
+			List<UDDISLA> uddislas = getService.getServices(serviceName);
+			helpController.removeTerms(uddislas, serviceName);
+			uddislas = helpController.sortKPI(uddislas, hashMap);
+			response = helpController.setResponse(uddislas);
 		}
 
 		long elapsedTime = System.currentTimeMillis() - startTime;
@@ -156,7 +153,7 @@ public class ThesisController {
 			@PathParam("uddislaIdName") String uddislaIdName) {
 
 		long startTime = System.currentTimeMillis();
-		setResponse(getService.getUDDISLAByIdName(uddislaIdName));
+		response = helpController.setResponse(getService.getUDDISLAByIdName(uddislaIdName));
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		LOGGER.info("Time to get UDDISLA by Id: " + elapsedTime + " ms");
 
@@ -171,7 +168,7 @@ public class ThesisController {
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 
 		getService.setClazz(UDDI.class);
-		setResponse(getService.getUddiOrSla(uddislaId));
+		response = helpController.setResponse(getService.getUddiOrSla(uddislaId));
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		LOGGER.info("Time to get UDDI: " + elapsedTime + " ms");
 
@@ -186,7 +183,7 @@ public class ThesisController {
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 
 		getService.setClazz(SLA.class);
-		setResponse(getService.getUddiOrSla(uddislaId));
+		response = helpController.setResponse(getService.getUddiOrSla(uddislaId));
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		LOGGER.info("Time to get SLA: " + elapsedTime + " ms");
 
@@ -203,7 +200,7 @@ public class ThesisController {
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 		ThesisHelp.validateUUID(serviceTermId, "serviceID");
 
-		setResponse(getService.getTerms(uddislaId, serviceTermId));
+		response = helpController.setResponse(getService.getTerms(uddislaId, serviceTermId));
 
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		LOGGER.info("Time get termById: " + elapsedTime + " ms");
@@ -227,137 +224,6 @@ public class ThesisController {
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		LOGGER.info("Time to delete an uddisla: " + elapsedTime + " ms");
 
-		return response;
-	}
-
-	private List<UDDISLA> buildQuery(String serviceName,
-			MultivaluedMap<String, String> hashMap) {
-		String query = "";
-		int count = 0;
-
-		for (Entry<String, List<String>> entry : hashMap.entrySet()) {
-			if (count > 0)
-				query += " AND";
-			String element = entry.getKey().toLowerCase().trim();
-			short value = Short.valueOf(entry.getValue().get(0));
-
-			if (element.equals("latency"))
-				query += " latency <= " + value;
-			else if (element.equals("mttr"))
-				query += " mttr <= " + value;
-			else if (element.equals("responsetime"))
-				query += " responseTime <= " + value;
-			else if (element.equals("availability"))
-				query += " availability >= " + value;
-			else if (element.equals("mtbf"))
-				query += " mtbf >= " + value;
-			count++;
-		}
-		LOGGER.info("KPI-Query:" + query);
-		return getService.getServices(serviceName, query);
-	}
-
-	private void removeTerms(List<UDDISLA> uddislas, String serviceName) {
-
-		for (UDDISLA uddisla : uddislas) {
-			SLA sla = uddisla.getSla();
-			List<ServiceTerms> serviceList = sla.getServiceTerms();
-			List<GuaranteeTerms> guaranteeList = sla.getGuaranteeTerms();
-
-			List<ServiceTerms> serviceTmp = new LinkedList(
-					sla.getServiceTerms());
-			List<GuaranteeTerms> guaranteeTmp = new LinkedList(
-					sla.getGuaranteeTerms());
-
-			for (GuaranteeTerms guaranteeTerms : guaranteeList) {
-				boolean contains = guaranteeTerms.getServiceName()
-						.toLowerCase().contains(serviceName.toLowerCase());
-				if (!contains)
-					guaranteeTmp.remove(guaranteeTerms);
-			}
-
-			for (ServiceTerms serviceTerms : serviceList) {
-				boolean contains = serviceTerms.getServiceName().toLowerCase()
-						.contains(serviceName.toLowerCase());
-				if (!contains)
-					serviceTmp.remove(serviceTerms);
-			}
-			sla.setServiceTerms(serviceTmp);
-			sla.setGuaranteeTerms(guaranteeTmp);
-			uddisla.setSla(sla);
-		}
-	}
-
-	private List<UDDISLA> compareKPI(List<UDDISLA> uddislas, MultivaluedMap<String, String> hashMap) {
-
-		List<UDDISLA> uddislaTmp = new LinkedList(uddislas);
-
-		for (UDDISLA uddisla : uddislas) {
-			int count = 0;
-			SLA sla = uddisla.getSla();
-			List<ServiceTerms> serviceList = sla.getServiceTerms();
-			List<GuaranteeTerms> guaranteeList = sla.getGuaranteeTerms();
-			
-			List<ServiceTerms> serviceTmp = new LinkedList(serviceList);
-			List<GuaranteeTerms> guaranteeTmp = new LinkedList(guaranteeList);
-
-			for (int i = 0; i < serviceList.size(); i++) {
-
-				boolean nothing = false;
-				ServiceTerms serviceTerms = serviceList.get(i);
-				GuaranteeTerms guaranteeTerms = guaranteeList.get(i);
-
-				KeyPerformanceIndicator kpi = guaranteeTerms
-						.getKeyPerformanceIndicator();
-
-				for (Entry<String, List<String>> entry : hashMap.entrySet()) {
-
-					String element = entry.getKey().toLowerCase().trim();
-					short value = Short.valueOf(entry.getValue().get(0));
-
-					if (element.equals("latency") && kpi.getLatency() != 0
-							&& value >= kpi.getLatency())
-						count++;
-					else if (element.equals("mttr") && kpi.getMttr() != 0
-							&& value >= kpi.getMttr())
-						count++;
-					else if (element.equals("responsetime")
-							&& kpi.getResponseTime() != 0
-							&& value >= kpi.getResponseTime())
-						count++;
-					else if (element.equals("availability")
-							&& kpi.getAvailability() != 0
-							&& value <= kpi.getAvailability())
-						count++;
-					else if (element.equals("mtbf") && kpi.getMtbf() != 0
-							&& value <= kpi.getMtbf())
-						count++;
-					else 
-						nothing = true;
-				}
-				if (nothing || hashMap.size() > count) {
-					serviceTmp.remove(serviceTerms);
-					guaranteeTmp.remove(guaranteeTerms);
-					if (guaranteeTmp.size() == 0 && serviceTmp.size() == 0) {
-						uddislaTmp.remove(uddisla);
-					} else {
-						sla.setServiceTerms(serviceTmp);
-						sla.setGuaranteeTerms(guaranteeTmp);
-						uddisla.setSla(sla);
-					}
-				}
-			}
-		}
-		return uddislaTmp;
-	}
-
-	private Response setResponse(Object element) {
-		if ((element instanceof List && ((List) element).isEmpty())
-				|| Objects.isNull(element))
-			response = ResponseHelp.currentResponse(ResponseHelp.NOT_FOUND,
-					ResponseHelp.NOT_FOUND_MESSAGE);
-		else
-			response = ResponseHelp.currentResponse(ResponseHelp.OK, element);
 		return response;
 	}
 }

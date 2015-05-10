@@ -19,6 +19,8 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import de.emo.cit.tuberlin.help.HelpController;
+
 @Configuration
 @ComponentScan("de.emo.cit.tuberlin")
 @EnableTransactionManagement
@@ -36,6 +38,11 @@ public class ThesisConfiguration {
 		propertySourcesPlaceholderConfigurer
 				.setIgnoreUnresolvablePlaceholders(true);
 		return propertySourcesPlaceholderConfigurer;
+	}
+	
+	@Bean(name = "helpController")
+	public HelpController getHelpController(){
+		return new HelpController();
 	}
 
 	@Bean
