@@ -25,39 +25,8 @@ import de.emo.cit.tuberlin.model.UDDISLA;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class HelpController {
 
-	public void removeTerms(List<UDDISLA> uddislas, String serviceName) {
-
-		for (UDDISLA uddisla : uddislas) {
-			SLA sla = uddisla.getSla();
-			List<ServiceTerms> serviceList = sla.getServiceTerms();
-			List<GuaranteeTerms> guaranteeList = sla.getGuaranteeTerms();
-
-			List<ServiceTerms> serviceTmp = new LinkedList(
-					sla.getServiceTerms());
-			List<GuaranteeTerms> guaranteeTmp = new LinkedList(
-					sla.getGuaranteeTerms());
-
-			for (GuaranteeTerms guaranteeTerms : guaranteeList) {
-				boolean contains = guaranteeTerms.getServiceName()
-						.toLowerCase().contains(serviceName.toLowerCase());
-				if (!contains)
-					guaranteeTmp.remove(guaranteeTerms);
-			}
-
-			for (ServiceTerms serviceTerms : serviceList) {
-				boolean contains = serviceTerms.getServiceName().toLowerCase()
-						.contains(serviceName.toLowerCase());
-				if (!contains)
-					serviceTmp.remove(serviceTerms);
-			}
-			sla.setServiceTerms(serviceTmp);
-			sla.setGuaranteeTerms(guaranteeTmp);
-			uddisla.setSla(sla);
-		}
-	}
-
 	public List<UDDISLA> sortKPI(List<UDDISLA> uddislas,
-			MultivaluedMap<String, String> hashMap) {
+			MultivaluedMap<String, String> hashMap, String serviceName) {
 
 		List<UDDISLA> uddislaTmp = new LinkedList(uddislas);
 
@@ -79,53 +48,53 @@ public class HelpController {
 				KeyPerformanceIndicator kpi = guaranteeTerms
 						.getKeyPerformanceIndicator();
 
-				// boolean contains = guaranteeTerms.getServiceName()
-				// .toLowerCase().contains(serviceName.toLowerCase());
-				// if (!contains) {
-				// serviceTmp.remove(serviceTerms);
-				// guaranteeTmp.remove(guaranteeTerms);
-				// sla.setServiceTerms(serviceTmp);
-				// sla.setGuaranteeTerms(guaranteeTmp);
-				// uddisla.setSla(sla);
-				// continue;
-				// }
-
-				// if (Objects.isNull(hashMap))
-
-				for (Entry<String, List<String>> entry : hashMap.entrySet()) {
-
-					String element = entry.getKey().toLowerCase().trim();
-					short value = Short.valueOf(entry.getValue().get(0));
-
-					if (element.equals("latency") && kpi.getLatency() != 0
-							&& value >= kpi.getLatency())
-						count++;
-					else if (element.equals("mttr") && kpi.getMttr() != 0
-							&& value >= kpi.getMttr())
-						count++;
-					else if (element.equals("responsetime")
-							&& kpi.getResponseTime() != 0
-							&& value >= kpi.getResponseTime())
-						count++;
-					else if (element.equals("availability")
-							&& kpi.getAvailability() != 0
-							&& value <= kpi.getAvailability())
-						count++;
-					else if (element.equals("mtbf") && kpi.getMtbf() != 0
-							&& value <= kpi.getMtbf())
-						count++;
-					else
-						nothing = true;
-				}
-				if (nothing || hashMap.size() > count) {
+				boolean contains = guaranteeTerms.getServiceName()
+						.toLowerCase().contains(serviceName.toLowerCase());
+				if (!contains) {
 					serviceTmp.remove(serviceTerms);
 					guaranteeTmp.remove(guaranteeTerms);
-					if (guaranteeTmp.size() == 0 && serviceTmp.size() == 0) {
-						uddislaTmp.remove(uddisla);
-					} else {
-						sla.setServiceTerms(serviceTmp);
-						sla.setGuaranteeTerms(guaranteeTmp);
-						uddisla.setSla(sla);
+					sla.setServiceTerms(serviceTmp);
+					sla.setGuaranteeTerms(guaranteeTmp);
+					uddisla.setSla(sla);
+					continue;
+				}
+
+				if (!Objects.isNull(hashMap)) {
+					for (Entry<String, List<String>> entry : hashMap.entrySet()) {
+
+						String element = entry.getKey().toLowerCase().trim();
+						short value = Short.valueOf(entry.getValue().get(0));
+
+						if (element.equals("latency") && kpi.getLatency() != 0
+								&& value >= kpi.getLatency())
+							count++;
+						else if (element.equals("mttr") && kpi.getMttr() != 0
+								&& value >= kpi.getMttr())
+							count++;
+						else if (element.equals("responsetime")
+								&& kpi.getResponseTime() != 0
+								&& value >= kpi.getResponseTime())
+							count++;
+						else if (element.equals("availability")
+								&& kpi.getAvailability() != 0
+								&& value <= kpi.getAvailability())
+							count++;
+						else if (element.equals("mtbf") && kpi.getMtbf() != 0
+								&& value <= kpi.getMtbf())
+							count++;
+						else
+							nothing = true;
+					}
+					if (nothing || hashMap.size() > count) {
+						serviceTmp.remove(serviceTerms);
+						guaranteeTmp.remove(guaranteeTerms);
+						if (guaranteeTmp.size() == 0 && serviceTmp.size() == 0) {
+							uddislaTmp.remove(uddisla);
+						} else {
+							sla.setServiceTerms(serviceTmp);
+							sla.setGuaranteeTerms(guaranteeTmp);
+							uddisla.setSla(sla);
+						}
 					}
 				}
 			}

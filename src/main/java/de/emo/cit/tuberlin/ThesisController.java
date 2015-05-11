@@ -55,7 +55,7 @@ public class ThesisController {
 	DeleteService deleteService;
 
 	Response response;
-	
+
 	@Autowired
 	HelpController helpController;
 
@@ -111,7 +111,8 @@ public class ThesisController {
 
 		long startTime = System.currentTimeMillis();
 		List<UDDISLA> uddislas = getService.getServices(serviceName);
-		helpController.removeTerms(uddislas, serviceName);
+		// helpController.removeTerms(uddislas, serviceName);
+		uddislas = helpController.sortKPI(uddislas, null, serviceName);
 		response = helpController.setResponse(uddislas);
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		LOGGER.info("Time get serviceByName: " + elapsedTime + " ms");
@@ -136,8 +137,8 @@ public class ThesisController {
 			response = helpController.setResponse(new ArrayList<>());
 		else {
 			List<UDDISLA> uddislas = getService.getServices(serviceName);
-			helpController.removeTerms(uddislas, serviceName);
-			uddislas = helpController.sortKPI(uddislas, hashMap);
+			// helpController.removeTerms(uddislas, serviceName);
+			uddislas = helpController.sortKPI(uddislas, hashMap, serviceName);
 			response = helpController.setResponse(uddislas);
 		}
 
@@ -153,7 +154,8 @@ public class ThesisController {
 			@PathParam("uddislaIdName") String uddislaIdName) {
 
 		long startTime = System.currentTimeMillis();
-		response = helpController.setResponse(getService.getUDDISLAByIdName(uddislaIdName));
+		response = helpController.setResponse(getService
+				.getUDDISLAByIdName(uddislaIdName));
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		LOGGER.info("Time to get UDDISLA by Id: " + elapsedTime + " ms");
 
@@ -168,7 +170,8 @@ public class ThesisController {
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 
 		getService.setClazz(UDDI.class);
-		response = helpController.setResponse(getService.getUddiOrSla(uddislaId));
+		response = helpController.setResponse(getService
+				.getUddiOrSla(uddislaId));
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		LOGGER.info("Time to get UDDI: " + elapsedTime + " ms");
 
@@ -183,7 +186,8 @@ public class ThesisController {
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 
 		getService.setClazz(SLA.class);
-		response = helpController.setResponse(getService.getUddiOrSla(uddislaId));
+		response = helpController.setResponse(getService
+				.getUddiOrSla(uddislaId));
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		LOGGER.info("Time to get SLA: " + elapsedTime + " ms");
 
@@ -200,7 +204,8 @@ public class ThesisController {
 		ThesisHelp.validateUUID(uddislaId, "uddislaID");
 		ThesisHelp.validateUUID(serviceTermId, "serviceID");
 
-		response = helpController.setResponse(getService.getTerms(uddislaId, serviceTermId));
+		response = helpController.setResponse(getService.getTerms(uddislaId,
+				serviceTermId));
 
 		long elapsedTime = System.currentTimeMillis() - startTime;
 		LOGGER.info("Time get termById: " + elapsedTime + " ms");
