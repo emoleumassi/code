@@ -66,14 +66,14 @@ public class HelpController {
 						short value = Short.valueOf(entry.getValue().get(0));
 
 						if (element.equals("latency") && kpi.getLatency() != 0
-								&& value >= kpi.getLatency())
+								&& value <= kpi.getLatency())
 							count++;
 						else if (element.equals("mttr") && kpi.getMttr() != 0
-								&& value >= kpi.getMttr())
+								&& value <= kpi.getMttr())
 							count++;
 						else if (element.equals("responsetime")
 								&& kpi.getResponseTime() != 0
-								&& value >= kpi.getResponseTime())
+								&& value <= kpi.getResponseTime())
 							count++;
 						else if (element.equals("availability")
 								&& kpi.getAvailability() != 0
